@@ -166,7 +166,6 @@ constexpr auto mod = 1000000007;
 
 /*-------------------------------------------------------------------------------------------------------------------------------------*/
 /*<modint>*/
-
 // ASUMES mod is PRIME
 template<int mod>
 class modint {
@@ -227,17 +226,25 @@ public:
             if(p & 1) ret = ret * cur;
             cur = cur * cur;
         }
+
+        return ret;
     }
 
     int value() const { return val; }
 };
 
 template<int mod>
-ostream& operator<<(ostream& os, modint<mod> m) { // print a mod
+ostream& operator <<(ostream& os, modint<mod> m) { // print a modint
     return os << m.value();
 }
 
-
+template<int mod>
+istream& operator >>(istream& is, modint<mod> &m) { // input a modint
+    int x;
+    is >> x;
+    m = modint<mod>(x);
+    return is;
+}
 /*</modint>*/
 /*-------------------------------------------------------------------------------------------------------------------------------------*/
 
@@ -250,5 +257,9 @@ int main() {
     trace(n3 + 5);
     trace(n2 - n3, n3 * n2);
     trace(n2 / n3);
+
+    modint<11> tn;
+    cin >> tn;
+    cout << tn.negate() << " " << tn.inverse() << endl;
     // trace(5 + n3); // Won't work
 }
