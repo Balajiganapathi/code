@@ -209,6 +209,7 @@ public:
     modint<mod> operator /(modint<mod> m) const { return *this * m.inverse(); }
 
     bool operator ==(modint<mod> m) const { return val == m.val; }
+    bool operator !=(modint<mod> m) const { return val != m.val; }
     bool operator <(modint<mod> m) const { return val < m.val; }
     bool operator >(modint<mod> m) const { return val > m.val; }
 

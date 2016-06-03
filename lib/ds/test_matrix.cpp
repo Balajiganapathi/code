@@ -177,16 +177,16 @@ private:
 public:
     matrix(int _n, int _m) {
         n = _n; m = _m;
-        assert(n > 1);
-        assert(m > 1);
+        assert(n > 0);
+        assert(m > 0);
         val = new T*[n];
         for(int i = 0; i < n; ++i) val[i] = new T[m];
     }
 
     matrix(int _n) {
         n = _n; m = _n;
-        assert(n > 1);
-        assert(m > 1);
+        assert(n > 0);
+        assert(m > 0);
         val = new T*[n];
         for(int i = 0; i < n; ++i) val[i] = new T[m];
     }
@@ -201,6 +201,14 @@ public:
     matrix(const matrix &&mat) {
         n = mat.n; m = mat.m;
         val = mat.val;
+    }
+
+    matrix &operator =(const matrix &mat) {
+        if(n != mat.n || m != mat.m) del();
+        n = mat.n; m = mat.m;
+        val = new T*[n];
+        for(int i = 0; i < n; ++i) val[i] = new T[m];
+        for(int i = 0; i < n; ++i) for(int j = 0; j < m; ++j) val[i][j] = mat.val[i][j];
     }
 
     matrix(const initializer_list<initializer_list<T>> &_val) {
@@ -285,10 +293,23 @@ public:
 
     T &operator()(int x, int y) { return val[x][y]; }
 
+    matrix operator()(int x) { 
+        matrix ret(1, m);
+        for(int j = 0; j < m; ++j) ret(0, j) = val[x][j];
+        return ret;
+    }
+
     ~matrix() {
+        del();
+    }
+
+private:
+    void del() {
+        return; // TODO
         for(int i = 0; i < n; ++i) delete[] val[i];
         delete[] val;
     }
+
 };
 
 template<typename T>
@@ -310,6 +331,7 @@ int main() {
 
     trace(m1, m2, m3, m4);
     trace(m3 + m4, m3 - m4, m3 * m5, m1 * m2);
+    trace(m3(0), m3(1));
     
     
 	return 0;
