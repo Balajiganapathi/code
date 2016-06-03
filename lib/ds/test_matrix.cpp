@@ -189,7 +189,6 @@ public:
         assert(m > 1);
         val = new T*[n];
         for(int i = 0; i < n; ++i) val[i] = new T[m];
-        for(int i = 0; i < n; ++i) val[i][i] = 1;
     }
 
     matrix(const matrix &mat) {
@@ -199,7 +198,12 @@ public:
         for(int i = 0; i < n; ++i) for(int j = 0; j < m; ++j) val[i][j] = mat.val[i][j];
     }
 
-    matrix(initializer_list<initializer_list<T>> _val) {
+    matrix(const matrix &&mat) {
+        n = mat.n; m = mat.m;
+        val = mat.val;
+    }
+
+    matrix(const initializer_list<initializer_list<T>> &_val) {
         n = _val.size();
         assert(n > 0);
         m = _val.begin()->size();
@@ -218,24 +222,44 @@ public:
         }
     }
 
-    int rows() { return n; }
-    int columns() { return m; }
+    int rows() const { return n; }
+    int columns() const { return m; }
 
-    matrix operator +(const matrix &mat) {
+    void makeIdentity() {
+        assert(n == m);
+        for(int i = 0; i < n; ++i) for(int j = 0; j < m; ++j) {
+            val[i][j] = (i == j? 1: 0);
+        }
+    }
+
+    void fill(const T &x) {
+        for(int i = 0; i < n; ++i) for(int j = 0; j < m; ++j) val[i][j] = x;
+    }
+
+    bool isIdentity() const {
+        assert(n == m);
+        for(int i = 0; i < n; ++i) for(int j = 0; j < m; ++j) {
+            if(i == j && val[i][j] != 1) return false;
+            if(i != j && val[i][j] != 0) return false;
+        }
+        return true;
+    }
+
+    matrix operator +(const matrix &mat) const {
         assert(n == mat.n && m == mat.m);
         matrix ret(*this);
         for(int i = 0; i < n; ++i) for(int j = 0; j < m; ++j) ret.val[i][j] = ret.val[i][j] + mat.val[i][j];
         return ret;
     }
 
-    matrix operator -(const matrix &mat) {
+    matrix operator -(const matrix &mat) const {
         assert(n == mat.n && m == mat.m);
         matrix ret(*this);
         for(int i = 0; i < n; ++i) for(int j = 0; j < m; ++j) ret.val[i][j] = ret.val[i][j] - mat.val[i][j];
         return ret;
     }
 
-    matrix operator *(const matrix &mat) {
+    matrix operator *(const matrix &mat) const {
         assert(m == mat.n);
         matrix ret(n, mat.m);
         for(int i = 0; i < n; ++i) for(int j = 0; j < mat.m; ++j) for(int k = 0; k < m; ++k) {
@@ -245,9 +269,10 @@ public:
     }
 
     template<typename N>
-    matrix pow(N p) {
+    matrix pow(N p) const {
         assert(n == m);
         matrix ret(n);
+        ret.makeIdentity();
         matrix cur(*this);
 
         for(; p; p /= 2) {
@@ -259,6 +284,11 @@ public:
     }
 
     T &operator()(int x, int y) { return val[x][y]; }
+
+    ~matrix() {
+        for(int i = 0; i < n; ++i) delete[] val[i];
+        delete[] val;
+    }
 };
 
 template<typename T>
@@ -275,6 +305,7 @@ ostream& operator <<(ostream& os, matrix<T> mat) { // print a matrix
 
 int main() {
     matrix<int> m1(2, 5), m2(5), m3({{1, 1}, {1, 0}}), m5(2);
+    m2.makeIdentity(); m5.makeIdentity();
     matrix<int> m4(m3);
 
     trace(m1, m2, m3, m4);
