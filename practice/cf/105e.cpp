@@ -171,68 +171,60 @@ int dp[mx_dist][mx_dist][mx_dist][mx_mask][mx_mask][mx_mask];
 int d[3], md[3], td[3];
 
 int solve(int d1, int d2, int d3, int m1, int m2, int m3) {
-    trace(d1, d2, d3, m1, m2, m3);
     assert(max(d1, max(d2, d3)) < mx_dist);
-    int &ret = dp[d1][d2][d3][m1][m2][m3];
+    int &ret = dp[d1+2][d2+2][d3+2][m1][m2][m3];
     if(ret != -1) return ret;
-    if(d1 == d2 || d1 == d3 || d2 == d3) return ret = -oo;
-    ret = max(d1, max(d2, d3));
+    if(d1 == d2 || d2 == d3 || d1 == d3) return ret = -oo;
+    int d[] = {d1, d2, d3};
+    int m[] = {m1, m2, m3};
+    int holding[3] = {-1, -1, -1};
+    int held[3] = {-1, -1, -1};
 
-    int d[] = {d1, d2, d3}, m[] = {m1, m2, m3};
-    // i moves
-    fo(i, 3) {
-        if(!is1(m[i], 0)) {
-            for(int dd = 1; dd <= md[i]; ++dd) {
-                d[i] += dd;
-                m[i] ^= 1;
-                ret = max(ret, solve(d[0], d[1], d[2], m[0], m[1], m[2]));
-                d[i] -= dd;
-
-                if(d[i] - dd >= 1) {
-                    d[i] -= dd;
-                    ret = max(ret, solve(d[0], d[1], d[2], m[0], m[1], m[2]));
-                    d[i] += dd;
-                }
-
-                m[i] ^= 1;
-            }
-        }
+    fo(i, 3) if(d[i] <= 0) {
+        held[i] = abs(d[i]);
+        holding[held[i]] = i;
     }
 
-    // i lifts and throws j
-    fo(i, 3) fo(j, 3) if(!is1(m[i], 1) && i != j && abs(d[i] - d[j]) <= 1) {
-        for(int dd = 1; dd <= td[i]; ++dd) {
-            int nd[] = {d[0], d[1], d[2]};
-            nd[j] = d[i] + dd;
-            m[i] ^= 2;
+    fo(j, 3) {
+        fo(i, 3) if(held[i] != -1 && d[held[i]] >= 1) {
+            d[i] = d[held[i]];
+        }
+    }
+    fo(i, 3) assert(d[i] > 0);
+
+
+    ret = max(d[0], max(d[1], d[2]));
+
+    // Move
+    fo(i, 3) if(!is1(m[i], 0) && holding[i] == -1 && held[i] == -1) {
+        m[i] ^= 1;
+        int nd[] = {d1, d2, d3};
+        rep(dd, max(1, d[i] - md[i]), d[i] + md[i]) {
+            nd[i] = dd;
             ret = max(ret, solve(nd[0], nd[1], nd[2], m[0], m[1], m[2]));
-            
-            if(d[i] - dd >= 1) {
-                int nd[] = {d[0], d[1], d[2]};
-                nd[j] = d[i] - dd;
-                ret = max(ret, solve(nd[0], nd[1], nd[2], m[0], m[1], m[2]));
-            }
-            m[i] ^= 2;
         }
+        m[i] ^= 1;
     }
 
-    // i lifts jk throw jk mac dist, j throws k
-    fo(i, 3) fo(j, 3) if(i != j) fo(k, 3) if(j != k && i != k && !is1(m[i], 1) && !is1(m[j], 1) && abs(d[j] - d[k]) <= 1 && abs(d[i] - d[j]) <= 1) {
-        int nd[] = {d[0], d[1], d[2]};
-        nd[j] = d[i] + td[i];
-        nd[k] = d[i] + td[i] + td[j];
+    // i lifts j
+    fo(i, 3) if(!is1(m[i], 1) && holding[i] == -1 && held[i] == -1) fo(j, 3) if(i != j && held[j] == -1 && abs(d[i] - d[j]) <= 1) {
         m[i] ^= 2;
-        m[j] ^= 2;
-
-        trace(d1, d2, d3, m1, m2, m3, i, j, k, nd[0], nd[1], nd[2], m[0], m[1], m[2]);
+        int nd[] = {d1, d2, d3};
+        nd[j] = -i;
         ret = max(ret, solve(nd[0], nd[1], nd[2], m[0], m[1], m[2]));
-        
         m[i] ^= 2;
-        m[j] ^= 2;
+    }
+
+    // i throws j
+    fo(i, 3) if(holding[i] != -1) {
+        int nd[] = {d1, d2, d3};
+        rep(dd, max(1, d[i] - td[i]), d[i] + td[i]) {
+            nd[holding[i]] = dd;
+            ret = max(ret, solve(nd[0], nd[1], nd[2], m[0], m[1], m[2]));
+        }
     }
 
     trace(d1, d2, d3, m1, m2, m3, ret);
-
     return ret;
 }
 
