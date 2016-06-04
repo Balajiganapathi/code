@@ -194,20 +194,32 @@ int brute(int n) {
     return ret;
 }
 
-int solve(int i, int eq, int ones) {
+int solve(int i, int eq, int v) {
     if(i == -1) {
-        int ret = ((1ll << ones) - ones) % mod;
-        trace(i, eq, ones, ret);
-        return ret;
+        trace(i, eq, v, 1);
+        return 1;
     }
 
-    int &ret = dp[i][eq][ones];
+    int &ret = dp[i][eq][v];
     if(ret != -1) return ret;
 
-    ret = solve(i - 1, (eq && bits[i] == 0), ones);
-    if(!eq || bits[i]) ret = (ret + solve(i - 1, (eq && bits[i] == 1), ones + 1)) % mod;
+    if(!eq || bits[i]) {
+        ret = solve(i - 1, (eq && bits[i] == 1), v + 1);
+        if(v == 0) {
+            ret = (ret + solve(i - 1, (eq && bits[i] == 0), v)) % mod;
+        } else {
+            ret = (ret + (1ll << (v-1)) % mod * solve(i - 1, (eq && bits[i] == 0), v)) % mod;
+            ret = (ret + (1ll << (v-1)) % mod * solve(i - 1, (eq && bits[i] == 1), v)) % mod;
+        }
+    } else {
+        if(v) {
+            ret = (1ll << (v-1)) % mod * solve(i - 1, (eq && bits[i] == 0), v) % mod;
+        } else {
+            ret = solve(i - 1, (eq && bits[i] == 0), v);
+        }
+    }
 
-    trace(i, eq, ones, ret);
+    trace(i, eq, v, ret);
     return ret;
 }
 
