@@ -160,65 +160,112 @@ T1 modpow(T1 _a, T2 p, T3 mod) {
 constexpr int dx[] = {-1, 0, 1, 0, 1, 1, -1, -1};
 constexpr int dy[] = {0, -1, 0, 1, 1, -1, 1, -1};
 constexpr auto PI  = 3.14159265358979323846L;
-constexpr auto oo  = numeric_limits<ll>::max() / 2 - 2;
+constexpr auto oo  = numeric_limits<int>::max() / 2 - 2;
 constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx = -1;
+constexpr int mx_n = 102;
+constexpr int mx_k = 100005;
 
-ll a, b, c, d;
+vi solve(int k) {
+    vi dig;
+    int base = 6;
+    for(; k; k /= base) dig.push_back(k % base);
+    reverse(all(dig));
 
-ll brute() {
-    ll ret = oo;
-    fo(i, 100) fo(j, 100) {
-        ll x = a + 1ll * i * c, y = b + 1ll * j * d;
-        ret = min(ret, abs(x - y));
+    vi ret = {};
+    fo(l, dig[0]) ret.push_back(dig[0] - l);
+    re(i, 1, si(dig)) {
+        int x = si(ret);
+        int lis = i + 1;
+        fo(j, base) ret.push_back(x + base - j);
+        fo(l, dig[i]) {
+            int x = si(ret);
+            fo(m, lis) ret.insert(ret.begin(), x + lis - m);
+        }
     }
 
     return ret;
 }
 
-ll solve(ll a, ll b, ll c, ll d) {
-    ll x = a - b;
-    ll g = __gcd(c, d);
-    trace(x, g);
-    return min(abs((x + g - 1) / g * g - x), abs(x % g));
-}
+tuple<vi, int> memo[mx_k];
 
-ll solve() {
-    return min(solve(a, b, c, d), solve(b, a, d, c));
+tuple<vi, int> sol(int k) {
+    if(k == 1) return mt(vi{1}, 1);
+    tuple<vi, int> &ret = memo[k];
+    if(gt(ret, 1) != 0) return ret;
+
+    for(int i = 2; i <= 10 && i <= k; ++i) {
+        vi v;
+        int lis;
+        tie(v, lis) = sol(k / i);
+        int rem = k % i;
+        ++lis;
+        int len = si(v) + i;
+        len += rem * lis;
+        if(gt(ret, 1) == 0 || len < si(gt(ret, 0)) || (len == si(gt(ret, 0)) && lis < gt(ret, 1))) {
+            vi nw = v;
+            int x = si(nw);
+            fo(j, i) nw.push_back(x + i - j);
+            fo(l, rem) {
+                int x = si(nw);
+                fo(m, lis) nw.insert(nw.begin(), x + lis - m);
+            }
+            ret = mt(nw, lis);
+            assert(si(nw) == len);
+        }
+    }
+    
+    return ret;
 }
 
 int main() {
     int t;
 #ifdef TEST
-    t = 100;
+    t = 100000;
+    int _k = 1;
 #else
-    cin >> t;
+    scanf("%d", &t);
 #endif
+
     while(t--) {
+        int k;
 #ifdef TEST
-        a = rand() % 100 + 1;
-        b = rand() % 100 + 1;
-        c = rand() % 100 + 1;
-        d = rand() % 100 + 1;
-
-        ll bans = brute();
+        k = _k++;
 #else
-        cin >> a >> b >> c >> d;
+        scanf("%d", &k);
 #endif
-        ll ans = solve();
-        cout << ans << endl;
+        vi ans = gt(sol(k), 0);
+
+        cout << si(ans) << endl;
+        fo(i, si(ans)) cout << ans[i] << " ";
+        cout << endl;
 
 #ifdef TEST
-        if(bans != ans) {
-            trace(a, b, c, d, ans, bans);
-            assert(bans == ans);
+        pi dp[mx_n];
+        assert(1 <= si(ans) && si(ans) <= 100);
+        if(k <= 100) {
+            dp[0] = {1, 1};
+            int lis = 1;
+            re(i, 1, si(ans)) {
+                dp[i] = {1, 1};
+                fo(j, i) if(ans[i] > ans[j]) {
+                    int x = dp[j].fi + 1;
+                    if(x == dp[i].fi) dp[i].se += dp[j].se;
+                    else if(x > dp[i].fi) dp[i] = mp(dp[j].fi + 1, dp[j].se);
+                }
+                lis = max(lis, dp[i].fi);
+            }
+            int cnt = 0;
+            fo(i, si(ans)) if(dp[i].fi == lis) cnt += dp[i].se;
+            trace(cnt, k);
+            assert(cnt == k);
         }
+        trace(k);
 #endif
-
     }
+    
     
 	return 0;
 }
