@@ -305,50 +305,11 @@ modint<mod> getAt(modint<mod> n1, modint<mod> n2, ll i, int m) {
 }
 
 modint<mod> get(ll x, ll y, int m) {
-    if(m == 0) {
-        modint<mod> ret = 0;
-        rep(i, x, y) ret = ret + a[i];
-
-        trace(x, y, m, ret);
-        return ret;
+    modint<mod> ret = 0;
+    rep(i, x, y) {
+        ret = ret + getAt(a[(i >> m)], a[(i >> m) + 1], i - ((i >> m) << m), m);
     }
-
-    ll rx = (x >> m), ry = (y >> m);
-    if(x == y) {
-        modint<mod> ret = 0;
-        if(rx > 0) {
-            ll idx = x - ((rx - 1) << (m));
-            ret = getAt(a[rx-1], a[rx], idx, m);
-        } else {
-            ll idx = x - ((rx) << (m));
-            ret = getAt(a[rx], a[rx+1], idx, m);
-        }
-        trace(x, y, m, ret);
-        return ret;
-    }
-
-    ll px = (x + 1) / 2, py = y / 2;
-    auto ret = get(px, py, m - 1) * 3;
-    if(x % 2) {
-        ll idx = px - 1 - ((rx - 1) << (m - 1));
-        ret = ret + getAt(a[rx - 1], a[rx], idx, m - 1);
-    } else {
-        ll idx = px - ((rx) << (m - 1));
-        ret = ret - getAt(a[rx], a[rx+1], idx, m - 1);
-    }
-
-    trace(x, y, ret);
-
-    if(y % 2) {
-        ll idx = py - ((ry) << (m - 1));
-        ret = ret + getAt(a[ry], a[ry+1], idx, m - 1);
-    } else {
-        ll idx = py - ((ry) << (m - 1));
-        ret = ret - getAt(a[ry], a[ry+1], idx, m - 1);
-    }
-
-
-    trace(x, y, rx, ry, m, ret);
+    trace(x, y, m, ret);
     return ret;
 }
 
@@ -377,6 +338,7 @@ int main() {
         cin >> n >> m >> x >> y;
         fo(i, n) cin >> a[i];
 #endif
+        a[n] = 0;
         --x; --y;
         int ans = solve();
         cout << ans << endl;
