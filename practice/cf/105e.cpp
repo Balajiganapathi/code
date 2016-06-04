@@ -217,13 +217,14 @@ int solve(int d1, int d2, int d3, int m1, int m2, int m3) {
     }
 
     // i lifts jk throw jk mac dist, j throws k
-    fo(i, 3) fo(j, 3) fo(k, 3) if(i != j && j != k && i != k && !is1(m[i], 1) && !is1(m[j], 1) && abs(d[j] - d[k]) <= 1 && abs(d[i] - d[j]) <= 1) {
+    fo(i, 3) fo(j, 3) if(i != j) fo(k, 3) if(j != k && i != k && !is1(m[i], 1) && !is1(m[j], 1) && abs(d[j] - d[k]) <= 1 && abs(d[i] - d[j]) <= 1) {
         int nd[] = {d[0], d[1], d[2]};
         nd[j] = d[i] + td[i];
         nd[k] = d[i] + td[i] + td[j];
         m[i] ^= 2;
         m[j] ^= 2;
 
+        trace(d1, d2, d3, m1, m2, m3, i, j, k, nd[0], nd[1], nd[2], m[0], m[1], m[2]);
         ret = max(ret, solve(nd[0], nd[1], nd[2], m[0], m[1], m[2]));
         
         m[i] ^= 2;
