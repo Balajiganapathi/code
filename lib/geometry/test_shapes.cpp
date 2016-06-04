@@ -179,6 +179,7 @@ class point {
 public:
     itype x, y;
 
+    constexpr point(): x(0), y(0) {}
     point(const itype &_x, const itype &_y): x(_x), y(_y) {}
     point(const point &p): x(p.x), y(p.y) {}
 
@@ -201,7 +202,7 @@ class vec {
 public:
     itype x, y;
 
-    vec() { x = y = 0; }
+    constexpr vec(): x(0), y(0) { }
     vec(const itype &_x, const itype &_y): x(_x), y(_y) {}
     vec(const vec &v): x(v.x), y(v.y) {}
     vec(const point &from, const point &to) {
@@ -226,6 +227,7 @@ public:
     vec v;
     otype la, lb, lc;
 
+    constexpr line(): la(0), lb(0), lc(0) {}
     line(const point &_a, const point &_b): a(_a), b(_b) { init(); }
     line(const line &l): a(l.a), b(l.b) { init(); }
     line(const itype &x1, const itype &y1, const itype &x2, const itype &y2): a(x1, y1), b(x2, y2) { init();  }
@@ -258,6 +260,7 @@ public:
     point a, b;
     line theLine;
 
+    constexpr segment() {}
     segment(const point &_a, const point &_b): a(_a), b(_b), theLine(_a, _b) { }
     segment(const segment &l): a(l.a), b(l.b), theLine(l.theLine) {}
     segment(const itype &x1, const itype &y1, const itype &x2, const itype &y2): a(x1, y1), b(x2, y2), theLine(x1, y1, x2, y2) {}
@@ -288,22 +291,23 @@ private:
     }
 };
 
-class Circle {
+class circle {
 public:
     point center;
     itype radius;
 
-    Circle(const point &_center, const itype &_radius): center(_center), radius(_radius) {}
+    constexpr circle(): radius(0) {}
+    circle(const point &_center, const itype &_radius): center(_center), radius(_radius) {}
     otype area() { return PI * radius * radius; }
 
     // TODO
-    bool intersects(const Circle &c) const {
+    bool intersects(const circle &c) const {
         otype dist = center.dist(c.center);
         return dist <= otype(radius) + c.radius + eps;
     }
     bool intersects(const segment &s) const {}
     bool contains(const point &p) const {}
-    vector<point> intersection(const Circle &c) const {}
+    vector<point> intersection(const circle &c) const {}
     vector<point> intersection(const line &s) const {}
     vector<point> intersection(const segment &s) const {
         vector<point> linePoints = intersection(line(s.a, s.b));
@@ -317,6 +321,7 @@ class polygon {
 public:
     vector<point> points;
 
+    polygon() {}
     polygon(const vector<point> &_points): points(_points) {}
     polygon(const polygon &pol): points(pol.points) {}
 

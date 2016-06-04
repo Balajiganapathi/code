@@ -176,10 +176,9 @@ private:
     int val;
 
 public:
-    modint() { val = 0; }
+    constexpr modint(): val(0) { }
 
-    modint(const int &_val) {
-        val = _val;
+    modint(const int &_val): val(_val) {
         if(val < 0) {
             val %= mod;
             if(val < 0) val += mod;
@@ -188,7 +187,7 @@ public:
         }
     }
 
-    modint(const modint<mod> &m) { val = m.val; }
+    modint(const modint<mod> &m): val(m.val) { }
 
     modint<mod> operator +(modint<mod> m) const {
         modint<mod> ret;
@@ -235,12 +234,12 @@ public:
 };
 
 template<int mod>
-ostream& operator <<(ostream& os, modint<mod> m) { // print a modint
+ostream& operator <<(ostream& os, const modint<mod> m) { // print a modint
     return os << m.value();
 }
 
 template<int mod>
-istream& operator >>(istream& is, modint<mod> &m) { // input a modint
+istream& operator >>(istream& is, volatile modint<mod> &m) { // input a modint
     int x;
     is >> x;
     m = modint<mod>(x);
