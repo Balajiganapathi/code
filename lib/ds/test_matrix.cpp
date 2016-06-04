@@ -172,43 +172,21 @@ constexpr int mx = -1;
 template<typename T>
 class matrix {
 private:
-    T **val;
+    vector<vector<T>> val;
     int n, m;
 public:
-    matrix(int _n, int _m) {
-        n = _n; m = _m;
+    constexpr matrix(): n(0), m(0) {}
+
+    matrix(int _n, int _m): n(_n), m(_m) {
         assert(n > 0);
         assert(m > 0);
-        val = new T*[n];
-        for(int i = 0; i < n; ++i) val[i] = new T[m];
+        val = vector<vector<T>>(n, vector<T>(m));
     }
 
-    matrix(int _n) {
-        n = _n; m = _n;
+    matrix(int _n): n(_n), m(_n) {
         assert(n > 0);
         assert(m > 0);
-        val = new T*[n];
-        for(int i = 0; i < n; ++i) val[i] = new T[m];
-    }
-
-    matrix(const matrix &mat) {
-        n = mat.n; m = mat.m;
-        val = new T*[n];
-        for(int i = 0; i < n; ++i) val[i] = new T[m];
-        for(int i = 0; i < n; ++i) for(int j = 0; j < m; ++j) val[i][j] = mat.val[i][j];
-    }
-
-    matrix(const matrix &&mat) {
-        n = mat.n; m = mat.m;
-        val = mat.val;
-    }
-
-    matrix &operator =(const matrix &mat) {
-        if(n != mat.n || m != mat.m) del();
-        n = mat.n; m = mat.m;
-        val = new T*[n];
-        for(int i = 0; i < n; ++i) val[i] = new T[m];
-        for(int i = 0; i < n; ++i) for(int j = 0; j < m; ++j) val[i][j] = mat.val[i][j];
+        val = vector<vector<T>>(n, vector<T>(m));
     }
 
     matrix(const initializer_list<initializer_list<T>> &_val) {
@@ -216,8 +194,7 @@ public:
         assert(n > 0);
         m = _val.begin()->size();
         assert(m > 0);
-        val = new T*[n];
-        for(int i = 0; i < n; ++i) val[i] = new T[m];
+        val = vector<vector<T>>(n, vector<T>(m));
 
         int r = 0;
         for(const auto &row: _val) {
@@ -297,17 +274,6 @@ public:
         matrix ret(1, m);
         for(int j = 0; j < m; ++j) ret(0, j) = val[x][j];
         return ret;
-    }
-
-    ~matrix() {
-        del();
-    }
-
-private:
-    void del() {
-        return; // TODO
-        for(int i = 0; i < n; ++i) delete[] val[i];
-        delete[] val;
     }
 
 };
