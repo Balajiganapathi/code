@@ -3,7 +3,7 @@
 //#define LOCAL
 #ifdef LOCAL
 #   define TRACE
-#   define TEST
+//#   define TEST
 #   define SPEED
 #else
 #   define NDEBUG
@@ -263,6 +263,68 @@ ll randll() {
     return 1ll * rand() * rand();
 }
 
+modint<mod> getAt(ll a, ll b, ll idx, int m) {
+    modint<mod> ret;
+    if(m == 0) {
+        return a;
+    } else {
+        if(is1(idx, m - 1)) ret = getAt(a + b, b, idx - (1ll << (m-1)), m - 1);
+        else ret = getAt(a, a + b, idx, m - 1);
+    }
+
+    //trace(a, b, idx, m, ret);
+    return ret;
+}
+
+modint<mod> getAt(ll i, int m) {
+    if(m == 0) {
+        return a[i];
+    }
+    ll ri = (i >> m);
+    ll idx = i - (ri << m);
+    auto ret = getAt(a[ri], a[ri+1], idx, m);
+    //trace(i, m, ret);
+
+    return ret;
+}
+
+modint<mod> get(ll x, int m) {
+    if(m == 0) {
+        modint<mod> ret = 0;
+        rep(i, 0, x) ret = ret + a[i];
+        //trace(x, m, ret);
+        return ret;
+    }
+
+    auto ret = get(x / 2, m - 1) * 3 - getAt(0, m - 1);
+    //trace(x, m, 1, ret);
+    if(x % 2 == 0) {
+        auto sub = getAt(x / 2, m - 1);
+        ret = ret - sub;
+        //trace(x, m, x % 2, sub, ret);
+    } else {
+        auto add = getAt(x / 2 + 1, m - 1);
+        ret = ret + add;
+        //trace(x, m, x % 2, add, ret);
+    }
+
+    //trace(x, m, ret);
+
+    return ret;
+}
+
+modint<mod> get(ll x, ll y, int m) {
+    auto ret = get(y, m);
+    if(x) ret = ret - get(x - 1, m);
+
+    return ret;
+}
+
+int brute();
+int solve() {
+    return get(x, y, m).value();
+}
+
 int brute() {
     vi cur;
     fo(i, n) cur.push_back(a[i]);
@@ -281,40 +343,12 @@ int brute() {
     rep(i, x, y) {
         ret += cur[i];
         if(ret >= mod) ret -= mod;
+        //auto tmp = getAt(i, m);
+        //trace(i, tmp, cur[i]);
+        //assert(tmp.value() == cur[i]);
     }
 
     return ret;
-}
-
-modint<mod> getAt(modint<mod> n1, modint<mod> n2, ll i, int m) {
-    modint<mod> ret;
-    //trace(n1, n2, i, m, ret);
-    if(m == 0) {
-        if(is1(i, 0)) ret = n2;
-        else ret = n1;
-    } else {
-        if(is1(i, m)) {
-            ret = getAt(n1 + n2, n2, i - (1 << m) + 1, m - 1);
-        } else {
-            ret = getAt(n1, n1 + n2, i, m - 1);
-        }
-    }
-    trace(n1, n2, i, m, ret);
-
-    return ret;
-}
-
-modint<mod> get(ll x, ll y, int m) {
-    modint<mod> ret = 0;
-    rep(i, x, y) {
-        ret = ret + getAt(a[(i >> m)], a[(i >> m) + 1], i - ((i >> m) << m), m);
-    }
-    trace(x, y, m, ret);
-    return ret;
-}
-
-int solve() {
-    return get(x, y, m).value();
 }
 
 int main() {
@@ -326,14 +360,16 @@ int main() {
 #endif
     while(t--) {
 #ifdef SPEED
-        n = 2, m = 2;
+        n = 100000, m = 30;
         ll len = n;
         fo(k, m) len = 2 * len - 1;
         trace(len);
         x = randll() % len + 1;
         y = randll() % len + 1;
         if(x > y) swap(x, y);
-        fo(i, n) a[i] = rand() % 10 + 1;
+        fo(i, n) a[i] = rand() % 1000 + 1;
+        //vi inp(a, a + n);
+        //trace(inp);
 #else
         cin >> n >> m >> x >> y;
         fo(i, n) cin >> a[i];
@@ -345,9 +381,7 @@ int main() {
 #ifdef TEST
         int bans = brute();
         if(bans != ans) {
-            vi inp(a, a + n);
             trace(n, m, x, y, ans, bans);
-            trace(inp);
             assert(ans == bans);
         }
 #endif
