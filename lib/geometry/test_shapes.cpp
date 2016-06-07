@@ -172,7 +172,7 @@ constexpr int mx = -1;
 /*WARNING: UNTESTED*/
 /*Requires PI and eps constants*/
 
-using itype = long long;
+using itype = long double;
 using otype = long double; // Assumes double or long double, uses eps constant
 
 class point {
@@ -188,7 +188,14 @@ public:
         otype dy = otype(y) - p.y;
         return sqrt(dx * dx + dy * dy);
     }
+
+    bool operator ==(const point &p) const { return x == p.x && y == p.y; }
+    bool operator !=(const point &p) const { return x != p.x || y != p.y; }
 };
+
+ostream& operator<<(ostream& os, const point& p) { // print a point
+    return os << "(" << p.x << ", " << p.y << ")";
+}
 
 otype toDegrees(const otype &rad) {
     return rad * 180.0 / PI;
@@ -218,8 +225,15 @@ public:
     otype operator^(const vec &v) const { return otype(x) * v.y - otype(y) * v.x; }
 
     otype length() const { return sqrt(otype(x) * x + otype(y) * y); }
-    long double angleWith(const vec &v) const { return acos((*this * v) / (length() * v.length())); } // Angle in radians
+    long double angleWith(const vec &v) const { 
+        long double angle = acos((*this * v) / (length() * v.length())); 
+        return angle;
+    } // Angle in radians
 };
+
+ostream& operator<<(ostream& os, const vec& v) { // print a vec
+    return os << "->(" << v.x << ", " << v.y << ")";
+}
 
 class line {
 public:
@@ -242,11 +256,21 @@ private:
     }
 
 public:
-    bool isParallelTo(const line &l) const { return fabs(v.angleWith(l.v)) <= eps; }
+    bool isParallelTo(const line &l) const { 
+        otype det = la * l.lb - l.la * lb;
+        return fabs(det) <= eps;
+    }
+
     point intersection(const line &l) const {
+        assert(!isParallelTo(l));
         otype det = la * l.lb - l.la * lb;
         assert(fabs(det) > eps);
-        return point((l.lb * lc - lb * l.lc) / det, (la * l.lc - l.la * lc) / det);
+        point p((l.lb * lc - lb * l.lc) / det, (la * l.lc - l.la * lc) / det);
+        return p;
+    }
+
+    bool contains(const point &p) const {
+        return true; // TODO
     }
 
     otype dist(const point &c) { 
@@ -254,6 +278,10 @@ public:
         return (ba ^ ca) / sqrt(ba * ba);
     }
 };
+
+ostream& operator<<(ostream& os, const line& l) { // print a line
+    return os << l.a << " <-> " << l.b;
+}
 
 class segment {
 public:
@@ -267,13 +295,22 @@ public:
 
     otype length() const { return a.dist(b); }
 
-    bool intersects(const segment &s) const { return !theLine.isParallelTo(s.theLine) && contains(getIntersectionPoint(s)); }
+    bool intersects(const segment &s) const { 
+        if(theLine.isParallelTo(s.theLine)) return false;
+        point p = theLine.intersection(s.theLine);
+        return contains(p) && s.contains(p);
+    }
 
-    bool contains(const point &p) const { return (a.x - eps <= p.x && p.x <= b.x + eps) && (a.y - eps <= p.y && p.y <= b.y + eps); }
+    bool contains(const point &p) const { 
+        if(!theLine.contains(p)) return false;
+        if(!(min(a.x, b.x) - eps <= p.x && p.x <= max(a.x, b.x) + eps)) return false;
+        if(!(min(a.y, b.y) - eps <= p.y && p.y <= max(a.y, b.y) + eps)) return false;
+        return true;
+    }
 
     point intersection(const segment &s) const {
         assert(intersects(s));
-        return getIntersectionPoint(s);
+        return theLine.intersection(s.theLine);
     }
 
     point midpoint() const { return point((otype(a.x) + b.x) / 2, (otype(a.y) + b.y) / 2); }
@@ -285,11 +322,31 @@ public:
         return fabs(dist);
     }
 
+    long double angleWith(const segment &s) const { // an endpoint must be common
+        assert(intersects(s));
+        point p = s.a;
+        if(p != a && p != b) p = s.b;
+        assert(p == a || p == b);
+        assert(p == s.a || p == s.b);
+        vec v1, v2;
+        if(s.a == p) v1 = vec(s.a, s.b);
+        else v1 = vec(s.b, s.a);
+
+        if(a == p) v2 = vec(a, b);
+        else v2 = vec(b, a);
+
+        return v1.angleWith(v2);
+    }
+
 private:
     point getIntersectionPoint(const segment &s) const {
         return theLine.intersection(s.theLine);
     }
 };
+
+ostream& operator<<(ostream& os, const segment& s) { // print a seg
+    return os << s.a << " - " << s.b;
+}
 
 class circle {
 public:
