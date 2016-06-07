@@ -186,6 +186,9 @@ public:
         otype dy = otype(y) - p.y;
         return sqrt(dx * dx + dy * dy);
     }
+
+    bool operator ==(const point &p) const { return x == p.x && y == p.y; }
+    bool operator !=(const point &p) const { return x != p.x || y != p.y; }
 };
 
 ostream& operator<<(ostream& os, const point& p) { // print a point
@@ -317,6 +320,22 @@ public:
         return fabs(dist);
     }
 
+    long double angleWith(const segment &s) const { // an endpoint must be common
+        assert(intersects(s));
+        point p = s.a;
+        if(p != a && p != b) p = s.b;
+        assert(p == a || p == b);
+        assert(p == s.a || p == s.b);
+        vec v1, v2;
+        if(s.a == p) v1 = vec(s.a, s.b);
+        else v1 = vec(s.b, s.a);
+
+        if(a == p) v2 = vec(a, b);
+        else v2 = vec(b, a);
+
+        return v1.angleWith(v2);
+    }
+
 private:
     point getIntersectionPoint(const segment &s) const {
         return theLine.intersection(s.theLine);
@@ -403,6 +422,7 @@ int pts(int x, int y) {
 
 void check() {
     trace(si(ans));
+    assert(ans.back() != ans.front());
     assert(si(ans) == n + 1);
     vector<pi> v(all(ans));
     int cnt = 0;
@@ -413,17 +433,23 @@ void check() {
     }
     assert(1 <= v[n].fi && v[n].fi <= 3000);
     assert(1 <= v[n].se && v[n].se <= 3000);
-    fo(i, n) {
+    fo(i, n-1) {
         segment s1(v[i].fi, v[i].se, v[i+1].fi, v[i+1].se);
+        segment s3(v[i+1].fi, v[i+1].se, v[i+2].fi, v[i+2].se);
+        long double angle = s1.angleWith(s3);
+        //trace(s1, s3, angle, PI / 2);
+        assert(fabs(angle - PI / 2) <= eps);
         re(j, i + 3, n) {
             segment s2(v[j].fi, v[j].se, v[j+1].fi, v[j+1].se);
             if(s1.intersects(s2)) {
                 //trace(s1, s2, s1.intersection(s2));
+                point p = s1.intersection(s2);
+                assert(p != s1.a && p != s1.b && p != s2.a && p != s2.b);
                 ++cnt;
             }
         }
     }
-    trace(cnt);
+    trace(n, k, cnt);
     assert(k == cnt);
 }
 
@@ -431,110 +457,104 @@ void check() {
 int main() {
     int t;
 #ifdef GEN
-    t = 10000;
+    t = 100;
+    ofstream fin("in");
+    fin << t << endl;
 #else
     scanf("%d", &t);
 #endif
     while(t--) {
         ans.clear();
+        int co;
 #ifdef GEN
-        n = rand() % 10 + 1;
+        n = rand() % 1000 + 1;
         int n2 = n / 2;
         int tot = n2 * (n2 - 1) / 2;
         k = rand() % (tot + 1);
+        co = 2000;
+        fin << n << " " << k << endl;
 #else
         scanf("%d %d", &n, &k);
+        co = 2000;
 #endif
-        if(n == 1) {
-            ans.push_back(mp(1, 1));
-            ans.push_back(mp(1, 3));
-        } else if(n == 2) {
-            ans.push_back(mp(1, 1));
-            ans.push_back(mp(1, 3));
-            ans.push_back(mp(4, 3));
-        } else if(n == 3) {
-            ans.push_back(mp(1, 1));
-            ans.push_back(mp(1, 3));
-            ans.push_back(mp(4, 3));
-            ans.push_back(mp(4, 10));
-        } else {
-            int co = 3000;
-            ans.push_back(mp(co / 2, co));
-            ans.push_back(mp(co / 2, 1));
-            ans.push_back(mp(co / 2 + 2, 1));
-            ans.push_back(mp(co / 2 + 2, co - 10));
+        ans.push_back(mp(co / 2, co));
+        ans.push_back(mp(co / 2, 1));
+        if(n >= 2) ans.push_back(mp(co / 2 - 2, 1));
+        if(n >= 3) ans.push_back(mp(co / 2 - 2, co - 10));
 
-            int rem = n - 3;
-            int remk = k;
+        int rem = n - 3;
+        int remk = k;
 
-            int y1 = 1, y2 = co - 10;
-            int cx = co / 2 + 2, cy = co - 10;
-            vi ver;
-            ver.push_back(co / 2);
-            int pos = 0;
-            while(remk > 0) {
-                if(pos == 0) {
-                    if(remk >= si(ver)) {
-                        remk -= si(ver);
-                        ver.push_back(cx);
-                        cx = ver[0] - 2;
-                        ans.push_back(mp(cx, cy));
-                    } else {
-                        cx = ver[si(ver) - 1 - remk + 1] - 1;
-                        ans.push_back(mp(cx, cy));
-                        remk = 0;
-                    }
-                    --rem;
-                    if(rem > 0 && remk > 0) {
-                        y1 += 2;
-                        cy = y1;
-                        ans.push_back({cx, cy});
-                        --rem;
-                    }
+        int y0 = co - 10, y1 = 1;
+        int cx = co / 2 - 2, cy = co - 10;
+        vi ver;
+        ver.push_back(co / 2 - 2);
+        ver.push_back(co / 2);
+        int pos = 0;
+        while(remk > 0) {
+            if(pos == 0) {
+                if(remk >= si(ver)) {
+                    remk -= si(ver) - 1;
+                    cx = ver.back() + 2;
+                    ver.push_back(cx);
+                    ans.push_back({cx, cy});
                 } else {
-                    if(remk >= si(ver)) {
-                        remk -= si(ver);
-                        ver.insert(ver.begin(), cx);
-                        cx = ver.back() + 2;
-                        ans.push_back({cx, cy});
-                    } else {
-                        cx = ver[remk-1] + 1;
-                        ans.push_back({cx, cy});
-                        remk = 0;
-                    }
-                    --rem;
-                    if(rem > 0 && remk > 0) {
-                        y2 -= 2;
-                        cy = y2;
-                        ans.push_back({cx, cy});
-                        --rem;
-                    }
+                    cx = ver[remk] + 1;
+                    ans.push_back({cx, cy});
+                    remk = 0;
                 }
-                pos = (pos + 1) % 2;
+                --rem;
+                if(rem > 0 && remk > 0) {
+                    y1 += 2;
+                    cy = y1;
+                    ans.push_back({cx, cy});
+                    --rem;
+                }
+            } else {
+                if(remk >= si(ver)) {
+                    remk -= si(ver) - 1;
+                    cx = ver[0] - 2;
+                    ver.insert(ver.begin(), cx);
+                    ans.push_back(mp(cx, cy));
+                } else {
+                    cx = ver[si(ver) - 1 - remk] - 1;
+                    ans.push_back(mp(cx, cy));
+                    remk = 0;
+                }
+                --rem;
+                if(rem > 0 && remk > 0) {
+                    y0 -= 2;
+                    cy = y0;
+                    ans.push_back({cx, cy});
+                    --rem;
+                }
             }
+            pos = (pos + 1) % 2;
+        }
 
-            cx = co / 2; cy = co;
-            for(; rem > 0; )  {
-                if(rem > 0) {
-                    ++cx;
-                    ans.insert(ans.begin(), mp(cx, cy));
-                    --rem;
-                }
-                if(rem > 0) {
-                    --cy;
-                    ans.insert(ans.begin(), mp(cx, cy));
-                    --rem;
-                }
-                if(rem > 0) {
-                    ++cx;
-                    ans.insert(ans.begin(), mp(cx, cy));
-                    --rem;
-                }
-                if(rem > 0) {
-                    ++cy;
-                    ans.insert(ans.begin(), mp(cx, cy));
-                    --rem;
-                }
+        cx = co / 2; cy = co;
+        int x0 = 1, x1 = 500;
+        y0 = 1; y1 = 500;
+        for(; rem > 0; )  {
+            if(rem > 0) {
+                cx = x0++;
+                ans.insert(ans.begin(), mp(cx, cy));
+                --rem;
+            }
+            if(rem > 0) {
+                cy = y0++;
+                ans.insert(ans.begin(), mp(cx, cy));
+                --rem;
+            }
+            if(rem > 0) {
+                cx = --x1;
+                ans.insert(ans.begin(), mp(cx, cy));
+                --rem;
+            }
+            if(rem > 0) {
+                cy = --y1;
+                ans.insert(ans.begin(), mp(cx, cy));
+                --rem;
             }
         }
         for(auto pt: ans) {
