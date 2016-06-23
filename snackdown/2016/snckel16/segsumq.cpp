@@ -191,7 +191,8 @@ public:
     vector<frac> fs;
     vector<ll> suma, sumb;
     ll sumb0;
-    seg(int _f, int _t) {
+
+    void build(int _f, int _t) {
         f = _f; t = _t;
         n = t - f + 1;
         trace(f, t, n);
@@ -259,19 +260,28 @@ public:
         return ans;
     }
 
-};
+} segs[4 * mx_n];
 
-vector<seg> segs;
+void build(int i, int a, int b) {
+    segs[i].build(a, b);
+    if(a == b) return;
+    int m = (a + b) / 2;
+    build(2 * i + 1, a, m);
+    build(2 * i + 2, m + 1, b);
+}
+
+ll solve(int i, int a, int b, int qa, int qb, int c, int d) {
+    if(b < qa || a > qb) return 0;
+    if(qa <= a && b <= qb) {
+        return segs[i].getSum(frac(d, c));
+    }
+    int m = (a + b) / 2;
+    return solve(2 * i + 1, a, m, qa, qb, c, d) + solve(2 * i + 2, m + 1, b, qa, qb, c, d);
+}
 
 void pre() {
-    s = sqrt(n) + 500;
-    ns = (n + s - 1) / s;
-    fo(i, ns) {
-        int f = i * s, t = min(n - 1, i * s + s - 1);
-        trace(i, f, t);
-        segs.push_back(seg(f, t));
-    }
-    trace(n, ns, s);
+    build(0, 0, n - 1);
+    return;
 }
 
 
@@ -285,30 +295,7 @@ ll brute(int l, int r, int c, int d) {
 }
 
 ll solve(int l, int r, int c, int d) {
-    trace(n, ns, s);
-    trace(s);
-    int ls = l / s, rs = r / s;
-    if(ls == rs) return segs[ls].getSum(l, r, c, d);
-    ll ans = 0;
-    int s1 = ls, s2 = rs;
-
-    if(l != ls * s) {
-        ans += segs[ls].getSum(l, ls * s + s - 1, c, d);
-        ++s1;
-    }
-    if(r != rs * s + s - 1) {
-        ans += segs[rs].getSum(rs * s, r, c, d);
-        --s2;
-    }
-
-    trace(ls, rs);
-    frac fr(d, c);
-    rep(i, s1, s2) {
-        trace(i);
-        ans += segs[i].getSum(fr);
-    }
-
-    return ans;
+    return solve(0, 0, n - 1, l, r, c, d);
 }
 
 int main() {
