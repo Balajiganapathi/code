@@ -169,119 +169,113 @@ constexpr int mx = -1;
 
 /*-------------------------------------------------------------------------------------------------------------------------------------*/
 /*<shapes>*/
+/*ref: emaxx, tc tutorials and wikipedia*/
 /*WARNING: UNTESTED*/
 /*Requires PI and eps constants*/
 
-using itype = long double;
-using otype = long double; // Assumes double or long double, uses eps constant
+using coord_t = long long;
+using length_t = long double; // Assumes double or long double, uses eps constant
+using angle_t = long double; // Assumes double or long double, uses eps constant
+
+// utils
+angle_t toDegrees(const angle_t &rad) { return rad * 180.0 / PI; }
+angle_t toRadians(const angle_t &deg) { return deg * PI / 180.0; }
+template<typename T> T det(T a, T b, T c, T d) { return a * d - b * c; }
+template<typename T> T equals(T a, T b) { return fabs(a - b) < eps; }
+template<typename T> T iszero(T n) { return equals(n, T(0)); }
 
 class point {
 public:
-    itype x, y;
+    coord_t x, y;
 
     constexpr point(): x(0), y(0) {}
-    point(const itype &_x, const itype &_y): x(_x), y(_y) {}
+    point(const coord_t &_x, const coord_t &_y): x(_x), y(_y) {}
     point(const point &p): x(p.x), y(p.y) {}
 
-    otype dist(const point &p) const {
-        otype dx = otype(x) - p.x;
-        otype dy = otype(y) - p.y;
+    length_t dist(const point &p) const {
+        length_t dx = length_t(x) - p.x;
+        length_t dy = length_t(y) - p.y;
         return sqrt(dx * dx + dy * dy);
     }
 
+    length_t dist() const { return sqrt(length_t(x) * x + length_t(y) * y); }
+    pair<length_t, angle_t> toPolar() const { return make_pair(dist(), atan2(y, x)); }
+
     bool operator ==(const point &p) const { return x == p.x && y == p.y; }
     bool operator !=(const point &p) const { return x != p.x || y != p.y; }
+    bool operator < (const point &p) const { return x < p.x || (x == p.x && y < p.y); }
 };
 
-ostream& operator<<(ostream& os, const point& p) { // print a point
-    return os << "(" << p.x << ", " << p.y << ")";
-}
-
-otype toDegrees(const otype &rad) {
-    return rad * 180.0 / PI;
-}
-
-otype toRadians(const otype &deg) {
-    return deg * PI / 180.0;
-}
+point fromPolar(pair<length_t, angle_t> pol) { return point(pol.first * cos(pol.second), pol.first * sin(pol.second)); }
+ostream& operator<<(ostream& os, const point& p) { return os << "(" << p.x << ", " << p.y << ")"; }
 
 class vec {
 public:
-    itype x, y;
+    coord_t x, y;
 
     constexpr vec(): x(0), y(0) { }
-    vec(const itype &_x, const itype &_y): x(_x), y(_y) {}
+    vec(const coord_t &_x, const coord_t &_y): x(_x), y(_y) {}
     vec(const vec &v): x(v.x), y(v.y) {}
-    vec(const point &from, const point &to) {
-        x = to.x - from.x;
-        y = to.y - from.y;
-    }
+    vec(const point &from, const point &to) { x = to.x - from.x; y = to.y - from.y; }
 
     vec operator+(const vec &v) const { return vec(x + v.x, y + v.y); }
     vec operator-(const vec &v) const { return vec(x - v.x, y - v.y); }
     // Dot product
-    otype operator*(const vec &v) const { return otype(x) * v.x - otype(y) * v.y; }
+    length_t operator*(const vec &v) const { return length_t(x) * v.x - length_t(y) * v.y; }
     // Cross product
-    otype operator^(const vec &v) const { return otype(x) * v.y - otype(y) * v.x; }
+    length_t operator^(const vec &v) const { return length_t(x) * v.y - length_t(y) * v.x; }
 
-    otype length() const { return sqrt(otype(x) * x + otype(y) * y); }
+    length_t length() const { return sqrt(length_t(x) * x + length_t(y) * y); }
     long double angleWith(const vec &v) const { 
         long double angle = acos((*this * v) / (length() * v.length())); 
         return angle;
     } // Angle in radians
 };
 
-ostream& operator<<(ostream& os, const vec& v) { // print a vec
-    return os << "->(" << v.x << ", " << v.y << ")";
-}
+ostream& operator<<(ostream& os, const vec& v) { return os << "->(" << v.x << ", " << v.y << ")"; }
 
 class line {
 public:
-    point a, b;
-    vec v;
-    otype la, lb, lc;
+    point p, q;
+    length_t a, b, c;
 
-    constexpr line(): la(0), lb(0), lc(0) {}
-    line(const point &_a, const point &_b): a(_a), b(_b) { init(); }
-    line(const line &l): a(l.a), b(l.b) { init(); }
-    line(const itype &x1, const itype &y1, const itype &x2, const itype &y2): a(x1, y1), b(x2, y2) { init();  }
+    constexpr line(): a(0), b(0), c(0) {}
+    line(const point &_p, const point &_q): p(_p), q(_q) { init(); }
+    line(const line &l): p(l.p), q(l.q) { init(); }
+    line(const coord_t &x1, const coord_t &y1, const coord_t &x2, const coord_t &y2): p(x1, y1), q(x2, y2) { init();  }
     //line(const segment &s): a(s.a), b(s.b) {}
 
 private:
     void init() {
-        v = vec(a, b);
-        la = otype(b.y) - a.y;
-        lb = otype(a.x) - b.x;
-        lc = la * a.x + lb * a.y;
+        a = length_t(p.y) - q.y;
+        b = length_t(q.x) - p.x;
+        c = -a * p.x - b * p.y;
+
+        length_t z = sqrt(a * a + b * b);
+        a /= z; b /= z; c /= z;
+        if(a < -eps && (equals(a, length_t(0)) && b < -eps)) {
+            a *= -1; b *= -1; c *= -1;
+        }
     }
 
 public:
-    bool isParallelTo(const line &l) const { 
-        otype det = la * l.lb - l.la * lb;
-        return fabs(det) <= eps;
-    }
+    bool parallel(const line &l) const { return iszero(det(a, b, l.a, l.b)); }
 
     point intersection(const line &l) const {
-        assert(!isParallelTo(l));
-        otype det = la * l.lb - l.la * lb;
-        assert(fabs(det) > eps);
-        point p((l.lb * lc - lb * l.lc) / det, (la * l.lc - l.la * lc) / det);
-        return p;
+        assert(!parallel(l));
+        length_t d = det(a, b, l.a, l.b);
+        assert(!iszero(d));
+        return point(det(c, b, l.c, l.b) / d, det(a, c, l.a, l.c) / d);
     }
 
-    bool contains(const point &p) const {
-        return true; // TODO
-    }
+    bool contains(const point &p) const { return iszero(a * p.x + b * p.y + c); }
 
-    otype dist(const point &c) { 
-        vec ba(b, a), ca(c, a);
-        return (ba ^ ca) / sqrt(ba * ba);
+    bool operator == (const line &l) const {
+        return iszero(det(a, b, l.a, l.b)) && iszero(det(a, c, l.a, l.c)) && iszero(det(b, c, l.b, l.c));
     }
 };
 
-ostream& operator<<(ostream& os, const line& l) { // print a line
-    return os << l.a << " <-> " << l.b;
-}
+ostream& operator<<(ostream& os, const line& l) { return os << l.a << " <-> " << l.b; }
 
 class segment {
 public:
@@ -291,12 +285,12 @@ public:
     constexpr segment() {}
     segment(const point &_a, const point &_b): a(_a), b(_b), theLine(_a, _b) { }
     segment(const segment &l): a(l.a), b(l.b), theLine(l.theLine) {}
-    segment(const itype &x1, const itype &y1, const itype &x2, const itype &y2): a(x1, y1), b(x2, y2), theLine(x1, y1, x2, y2) {}
+    segment(const coord_t &x1, const coord_t &y1, const coord_t &x2, const coord_t &y2): a(x1, y1), b(x2, y2), theLine(x1, y1, x2, y2) {}
 
-    otype length() const { return a.dist(b); }
+    length_t length() const { return a.dist(b); }
 
     bool intersects(const segment &s) const { 
-        if(theLine.isParallelTo(s.theLine)) return false;
+        if(theLine.parallel(s.theLine)) return false;
         point p = theLine.intersection(s.theLine);
         return contains(p) && s.contains(p);
     }
@@ -308,15 +302,13 @@ public:
         return true;
     }
 
-    point intersection(const segment &s) const {
-        assert(intersects(s));
-        return theLine.intersection(s.theLine);
-    }
+    // Assumes single point of intersection
+    point intersection(const segment &s) const { assert(intersects(s)); return theLine.intersection(s.theLine); }
 
-    point midpoint() const { return point((otype(a.x) + b.x) / 2, (otype(a.y) + b.y) / 2); }
-    otype dist(const point &c) {
+    point midpoint() const { return point((length_t(a.x) + b.x) / 2, (length_t(a.y) + b.y) / 2); }
+    length_t dist(const point &c) {
         vec ba(b, a), ca(c, a), cb(c, b), ab(a, b), bc(b, c), ac(a, c);
-        otype dist = (ba ^ ca) / sqrt(ba * ba);
+        length_t dist = (ba ^ ca) / sqrt(ba * ba);
         if(cb * ba > eps) return sqrt(bc * bc);
         if(ca * ab > eps) return sqrt(ac * ac);
         return fabs(dist);
@@ -337,41 +329,31 @@ public:
 
         return v1.angleWith(v2);
     }
-
-private:
-    point getIntersectionPoint(const segment &s) const {
-        return theLine.intersection(s.theLine);
-    }
 };
 
-ostream& operator<<(ostream& os, const segment& s) { // print a seg
-    return os << s.a << " - " << s.b;
-}
+ostream& operator<<(ostream& os, const segment& s) { return os << s.a << " - " << s.b; }
 
 class circle {
 public:
     point center;
-    itype radius;
+    length_t radius;
 
     constexpr circle(): radius(0) {}
-    circle(const point &_center, const itype &_radius): center(_center), radius(_radius) {}
-    otype area() { return PI * radius * radius; }
+    circle(const point &_center, const length_t &_radius): center(_center), radius(_radius) {}
+    length_t area() { return PI * radius * radius; }
 
-    // TODO
-    bool intersects(const circle &c) const {
-        otype dist = center.dist(c.center);
-        return dist <= otype(radius) + c.radius + eps;
-    }
-    bool intersects(const segment &s) const {}
-    bool contains(const point &p) const {}
-    vector<point> intersection(const circle &c) const {}
-    vector<point> intersection(const line &s) const {}
+    template<typename T> bool intersects(const T &shape) const { return shape.dist(center) <= radius + eps; }
+    template<typename T> length_t dist(const T &shape) const { assert(!intersects(shape)); return shape.dist(center) - radius; }
     vector<point> intersection(const segment &s) const {
         vector<point> linePoints = intersection(line(s.a, s.b));
         vector<point> ret;
         for(const point &p: linePoints) if(s.contains(p)) ret.push_back(p);
         return ret;
     }
+
+    // TODO
+    vector<point> intersection(const line &s) const {}
+    vector<point> intersection(const circle &c) const {}
 };
 
 class polygon {
@@ -382,8 +364,8 @@ public:
     polygon(const vector<point> &_points): points(_points) {}
     polygon(const polygon &pol): points(pol.points) {}
 
-    otype area() const {
-        otype ret = 0;
+    length_t area() const {
+        length_t ret = 0;
         for(int i = 1; i + 1 < si(points); ++i) {
             vec v1(points[i], points[0]);
             vec v2(points[i+1], points[0]);
@@ -400,8 +382,13 @@ public:
 };
 
 
-class Triangle {
-    // TODO
+class triangle {
+public:
+    point a, b, c;
+    constexpr triangle() {}
+    triangle(const point &_a, const point &_b, const point &_c): a(_a), b(_b), c(_c) {}
+    triangle(const coord_t &x1, const coord_t &y1, const coord_t &x2, const coord_t &y2, const coord_t &x3, const coord_t &y3)
+        : a(x1, y1), b(x2, y2), c(x3, y3) {}
 };
 
 
