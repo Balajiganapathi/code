@@ -170,39 +170,64 @@ vi adj[mx_n];
 int n, m;
 int vis[mx_n], disc[mx_n], low[mx_n], tim;
 int par[mx_n];
-int bridges;
+set<pi> bridges;
+map<pi, int> cnt;
 
+vector<int> leaves;
 // Bridge finding from http://www.geeksforgeeks.org/bridge-in-a-graph/
-void dfs(int x) {
+void dfs(int x, bool had) {
     vis[x] = 1;
     disc[x] = low[x] = ++tim;
 
+    int ch = 0;
     for(int y: adj[x]) {
+        pi edge = mp(min(x, y), max(x, y));
         if(!vis[y]) {
             par[y] = x;
+            ++ch;
             dfs(y);
             low[x] = min(low[x], low[y]);
-            if(low[y] > disc[x]) ++bridges;
-        } else {
+            if(low[y] > disc[x] && cnt[edge] == 1) {
+                bridges.insert(edge);
+            }
+        } else if(y != par[x]) {
             low[x] = min(low[x], disc[y]);
         }
     }
+
+    if(ch == 0 && had) leaves.push_back(x);
+    trace(x, low[x], disc[x]);
+}
+
+int r;
+
+vector<pi> get() {
+    ini(vis, 0);
+    ini(low, 0); ini(disc, 0); ini(par, 0);
+    leaves.clear();
+    bridges.clear();
+    dfs(r);
+
+    return bridges;
 }
 
 int main() {
+    srand(time(NULL));
     scanf("%d %d", &n, &m);
+    r = rand() % n + 1;
     int x, y;
     fo(i, m) {
         scanf("%d %d", &x, &y);
         adj[x].push_back(y);
         adj[y].push_back(x);
+        ++cnt[mp(min(x, y), max(x, y))];
     }
 
-    dfs(1);
+    bool ok = false;
 
-    if(bridges <= 1) printf("YES\n");
-    else printf("NO\n");
-    
+    vector<pi> candidates = get();
+
+
     
 	return 0;
 }
