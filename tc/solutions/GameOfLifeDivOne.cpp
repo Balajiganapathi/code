@@ -145,71 +145,91 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx_n = 52;
+constexpr int mx_n = 52 * 2;
 
-ll dp[mx_n][mx_n][2][2][2];
+int pos[mx_n][2][mx_n][2];
+ll dp[mx_n][2][52];
 
 class GameOfLifeDivOne {
 public:
-    string str;
-    int n;
-    // i -> current i 0 to n-1
-    // k -> remaining ones needed K to 0
-    // f -> first char 0/1
-    // l -> last char 0/1
-    // c -> cnt of last char 1/2+
-    ll solve(int i, int k, int f, int l, int c) {
-        if(i == n) return k == 0;
-        ll &ret = dp[i][k][f][l][c-1];
+    string str, s2;
+    int n, t, k;
 
-        ret = 0;
-        if(str[i] == '0' || str[i] == '?') {
+    bool canSet(int i, int b) {
+        assert(i >= 0 && i < 2 * n);
+        return s2[i] == '?' || s2[i] == '0' + b;
+    }
+
+    bool canAlternate(int s, int e, int b) {
+        re(i, s, e) {
+            if(!canSet(i, b)) return false;
+            b = 1 - b;
         }
+
+        return true;
+    }
+
+    void buildGraph() {
+        ini(pos, -1);
+        trace(s2, n, t, k);
+        re(i, 1, 2 * n) fo(b1, 2) if(canSet(i, b1)) {
+            re(j, i + 1, 2 * n - 1) fo(b2, 2) if(canSet(j, b2)) {
+                int len = j - i;
+                if(len % 2 == 0) {
+                    if(b1 != b2 && canAlternate(i, j, b1)) {
+                        pos[i][b1][j][b2] = len / 2;
+                    }
+                } else {
+                    if(b1 == b2 && canAlternate(i, j, b1)) {
+                        if(b1 == 0) pos[i][b1][j][b2] = max((len + 1) / 2 - t, 0);
+                        else pos[i][b1][j][b2] = len - max((len + 1) / 2 - t, 0);
+                    }
+                }
+                trace(i, b1, j, b2, pos[i][b1][j][b2]);
+            }
+        }
+    }
+
+    int start, bstart;
+
+    ll solve(int i, int b, int ones) {
+        ll &ret = dp[i][b][ones];
+        if(ret != -1) return ret;
+        if(i == start + n) {
+            ret = (b == bstart) && ones == 0;
+        } else {
+            ret = 0;
+
+            for(int j = i + 1; j <= start + n; ++j) fo(bn, 2) if(j % n > start || (i < n && j == start + n)) {
+                int &p = pos[i][b][j][bn];
+                trace(i, b, j, bn, p);
+                if(p != -1) ret += solve(j, bn, max(0, ones - p));
+            }
+        }
+
+        trace(i, b, ones, ret);
 
         return ret;
     }
-
-    ll solve(int k) {
-        ini(dp, -1);
-        if(str[0] == '0') return solve(0, k, 0, 0, 1);
-        else if(str[0] == '1') return solve(0, k, 1, 1, 1);
-        return solve(0, k, 0, 0, 1) + solve(0, k, 1, 1, 1);
-    }
-
-    ll comb(ll n, ll k) {
-        if(k == 0) return 1;
-        ll ret = 1;
-        int c = 0;
-        rep(i, n - k + 1, n) {
-            ++c;
-            ret = ret * i / c;
-        }
-
-        return ret;
-    }
-
-    ll solve0(int k) {
-        int ones = 0, zeros = 0, q = 0;
-        fo(i, n) {
-            if(str[i] == '0') ++zeros;
-            else if(str[i] == '1') ++ones;
-            else ++q;
-        }
-        int atleast = max(0, k - ones);
-
-        ll ret = 0;
-        rep(i, atleast, q) ret += comb(q, i);
-
-        return ret;
-    }
-
 
 	long long theCount( string init, int T, int K ) {
         str = init;
-        n = si(str);
-        if(T == 0) return solve0(K);
-		
-		return solve(K);
+        n = si(str); t = T; k = K;
+        s2 = str + str;
+        buildGraph();
+
+        ll ans = 0;
+
+        if(k <= n / 2 && pos[0][0][n][1] != -1) ++ans;
+        if(k <= n / 2 && pos[0][1][n][0] != -1) ++ans;
+
+        for(start = 0; start < n; ++start) for(bstart = 0; bstart < 2; ++bstart) if(canSet(start, bstart)) {
+            ini(dp, -1);
+            trace(start, bstart, solve(start + 1, bstart, k));
+            ans += solve(start + 1, bstart, k);
+        }
+
+        return ans;
 	}
 };
 
