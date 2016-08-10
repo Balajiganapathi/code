@@ -169,85 +169,73 @@ constexpr int mx_n = 5003;
 
 int a[mx_n], b[mx_n], c[mx_n], d[mx_n], n, s, e;
 int x[mx_n];
-ll dp[mx_n][3][3];
+ll dp[mx_n][mx_n][2][2];
 
-ll solve(int idx, int right_launcher, int right_lander) {
+ll solve(int idx, int both, int after, int before) {
+    if(both < 0 || after < 0 || before < 0) return oo;
     if(idx == n) {
-        return (right_launcher + right_lander == 0)? 0: oo;
+        return (both + after + before == 0)? 0: oo;
     }
-    ll &ret = dp[idx][right_launcher][right_lander];
+    ll &ret = dp[idx][both][after][before];
     if(ret != -1) return ret;
 
     ret = oo;
-    int nxt_launcher = 0, nxt_lander = 0;
 
-    // i -> launcher, j -> lander
-    // i = 0 -> launch left
-    // i = 1 -> launch right
-    // j = 0 -> land from left
-    // j = 1 -> land from right
-
-    ll costi = 0, costj = 0;
-    fo(i, 3) {
-        if((i == 2) ^ (idx == e)) continue;
-        int lander_allowed = 1;
-        int nxt_launcher = 0;
-
-        if(i == 0) {
-            if(right_lander == 0) continue;
-            else lander_allowed = 0;
-            costi = c[idx];
-        } else if(i == 1) {
-            nxt_launcher = 1;
-            costi = d[idx];
-        } else {
-            costi = 0;
-        }
-
-        fo(j, 3) {
-            if((j == 2) ^ (idx == s)) continue;
-            int launcher_allowed = 1;
-            int nxt_lander = 0;
-            if(j == 0) {
-                if(right_launcher == 0) continue;
-                else launcher_allowed = 0;
-                costj = a[idx];
-            } else if(j == 1) {
-                nxt_lander = 1;
-                costj = b[idx];
-            } else {
-                costj = 0;
-            }
-
-            nxt_lander += ((right_lander>0) && lander_allowed);
-            nxt_launcher += ((right_launcher>0) && launcher_allowed);
-
-
-            ll cost = costi + costj;
-            if(idx + 1 < n) cost += 1ll * (nxt_launcher + nxt_lander) * (x[idx+1] - x[idx]);
-            ll tmp = cost + solve(idx + 1, nxt_launcher, nxt_lander);
-            trace(idx, right_launcher, right_lander, i, j, costi, costj, cost);
-            trace(nxt_launcher, nxt_lander, tmp);
-            ret = min(ret, tmp);
-        }
+    ll dx = x[idx+1] - x[idx];
+    if(idx == s) {
+        // Launch left
+        // From both
+        ret = min(ret, c[idx] + solve(idx + 1, both - 1, 1, before) + dx * (2 * (both - 1) + 1 + before)); 
+        // From  before
+        ret = min(ret, c[idx] + solve(idx + 1, both, 0, before - 1) + dx * (2 * both + 0 + before - 1)); 
+        // Launch right
+        // after
+        ret = min(ret, d[idx] + solve(idx + 1, both, 1, before) + dx * (2 * both + 1 + before));
+    } else if(idx == e) {
+        // Land from left
+        // From both
+        ret = min(ret, a[idx] + solve(idx + 1, both - 1, after, 1) + dx * (2 * (both - 1) + after + 1));
+        // From after
+        ret = min(ret, a[idx] + solve(idx + 1, both, after - 1, 0) + dx * (2 * both + after - 1 + 0));
+        // Land from right
+        // before
+        ret = min(ret, b[idx] + solve(idx + 1, both, after, 1) + dx * (2 * both + after + 1));
+    } else {
+        // Launch left, land from left
+        //ret = min(ret, c[idx] + a[idx] + solve(idx + 1, both + 1, after, before) + dx * (2 * (both + 1) + after + before));
+        if(both >= 2) 
+            ret = min(ret, c[idx] + a[idx] + solve(idx + 1, both - 1, after, before) + dx * (2 * (both - 1) + after + before));
+        //if(after >= 1 || before >= 1) {
+            //ret = min(ret, c[idx] + a[idx] + solve(idx + 1, both, after, before) + dx * (2 * both + after + before));
+            //ret = min(ret, c[idx] + a[idx] + solve(idx + 1, both - 1, after, before) + dx * (2 * (both - 1) + after + before));
+        //}
+        ret = min(ret, c[idx] + a[idx] + solve(idx + 1, both, after - 1, before - 1) + dx * (2 * both + after - 1 + before - 1));
+        // Launch left, land from right
+        //ret = min(ret, c[idx] + b[idx] + solve(idx + 1, both + 1, after, before) + dx * (2 * (both + 1) + after + before));
+        if(both >= 1 || before >= 1) 
+            ret = min(ret, c[idx] + b[idx] + solve(idx + 1, both, after, before) + dx * (2 * both + after + before));
+        // Launch right, land from left
+        //ret = min(ret, d[idx] + a[idx] + solve(idx + 1, both + 1, after, before) + dx * (2 * (both + 1) + after + before));
+        if(both >= 1 || after >= 1) 
+            ret = min(ret, d[idx] + a[idx] + solve(idx + 1, both, after, before) + dx * (2 * both + after + before));
+        // Launch right, land from right
+        ret = min(ret, d[idx] + b[idx] + solve(idx + 1, both + 1, after, before) + dx * (2 * (both + 1) + after + before));
     }
-
-    trace(idx, right_launcher, right_lander, ret);
-
+    trace(idx, both, after, before, ret);
     
     return ret;
 }
 
 int main() {
     scanf("%d %d %d", &n, &s, &e); --s; --e;
-    fo(i, n) scanf("%d", x + i);
+    fo(i, n) scanf("%d", x + i); x[n] = x[n-1];
     fo(i, n) scanf("%d", a + i);
     fo(i, n) scanf("%d", b + i);
     fo(i, n) scanf("%d", c + i);
     fo(i, n) scanf("%d", d + i);
 
     ini(dp, -1);
-    cout << solve(0, 0, 0) << endl;
+    cout << solve(0, 0, 0, 0) << endl;
     
 	return 0;
 }
