@@ -15,25 +15,20 @@ using namespace std;
 
 /* aliases */
 using vi  = vector<int>;
-using pii  = pair<int, int>;
-using ll  = int64_t;
+using pi  = pair<int, int>;
+using ll  = long long int;
 
 /* shortcut macros */
 #define mp              make_pair
 #define fi              first
 #define se              second
-#define pu              push_back
-
 #define mt              make_tuple
 #define gt(t, i)        get<i>(t)
-
 #define all(x)          (x).begin(), (x).end()
 #define ini(a, v)       memset(a, v, sizeof(a))
-
 #define rep(i, s, n)    for(int i = (s), _##i = (n); i <= _##i; ++i)
 #define re(i, s, n)     rep(i, (s), (n) - 1)
 #define fo(i, n)        re(i, 0, n)
-
 #define si(x)           (int((x).size()))
 #define is1(mask,i)     (((mask) >> i) & 1)
 
@@ -45,8 +40,8 @@ using ll  = int64_t;
 #endif
 
 #ifdef TRACE
-pii _gp(string s) {
-    pii r(0, si(s) - 1);
+pi _gp(string s) {
+    pi r(0, si(s) - 1);
     int p = 0, s1 = 0, s2 = 0, start = 1;
     fo(i, si(s)) {
         int x = (s1 | s2);
@@ -69,12 +64,12 @@ pii _gp(string s) {
 }
 
 template<typename H> void _dt(string u, H&& v) {
-    pii p = _gp(u);
+    pi p = _gp(u);
     cerr << u.substr(p.fi, p.se - p.fi + 1) << " = " << forward<H>(v) << " |" << endl;
 }
 
 template<typename H, typename ...T> void _dt(string u, H&& v, T&&... r) {
-    pii p = _gp(u);
+    pi p = _gp(u);
     cerr << u.substr(p.fi, p.se - p.fi + 1) << " = " << forward<H>(v) << " | ";
     _dt(u.substr(p.se + 2), forward<T>(r)...);
 }
@@ -104,7 +99,7 @@ ostream &operator <<(ostream &o, set<T> s) { // print a set
     bool first = true;
     for(auto &entry: s) {
         if(!first) o << ", ";
-
+         
         o << entry;
         first = false;
     }
@@ -114,11 +109,11 @@ ostream &operator <<(ostream &o, set<T> s) { // print a set
 
 template <size_t n, typename... T>
 typename enable_if<(n >= sizeof...(T))>::type
-print_tuple(ostream&, const tuple<T...>&) {} 
+    print_tuple(ostream&, const tuple<T...>&) {} 
 
 template <size_t n, typename... T>
 typename enable_if<(n < sizeof...(T))>::type
-print_tuple(ostream& os, const tuple<T...>& tup) {
+    print_tuple(ostream& os, const tuple<T...>& tup) {
     if (n != 0)
         os << ", ";
     os << get<n>(tup);
@@ -128,13 +123,12 @@ print_tuple(ostream& os, const tuple<T...>& tup) {
 template <typename... T>
 ostream& operator<<(ostream& os, const tuple<T...>& tup) { // print a tuple
     os << "("; print_tuple<0>(os, tup); return os << ")"; } template <typename T1, typename T2>
-    ostream& operator<<(ostream& os, const pair<T1, T2>& p) { // print a pair
-        return os << "(" << p.fi << ", " << p.se << ")";
-    }
+ostream& operator<<(ostream& os, const pair<T1, T2>& p) { // print a pair
+    return os << "(" << p.fi << ", " << p.se << ")";
+}
 #endif
-
+    
 /* util functions */
-
 template<typename T1, typename T2, typename T3>
 T1 modpow(T1 _a, T2 p, T3 mod) {
     assert(p >= 0);
@@ -165,7 +159,7 @@ T1 modpow(T1 _a, T2 p, T3 mod) {
 /* constants */
 constexpr int dx[] = {-1, 0, 1, 0, 1, 1, -1, -1};
 constexpr int dy[] = {0, -1, 0, 1, 1, -1, 1, -1};
-constexpr auto pi  = 3.14159265358979323846L;
+constexpr auto PI  = 3.14159265358979323846L;
 constexpr auto oo  = numeric_limits<int>::max() / 2 - 2;
 constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
@@ -173,39 +167,14 @@ constexpr auto mod = 1000000007;
 /* code */
 constexpr int mx = -1;
 
-int f(int a, double b, long c) {
-    trace(a, b, c, mt(a, b, c), mt(1, 2));
-}
-
 int main() {
-    f(1, 2, 3);
-    trace("Hello, \"(, f(, ))");
-
-    vector<pii> v;
-    int n = 10;
-    fo(i, n) v.push_back({i, 10 * i});
-
-    trace(v);
-    vector<tuple<int, int, int>> vt;
-    rep(i, 0, n) vt.push_back(mt(i, 10 * i, 100 * i));
-
-    reverse(all(vt));
-    trace(si(vt), vt);
-    trace("");
-
-    map<int, string> m;
-    string s = "abc";
-    re(i, 2, n) {
-        ++s[2];
-        m[i] = char('a' + i);
-    }
-
-    trace(m, gt(vt[0], 0));
-
-    set<int> se;
-    fo(i, 100) se.insert(i % 10);
-    trace(se);
-
-
-    return 0;
+    int a, b, c;
+    cin >> a >> b >> c;
+    int p[] = {a, b, c};
+    sort(p, p + 3);
+    cout << (p[2] - p[0]) << endl;
+    
+    
+	return 0;
 }
+

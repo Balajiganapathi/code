@@ -15,25 +15,20 @@ using namespace std;
 
 /* aliases */
 using vi  = vector<int>;
-using pii  = pair<int, int>;
-using ll  = int64_t;
+using pi  = pair<int, int>;
+using ll  = long long int;
 
 /* shortcut macros */
 #define mp              make_pair
 #define fi              first
 #define se              second
-#define pu              push_back
-
 #define mt              make_tuple
 #define gt(t, i)        get<i>(t)
-
 #define all(x)          (x).begin(), (x).end()
 #define ini(a, v)       memset(a, v, sizeof(a))
-
 #define rep(i, s, n)    for(int i = (s), _##i = (n); i <= _##i; ++i)
 #define re(i, s, n)     rep(i, (s), (n) - 1)
 #define fo(i, n)        re(i, 0, n)
-
 #define si(x)           (int((x).size()))
 #define is1(mask,i)     (((mask) >> i) & 1)
 
@@ -45,8 +40,8 @@ using ll  = int64_t;
 #endif
 
 #ifdef TRACE
-pii _gp(string s) {
-    pii r(0, si(s) - 1);
+pi _gp(string s) {
+    pi r(0, si(s) - 1);
     int p = 0, s1 = 0, s2 = 0, start = 1;
     fo(i, si(s)) {
         int x = (s1 | s2);
@@ -69,12 +64,12 @@ pii _gp(string s) {
 }
 
 template<typename H> void _dt(string u, H&& v) {
-    pii p = _gp(u);
+    pi p = _gp(u);
     cerr << u.substr(p.fi, p.se - p.fi + 1) << " = " << forward<H>(v) << " |" << endl;
 }
 
 template<typename H, typename ...T> void _dt(string u, H&& v, T&&... r) {
-    pii p = _gp(u);
+    pi p = _gp(u);
     cerr << u.substr(p.fi, p.se - p.fi + 1) << " = " << forward<H>(v) << " | ";
     _dt(u.substr(p.se + 2), forward<T>(r)...);
 }
@@ -104,7 +99,7 @@ ostream &operator <<(ostream &o, set<T> s) { // print a set
     bool first = true;
     for(auto &entry: s) {
         if(!first) o << ", ";
-
+         
         o << entry;
         first = false;
     }
@@ -114,11 +109,11 @@ ostream &operator <<(ostream &o, set<T> s) { // print a set
 
 template <size_t n, typename... T>
 typename enable_if<(n >= sizeof...(T))>::type
-print_tuple(ostream&, const tuple<T...>&) {} 
+    print_tuple(ostream&, const tuple<T...>&) {} 
 
 template <size_t n, typename... T>
 typename enable_if<(n < sizeof...(T))>::type
-print_tuple(ostream& os, const tuple<T...>& tup) {
+    print_tuple(ostream& os, const tuple<T...>& tup) {
     if (n != 0)
         os << ", ";
     os << get<n>(tup);
@@ -128,13 +123,12 @@ print_tuple(ostream& os, const tuple<T...>& tup) {
 template <typename... T>
 ostream& operator<<(ostream& os, const tuple<T...>& tup) { // print a tuple
     os << "("; print_tuple<0>(os, tup); return os << ")"; } template <typename T1, typename T2>
-    ostream& operator<<(ostream& os, const pair<T1, T2>& p) { // print a pair
-        return os << "(" << p.fi << ", " << p.se << ")";
-    }
+ostream& operator<<(ostream& os, const pair<T1, T2>& p) { // print a pair
+    return os << "(" << p.fi << ", " << p.se << ")";
+}
 #endif
-
+    
 /* util functions */
-
 template<typename T1, typename T2, typename T3>
 T1 modpow(T1 _a, T2 p, T3 mod) {
     assert(p >= 0);
@@ -165,47 +159,82 @@ T1 modpow(T1 _a, T2 p, T3 mod) {
 /* constants */
 constexpr int dx[] = {-1, 0, 1, 0, 1, 1, -1, -1};
 constexpr int dy[] = {0, -1, 0, 1, 1, -1, 1, -1};
-constexpr auto pi  = 3.14159265358979323846L;
+constexpr auto PI  = 3.14159265358979323846L;
 constexpr auto oo  = numeric_limits<int>::max() / 2 - 2;
 constexpr auto eps = 1e-6;
-constexpr auto mod = 1000000007;
+constexpr auto mod = 1000000009;
 
 /* code */
-constexpr int mx = -1;
+constexpr int mx = 5003;
+tuple<int, int, int> edges[mx];
+vi adj[mx];
+int sz[mx], vis[mx], n;
+int dp[mx][mx];
 
-int f(int a, double b, long c) {
-    trace(a, b, c, mt(a, b, c), mt(1, 2));
+void dfs(int x) {
+    if(vis[x]) return;
+    vis[x] = 1;
+    sz[x] = 1;
+    for(int y: adj[x]) if(!vis[y]) {
+        dfs(y);
+        sz[x] += sz[y];
+    }
+}
+
+int fact[mx];
+void pre() {
+    fact[0] = 1;
+    re(i, 1, mx) {
+        fact[i] = 1ll * i * fact[i-1] % mod;
+    }
+}
+
+int solve(int x, int p) {
+    vi c;
+    for(int y: adj[x]) if(y != p) {
+        c.push_back(solve(y, x));
+    }
+    int ans = 1;
+    int sum = 0;
+    for(int v: c) {
+        sum += v;
+        if(sum >= mod) sum -= mod;
+    }
+
+    if(si(c)) {
+        ans = 1ll * ans * fact[si(c) - 1] % mod;
+        ans = 1ll * ans * ((1ll * si(c) * (si(c) - 1) / 2) % mod) % mod;
+        ans = 1ll * ans * sum % mod;
+    }
+    return ans;
 }
 
 int main() {
-    f(1, 2, 3);
-    trace("Hello, \"(, f(, ))");
+    pre();
+    cin >> n;
+    fo(i, n - 1) {
+        int x, y, w;
+        cin >> x >> y >> w;
+        edges[i] = mt(x, y, w);
+        adj[x].push_back(y);
+        adj[y].push_back(x);
+    }
+    dfs(1);
 
-    vector<pii> v;
-    int n = 10;
-    fo(i, n) v.push_back({i, 10 * i});
-
-    trace(v);
-    vector<tuple<int, int, int>> vt;
-    rep(i, 0, n) vt.push_back(mt(i, 10 * i, 100 * i));
-
-    reverse(all(vt));
-    trace(si(vt), vt);
-    trace("");
-
-    map<int, string> m;
-    string s = "abc";
-    re(i, 2, n) {
-        ++s[2];
-        m[i] = char('a' + i);
+    ini(dp, -1);
+    int ans = 0;
+    fo(i, n - 1) {
+        int x = gt(edges[i], 0);
+        int y = gt(edges[i], 1);
+        int z = gt(edges[i], 2);
+        int cnt = solve(x, y) + solve(y, x);
+        cnt %= mod;
+        ans = (ans + 1ll * cnt * z) % mod;
     }
 
-    trace(m, gt(vt[0], 0));
-
-    set<int> se;
-    fo(i, 100) se.insert(i % 10);
-    trace(se);
-
-
-    return 0;
+    cout << ans << endl;
+    
+    
+	return 0;
 }
+
