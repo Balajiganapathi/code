@@ -160,12 +160,11 @@ T1 modpow(T1 _a, T2 p, T3 mod) {
 constexpr int dx[] = {-1, 0, 1, 0, 1, 1, -1, -1};
 constexpr int dy[] = {0, -1, 0, 1, 1, -1, 1, -1};
 constexpr auto PI  = 3.14159265358979323846L;
-constexpr auto oo  = numeric_limits<int>::max() / 2 - 2;
+constexpr auto oo  = numeric_limits<ll>::max() / 2 - 2;
 constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx = -1;
 
 /*-------------------------------------------------------------------------------------------------------------------------------------*/
 /*<shapes>*/
@@ -173,8 +172,8 @@ constexpr int mx = -1;
 /*WARNING: UNTESTED*/
 /*Requires PI and eps constants*/
 
-using coord_t = long double;
-using length_t = long double; // Assumes double or long double, uses eps constant
+using coord_t = long long;
+using length_t = long long; // Assumes double or long double, uses eps constant
 using angle_t = long double; // Assumes double or long double, uses eps constant
 
 // utils
@@ -193,11 +192,14 @@ public:
     constexpr point(const point &p): x(p.x), y(p.y) {}
 
     length_t dist(const point &p) const {
-        length_t dx = length_t(x) - p.x;
-        length_t dy = length_t(y) - p.y;
-        return sqrt(dx * dx + dy * dy);
+        return sqrt(sqDist(p));
     }
 
+    length_t sqDist(const point &p) const { 
+        length_t dx = length_t(x) - p.x;
+        length_t dy = length_t(y) - p.y;
+        return dx * dx + dy * dy;
+    }
     length_t dist() const { return sqrt(sqDist()); }
     length_t sqDist() const { return length_t(x) * x + length_t(y) * y; }
     pair<length_t, angle_t> toPolar() const { return make_pair(dist(), atan2(y, x)); }
@@ -411,6 +413,65 @@ public:
     }
 };
 
+// O(n lg^2n)
+
+length_t dist(const pair<point, point> &pt_pair) {
+    return pt_pair.fi.sqDist(pt_pair.se);
+}
+
+pair<point, point> solve_closest(vector<point> points) {
+    int n = si(points);
+    pair<point, point> ret;
+    if(n <= 4) {
+        ret = mp(points[0], points[1]);
+        fo(i, n) re(j, i + 1, n) {
+            auto cur = mp(points[i], points[j]);
+            if(dist(cur) < dist(ret)) {
+                ret = cur;
+            }
+        }
+        trace(points, ret);
+        return ret;
+    }
+
+    int m = n / 2;
+    vector<point> left(points.begin(), points.begin() + m);
+    vector<point> right(points.begin() + m, points.end());
+    auto retL = solve_closest(left), retR = solve_closest(right);
+    ret = retL;
+    if(dist(retR) < dist(ret)) ret = retR;
+
+    vector<point> strip;
+
+    long double d = sqrt(1.0L * dist(ret));
+    fo(i, n) if(abs(points[i].x - points[m].x) <= d + eps) strip.push_back(points[i]);
+
+    sort(all(strip), [](const point &p1, const point &p2) {return p1.y < p2.y; });
+    trace(strip);
+
+    fo(i, si(strip)) {
+        for(int j = i + 1; j < si(strip) && (strip[j].y - strip[i].y) <= d + eps; ++j) {
+            pair<point, point> cur(strip[i], strip[j]);
+            if(dist(cur) < dist(ret)) {
+                ret = cur;
+            }
+        }
+    }
+    bool pr1 = false, pr2 = false;
+    for(auto p: points) {
+        if(p == ret.fi) pr1 = true;
+        if(p == ret.se) pr2 = true;
+    }
+    trace(points, retL, retR, ret);
+    assert(pr1 && pr2);
+    return ret;
+}
+
+pair<point, point> closest(vector<point> points) {
+    int n = si(points);
+    sort(all(points));
+    return solve_closest(points);
+}
 
 // TODO
 polygon convexHull(vector<point> points) {
@@ -419,7 +480,22 @@ polygon convexHull(vector<point> points) {
 /*</shapes>*/
 /*-------------------------------------------------------------------------------------------------------------------------------------*/
 
+constexpr int mx = 100005;
+int a[mx], csum[mx], n;
+
+pair<point, point> solve() {
+    vector<point> pts;
+    fo(i, n) pts.push_back(point(i, csum[i]));
+    return closest(pts);
+}
+
 int main() {
+    cin >> n;
+    fo(i, n) cin >> a[i];
+    partial_sum(a, a + n, csum);
+
+    auto ans = solve();
+    cout << dist(ans) << endl;
     
     
 	return 0;

@@ -165,7 +165,8 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx = -1;
+constexpr int mx = 800005;
+using ld = long double;
 
 /*-------------------------------------------------------------------------------------------------------------------------------------*/
 /*<shapes>*/
@@ -419,7 +420,37 @@ polygon convexHull(vector<point> points) {
 /*</shapes>*/
 /*-------------------------------------------------------------------------------------------------------------------------------------*/
 
+
+
+int n;
+int x[mx], h[mx];
+
+void input() {
+    cin >> n;
+    ll x1, ax, bx, cx, h1, ah, bh, ch;
+    cin >> x1 >> ax >> bx >> cx >> h1 >> ah >> bh >> ch;
+    x[1] = x1;
+    h[1] = h1;
+    rep(i, 2, n) {
+        x[i] = (ax * x[i-1] + bx) % cx + 1;
+        h[i] = (ah * h[i-1] + bh) % ch + 1;
+    }
+}
+
+ld solve() {
+    ld ans = 0;
+}
+
 int main() {
+    int t;
+    cin >> t;
+    rep(kase, 1, t) {
+        input();
+        ld ans = solve();
+        printf("Case #%d: %.09Lf\n", kase, ans);
+        // cout << "Case #" << kase << ":";
+
+    }
     
     
 	return 0;
