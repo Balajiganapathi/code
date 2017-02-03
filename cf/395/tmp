@@ -1,0 +1,1037 @@
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h: In instantiation of ‘bool __gnu_cxx::__ops::_Iter_less_val::operator()(_Iterator, _Value&) const [with _Iterator = __gnu_cxx::__normal_iterator<std::pair<Hash, int>*, std::vector<std::pair<Hash, int> > >; _Value = const Hash]’:
+/usr/include/c++/5/bits/stl_algobase.h:975:14:   required from ‘_ForwardIterator std::__lower_bound(_ForwardIterator, _ForwardIterator, const _Tp&, _Compare) [with _ForwardIterator = __gnu_cxx::__normal_iterator<std::pair<Hash, int>*, std::vector<std::pair<Hash, int> > >; _Tp = Hash; _Compare = __gnu_cxx::__ops::_Iter_less_val]’
+/usr/include/c++/5/bits/stl_algobase.h:1009:32:   required from ‘_ForwardIterator std::lower_bound(_ForwardIterator, _ForwardIterator, const _Tp&) [with _ForwardIterator = __gnu_cxx::__normal_iterator<std::pair<Hash, int>*, std::vector<std::pair<Hash, int> > >; _Tp = Hash]’
+d.cpp:273:47:   required from here
+/usr/include/c++/5/bits/predefined_ops.h:55:22: error: no match for ‘operator<’ (operand types are ‘std::pair<Hash, int>’ and ‘const Hash’)
+       { return *__it < __val; }
+                      ^
+In file included from /usr/include/c++/5/bits/stl_algobase.h:67:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/stl_iterator.h:849:5: note: candidate: template<class _IteratorL, class _IteratorR, class _Container> bool __gnu_cxx::operator<(const __gnu_cxx::__normal_iterator<_IteratorL, _Container>&, const __gnu_cxx::__normal_iterator<_IteratorR, _Container>&)
+     operator<(const __normal_iterator<_IteratorL, _Container>& __lhs,
+     ^
+/usr/include/c++/5/bits/stl_iterator.h:849:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h:55:22: note:   ‘std::pair<Hash, int>’ is not derived from ‘const __gnu_cxx::__normal_iterator<_IteratorL, _Container>’
+       { return *__it < __val; }
+                      ^
+In file included from /usr/include/c++/5/bits/stl_algobase.h:67:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/stl_iterator.h:856:5: note: candidate: template<class _Iterator, class _Container> bool __gnu_cxx::operator<(const __gnu_cxx::__normal_iterator<_Iterator, _Container>&, const __gnu_cxx::__normal_iterator<_Iterator, _Container>&)
+     operator<(const __normal_iterator<_Iterator, _Container>& __lhs,
+     ^
+/usr/include/c++/5/bits/stl_iterator.h:856:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h:55:22: note:   ‘std::pair<Hash, int>’ is not derived from ‘const __gnu_cxx::__normal_iterator<_Iterator, _Container>’
+       { return *__it < __val; }
+                      ^
+In file included from /usr/include/c++/5/regex:61:0,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:108,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/regex.h:1426:5: note: candidate: template<class _Bi_iter> bool std::__cxx11::operator<(const std::__cxx11::sub_match<_BiIter>&, const typename std::iterator_traits<_Iter>::value_type&)
+     operator<(const sub_match<_Bi_iter>& __lhs,
+     ^
+/usr/include/c++/5/bits/regex.h:1426:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h:55:22: note:   ‘std::pair<Hash, int>’ is not derived from ‘const std::__cxx11::sub_match<_BiIter>’
+       { return *__it < __val; }
+                      ^
+In file included from /usr/include/c++/5/regex:61:0,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:108,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/regex.h:1346:5: note: candidate: template<class _Bi_iter> bool std::__cxx11::operator<(const typename std::iterator_traits<_Iter>::value_type&, const std::__cxx11::sub_match<_BiIter>&)
+     operator<(typename iterator_traits<_Bi_iter>::value_type const& __lhs,
+     ^
+/usr/include/c++/5/bits/regex.h:1346:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h:55:22: note:   ‘const Hash’ is not derived from ‘const std::__cxx11::sub_match<_BiIter>’
+       { return *__it < __val; }
+                      ^
+In file included from /usr/include/c++/5/regex:61:0,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:108,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/regex.h:1269:5: note: candidate: template<class _Bi_iter> bool std::__cxx11::operator<(const std::__cxx11::sub_match<_BiIter>&, const typename std::iterator_traits<_Iter>::value_type*)
+     operator<(const sub_match<_Bi_iter>& __lhs,
+     ^
+/usr/include/c++/5/bits/regex.h:1269:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h:55:22: note:   ‘std::pair<Hash, int>’ is not derived from ‘const std::__cxx11::sub_match<_BiIter>’
+       { return *__it < __val; }
+                      ^
+In file included from /usr/include/c++/5/regex:61:0,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:108,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/regex.h:1195:5: note: candidate: template<class _Bi_iter> bool std::__cxx11::operator<(const typename std::iterator_traits<_Iter>::value_type*, const std::__cxx11::sub_match<_BiIter>&)
+     operator<(typename iterator_traits<_Bi_iter>::value_type const* __lhs,
+     ^
+/usr/include/c++/5/bits/regex.h:1195:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h:55:22: note:   ‘const Hash’ is not derived from ‘const std::__cxx11::sub_match<_BiIter>’
+       { return *__it < __val; }
+                      ^
+In file included from /usr/include/c++/5/regex:61:0,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:108,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/regex.h:1118:5: note: candidate: template<class _Bi_iter, class _Ch_traits, class _Ch_alloc> bool std::__cxx11::operator<(const std::__cxx11::sub_match<_BiIter>&, std::__cxx11::__sub_match_string<_Bi_iter, _Ch_traits, _Ch_alloc>&)
+     operator<(const sub_match<_Bi_iter>& __lhs,
+     ^
+/usr/include/c++/5/bits/regex.h:1118:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h:55:22: note:   ‘std::pair<Hash, int>’ is not derived from ‘const std::__cxx11::sub_match<_BiIter>’
+       { return *__it < __val; }
+                      ^
+In file included from /usr/include/c++/5/regex:61:0,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:108,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/regex.h:1038:5: note: candidate: template<class _Bi_iter, class _Ch_traits, class _Ch_alloc> bool std::__cxx11::operator<(std::__cxx11::__sub_match_string<_Bi_iter, _Ch_traits, _Ch_alloc>&, const std::__cxx11::sub_match<_BiIter>&)
+     operator<(const __sub_match_string<_Bi_iter, _Ch_traits, _Ch_alloc>& __lhs,
+     ^
+/usr/include/c++/5/bits/regex.h:1038:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h:55:22: note:   ‘std::pair<Hash, int>’ is not derived from ‘std::__cxx11::__sub_match_string<_Bi_iter, _Ch_traits, _Ch_alloc>’
+       { return *__it < __val; }
+                      ^
+In file included from /usr/include/c++/5/regex:61:0,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:108,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/regex.h:959:5: note: candidate: template<class _BiIter> bool std::__cxx11::operator<(const std::__cxx11::sub_match<_BiIter>&, const std::__cxx11::sub_match<_BiIter>&)
+     operator<(const sub_match<_BiIter>& __lhs, const sub_match<_BiIter>& __rhs)
+     ^
+/usr/include/c++/5/bits/regex.h:959:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h:55:22: note:   ‘std::pair<Hash, int>’ is not derived from ‘const std::__cxx11::sub_match<_BiIter>’
+       { return *__it < __val; }
+                      ^
+In file included from /usr/include/c++/5/forward_list:38:0,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:102,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/forward_list.h:1363:5: note: candidate: template<class _Tp, class _Alloc> bool std::operator<(const std::forward_list<_Tp, _Alloc>&, const std::forward_list<_Tp, _Alloc>&)
+     operator<(const forward_list<_Tp, _Alloc>& __lx,
+     ^
+/usr/include/c++/5/bits/forward_list.h:1363:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h:55:22: note:   ‘std::pair<Hash, int>’ is not derived from ‘const std::forward_list<_Tp, _Alloc>’
+       { return *__it < __val; }
+                      ^
+In file included from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:94:0,
+                 from d.cpp:12:
+/usr/include/c++/5/valarray:1181:1: note: candidate: template<class _Tp> std::_Expr<std::_BinClos<std::__less, std::_Constant, std::_ValArray, _Tp, _Tp>, typename std::__fun<std::__less, _Tp>::result_type> std::operator<(const _Tp&, const std::valarray<_Tp>&)
+ _DEFINE_BINARY_OPERATOR(<, __less)
+ ^
+/usr/include/c++/5/valarray:1181:1: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h:55:22: note:   ‘const Hash’ is not derived from ‘const std::valarray<_Tp>’
+       { return *__it < __val; }
+                      ^
+In file included from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:94:0,
+                 from d.cpp:12:
+/usr/include/c++/5/valarray:1181:1: note: candidate: template<class _Tp> std::_Expr<std::_BinClos<std::__less, std::_ValArray, std::_Constant, _Tp, _Tp>, typename std::__fun<std::__less, _Tp>::result_type> std::operator<(const std::valarray<_Tp>&, const _Tp&)
+ _DEFINE_BINARY_OPERATOR(<, __less)
+ ^
+/usr/include/c++/5/valarray:1181:1: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h:55:22: note:   ‘std::pair<Hash, int>’ is not derived from ‘const std::valarray<_Tp>’
+       { return *__it < __val; }
+                      ^
+In file included from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:94:0,
+                 from d.cpp:12:
+/usr/include/c++/5/valarray:1181:1: note: candidate: template<class _Tp> std::_Expr<std::_BinClos<std::__less, std::_ValArray, std::_ValArray, _Tp, _Tp>, typename std::__fun<std::__less, _Tp>::result_type> std::operator<(const std::valarray<_Tp>&, const std::valarray<_Tp>&)
+ _DEFINE_BINARY_OPERATOR(<, __less)
+ ^
+/usr/include/c++/5/valarray:1181:1: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h:55:22: note:   ‘std::pair<Hash, int>’ is not derived from ‘const std::valarray<_Tp>’
+       { return *__it < __val; }
+                      ^
+In file included from /usr/include/c++/5/valarray:587:0,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:94,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/valarray_after.h:416:5: note: candidate: template<class _Dom> std::_Expr<std::_BinClos<std::__less, std::_ValArray, std::_Expr, typename _Dom::value_type, _Dom>, typename std::__fun<std::__less, typename _Dom1::value_type>::result_type> std::operator<(const std::valarray<typename _Dom::value_type>&, const std::_Expr<_Dom1, typename _Dom1::value_type>&)
+     _DEFINE_EXPR_BINARY_OPERATOR(<, __less)
+     ^
+/usr/include/c++/5/bits/valarray_after.h:416:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h:55:22: note:   ‘const Hash’ is not derived from ‘const std::_Expr<_Dom1, typename _Dom1::value_type>’
+       { return *__it < __val; }
+                      ^
+In file included from /usr/include/c++/5/valarray:587:0,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:94,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/valarray_after.h:416:5: note: candidate: template<class _Dom> std::_Expr<std::_BinClos<std::__less, std::_Expr, std::_ValArray, _Dom, typename _Dom::value_type>, typename std::__fun<std::__less, typename _Dom1::value_type>::result_type> std::operator<(const std::_Expr<_Dom1, typename _Dom1::value_type>&, const std::valarray<typename _Dom::value_type>&)
+     _DEFINE_EXPR_BINARY_OPERATOR(<, __less)
+     ^
+/usr/include/c++/5/bits/valarray_after.h:416:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h:55:22: note:   ‘std::pair<Hash, int>’ is not derived from ‘const std::_Expr<_Dom1, typename _Dom1::value_type>’
+       { return *__it < __val; }
+                      ^
+In file included from /usr/include/c++/5/valarray:587:0,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:94,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/valarray_after.h:416:5: note: candidate: template<class _Dom> std::_Expr<std::_BinClos<std::__less, std::_Constant, std::_Expr, typename _Dom::value_type, _Dom>, typename std::__fun<std::__less, typename _Dom1::value_type>::result_type> std::operator<(const typename _Dom::value_type&, const std::_Expr<_Dom1, typename _Dom1::value_type>&)
+     _DEFINE_EXPR_BINARY_OPERATOR(<, __less)
+     ^
+/usr/include/c++/5/bits/valarray_after.h:416:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h:55:22: note:   ‘const Hash’ is not derived from ‘const std::_Expr<_Dom1, typename _Dom1::value_type>’
+       { return *__it < __val; }
+                      ^
+In file included from /usr/include/c++/5/valarray:587:0,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:94,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/valarray_after.h:416:5: note: candidate: template<class _Dom> std::_Expr<std::_BinClos<std::__less, std::_Expr, std::_Constant, _Dom, typename _Dom::value_type>, typename std::__fun<std::__less, typename _Dom1::value_type>::result_type> std::operator<(const std::_Expr<_Dom1, typename _Dom1::value_type>&, const typename _Dom::value_type&)
+     _DEFINE_EXPR_BINARY_OPERATOR(<, __less)
+     ^
+/usr/include/c++/5/bits/valarray_after.h:416:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h:55:22: note:   ‘std::pair<Hash, int>’ is not derived from ‘const std::_Expr<_Dom1, typename _Dom1::value_type>’
+       { return *__it < __val; }
+                      ^
+In file included from /usr/include/c++/5/valarray:587:0,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:94,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/valarray_after.h:416:5: note: candidate: template<class _Dom1, class _Dom2> std::_Expr<std::_BinClos<std::__less, std::_Expr, std::_Expr, _Dom1, _Dom2>, typename std::__fun<std::__less, typename _Dom1::value_type>::result_type> std::operator<(const std::_Expr<_Dom1, typename _Dom1::value_type>&, const std::_Expr<_Dom2, typename _Dom2::value_type>&)
+     _DEFINE_EXPR_BINARY_OPERATOR(<, __less)
+     ^
+/usr/include/c++/5/bits/valarray_after.h:416:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h:55:22: note:   ‘std::pair<Hash, int>’ is not derived from ‘const std::_Expr<_Dom1, typename _Dom1::value_type>’
+       { return *__it < __val; }
+                      ^
+In file included from /usr/include/c++/5/stack:61:0,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:88,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/stl_stack.h:264:5: note: candidate: template<class _Tp, class _Seq> bool std::operator<(const std::stack<_Tp, _Seq>&, const std::stack<_Tp, _Seq>&)
+     operator<(const stack<_Tp, _Seq>& __x, const stack<_Tp, _Seq>& __y)
+     ^
+/usr/include/c++/5/bits/stl_stack.h:264:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h:55:22: note:   ‘std::pair<Hash, int>’ is not derived from ‘const std::stack<_Tp, _Seq>’
+       { return *__it < __val; }
+                      ^
+In file included from /usr/include/c++/5/set:62:0,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:86,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/stl_multiset.h:842:5: note: candidate: template<class _Key, class _Compare, class _Alloc> bool std::operator<(const std::multiset<_Key, _Compare, _Alloc>&, const std::multiset<_Key, _Compare, _Alloc>&)
+     operator<(const multiset<_Key, _Compare, _Alloc>& __x,
+     ^
+/usr/include/c++/5/bits/stl_multiset.h:842:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h:55:22: note:   ‘std::pair<Hash, int>’ is not derived from ‘const std::multiset<_Key, _Compare, _Alloc>’
+       { return *__it < __val; }
+                      ^
+In file included from /usr/include/c++/5/set:61:0,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:86,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/stl_set.h:859:5: note: candidate: template<class _Key, class _Compare, class _Alloc> bool std::operator<(const std::set<_Key, _Compare, _Alloc>&, const std::set<_Key, _Compare, _Alloc>&)
+     operator<(const set<_Key, _Compare, _Alloc>& __x,
+     ^
+/usr/include/c++/5/bits/stl_set.h:859:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h:55:22: note:   ‘std::pair<Hash, int>’ is not derived from ‘const std::set<_Key, _Compare, _Alloc>’
+       { return *__it < __val; }
+                      ^
+In file included from /usr/include/c++/5/queue:64:0,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:85,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/stl_queue.h:289:5: note: candidate: template<class _Tp, class _Seq> bool std::operator<(const std::queue<_Tp, _Seq>&, const std::queue<_Tp, _Seq>&)
+     operator<(const queue<_Tp, _Seq>& __x, const queue<_Tp, _Seq>& __y)
+     ^
+/usr/include/c++/5/bits/stl_queue.h:289:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h:55:22: note:   ‘std::pair<Hash, int>’ is not derived from ‘const std::queue<_Tp, _Seq>’
+       { return *__it < __val; }
+                      ^
+In file included from /usr/include/c++/5/memory:82:0,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:81,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/shared_ptr.h:382:5: note: candidate: template<class _Tp> bool std::operator<(std::nullptr_t, const std::shared_ptr<_Tp1>&)
+     operator<(nullptr_t, const shared_ptr<_Tp>& __a) noexcept
+     ^
+/usr/include/c++/5/bits/shared_ptr.h:382:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h:55:22: note:   cannot convert ‘__it.__gnu_cxx::__normal_iterator<_Iterator, _Container>::operator*<std::pair<Hash, int>*, std::vector<std::pair<Hash, int> > >()’ (type ‘std::pair<Hash, int>’) to type ‘std::nullptr_t’
+       { return *__it < __val; }
+                      ^
+In file included from /usr/include/c++/5/memory:82:0,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:81,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/shared_ptr.h:377:5: note: candidate: template<class _Tp> bool std::operator<(const std::shared_ptr<_Tp1>&, std::nullptr_t)
+     operator<(const shared_ptr<_Tp>& __a, nullptr_t) noexcept
+     ^
+/usr/include/c++/5/bits/shared_ptr.h:377:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h:55:22: note:   ‘std::pair<Hash, int>’ is not derived from ‘const std::shared_ptr<_Tp1>’
+       { return *__it < __val; }
+                      ^
+In file included from /usr/include/c++/5/memory:82:0,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:81,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/shared_ptr.h:368:5: note: candidate: template<class _Tp1, class _Tp2> bool std::operator<(const std::shared_ptr<_Tp1>&, const std::shared_ptr<_Tp2>&)
+     operator<(const shared_ptr<_Tp1>& __a,
+     ^
+/usr/include/c++/5/bits/shared_ptr.h:368:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h:55:22: note:   ‘std::pair<Hash, int>’ is not derived from ‘const std::shared_ptr<_Tp1>’
+       { return *__it < __val; }
+                      ^
+In file included from /usr/include/c++/5/bits/shared_ptr.h:52:0,
+                 from /usr/include/c++/5/memory:82,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:81,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/shared_ptr_base.h:1229:5: note: candidate: template<class _Tp, __gnu_cxx::_Lock_policy _Lp> bool std::operator<(std::nullptr_t, const std::__shared_ptr<_Tp, _Lp>&)
+     operator<(nullptr_t, const __shared_ptr<_Tp, _Lp>& __a) noexcept
+     ^
+/usr/include/c++/5/bits/shared_ptr_base.h:1229:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h:55:22: note:   cannot convert ‘__it.__gnu_cxx::__normal_iterator<_Iterator, _Container>::operator*<std::pair<Hash, int>*, std::vector<std::pair<Hash, int> > >()’ (type ‘std::pair<Hash, int>’) to type ‘std::nullptr_t’
+       { return *__it < __val; }
+                      ^
+In file included from /usr/include/c++/5/bits/shared_ptr.h:52:0,
+                 from /usr/include/c++/5/memory:82,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:81,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/shared_ptr_base.h:1224:5: note: candidate: template<class _Tp, __gnu_cxx::_Lock_policy _Lp> bool std::operator<(const std::__shared_ptr<_Tp, _Lp>&, std::nullptr_t)
+     operator<(const __shared_ptr<_Tp, _Lp>& __a, nullptr_t) noexcept
+     ^
+/usr/include/c++/5/bits/shared_ptr_base.h:1224:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h:55:22: note:   ‘std::pair<Hash, int>’ is not derived from ‘const std::__shared_ptr<_Tp, _Lp>’
+       { return *__it < __val; }
+                      ^
+In file included from /usr/include/c++/5/bits/shared_ptr.h:52:0,
+                 from /usr/include/c++/5/memory:82,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:81,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/shared_ptr_base.h:1215:5: note: candidate: template<class _Tp1, class _Tp2, __gnu_cxx::_Lock_policy _Lp> bool std::operator<(const std::__shared_ptr<_Tp1, _Lp>&, const std::__shared_ptr<_Tp2, _Lp>&)
+     operator<(const __shared_ptr<_Tp1, _Lp>& __a,
+     ^
+/usr/include/c++/5/bits/shared_ptr_base.h:1215:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h:55:22: note:   ‘std::pair<Hash, int>’ is not derived from ‘const std::__shared_ptr<_Tp1, _Lp>’
+       { return *__it < __val; }
+                      ^
+In file included from /usr/include/c++/5/map:62:0,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:80,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/stl_multimap.h:991:5: note: candidate: template<class _Key, class _Tp, class _Compare, class _Alloc> bool std::operator<(const std::multimap<_Key, _Tp, _Compare, _Alloc>&, const std::multimap<_Key, _Tp, _Compare, _Alloc>&)
+     operator<(const multimap<_Key, _Tp, _Compare, _Alloc>& __x,
+     ^
+/usr/include/c++/5/bits/stl_multimap.h:991:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h:55:22: note:   ‘std::pair<Hash, int>’ is not derived from ‘const std::multimap<_Key, _Tp, _Compare, _Alloc>’
+       { return *__it < __val; }
+                      ^
+In file included from /usr/include/c++/5/map:61:0,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:80,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/stl_map.h:1090:5: note: candidate: template<class _Key, class _Tp, class _Compare, class _Alloc> bool std::operator<(const std::map<_Key, _Tp, _Compare, _Alloc>&, const std::map<_Key, _Tp, _Compare, _Alloc>&)
+     operator<(const map<_Key, _Tp, _Compare, _Alloc>& __x,
+     ^
+/usr/include/c++/5/bits/stl_map.h:1090:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h:55:22: note:   ‘std::pair<Hash, int>’ is not derived from ‘const std::map<_Key, _Tp, _Compare, _Alloc>’
+       { return *__it < __val; }
+                      ^
+In file included from /usr/include/c++/5/map:60:0,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:80,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/stl_tree.h:1283:5: note: candidate: template<class _Key, class _Val, class _KeyOfValue, class _Compare, class _Alloc> bool std::operator<(const std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>&, const std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>&)
+     operator<(const _Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>& __x,
+     ^
+/usr/include/c++/5/bits/stl_tree.h:1283:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h:55:22: note:   ‘std::pair<Hash, int>’ is not derived from ‘const std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>’
+       { return *__it < __val; }
+                      ^
+In file included from /usr/include/c++/5/list:63:0,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:78,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/stl_list.h:1836:5: note: candidate: template<class _Tp, class _Alloc> bool std::operator<(const std::__cxx11::list<_Tp, _Alloc>&, const std::__cxx11::list<_Tp, _Alloc>&)
+     operator<(const list<_Tp, _Alloc>& __x, const list<_Tp, _Alloc>& __y)
+     ^
+/usr/include/c++/5/bits/stl_list.h:1836:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h:55:22: note:   ‘std::pair<Hash, int>’ is not derived from ‘const std::__cxx11::list<_Tp, _Alloc>’
+       { return *__it < __val; }
+                      ^
+In file included from /usr/include/c++/5/bits/locale_conv.h:41:0,
+                 from /usr/include/c++/5/locale:43,
+                 from /usr/include/c++/5/iomanip:43,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:71,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/unique_ptr.h:675:5: note: candidate: template<class _Tp, class _Dp> bool std::operator<(std::nullptr_t, const std::unique_ptr<_Tp, _Dp>&)
+     operator<(nullptr_t, const unique_ptr<_Tp, _Dp>& __x)
+     ^
+/usr/include/c++/5/bits/unique_ptr.h:675:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h:55:22: note:   cannot convert ‘__it.__gnu_cxx::__normal_iterator<_Iterator, _Container>::operator*<std::pair<Hash, int>*, std::vector<std::pair<Hash, int> > >()’ (type ‘std::pair<Hash, int>’) to type ‘std::nullptr_t’
+       { return *__it < __val; }
+                      ^
+In file included from /usr/include/c++/5/bits/locale_conv.h:41:0,
+                 from /usr/include/c++/5/locale:43,
+                 from /usr/include/c++/5/iomanip:43,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:71,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/unique_ptr.h:669:5: note: candidate: template<class _Tp, class _Dp> bool std::operator<(const std::unique_ptr<_Tp, _Dp>&, std::nullptr_t)
+     operator<(const unique_ptr<_Tp, _Dp>& __x, nullptr_t)
+     ^
+/usr/include/c++/5/bits/unique_ptr.h:669:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h:55:22: note:   ‘std::pair<Hash, int>’ is not derived from ‘const std::unique_ptr<_Tp, _Dp>’
+       { return *__it < __val; }
+                      ^
+In file included from /usr/include/c++/5/bits/locale_conv.h:41:0,
+                 from /usr/include/c++/5/locale:43,
+                 from /usr/include/c++/5/iomanip:43,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:71,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/unique_ptr.h:658:5: note: candidate: template<class _Tp, class _Dp, class _Up, class _Ep> bool std::operator<(const std::unique_ptr<_Tp, _Dp>&, const std::unique_ptr<_Up, _Ep>&)
+     operator<(const unique_ptr<_Tp, _Dp>& __x,
+     ^
+/usr/include/c++/5/bits/unique_ptr.h:658:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h:55:22: note:   ‘std::pair<Hash, int>’ is not derived from ‘const std::unique_ptr<_Tp, _Dp>’
+       { return *__it < __val; }
+                      ^
+In file included from /usr/include/c++/5/functional:55:0,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:70,
+                 from d.cpp:12:
+/usr/include/c++/5/tuple:928:5: note: candidate: template<class ... _TElements, class ... _UElements> constexpr bool std::operator<(const std::tuple<_Elements ...>&, const std::tuple<_Elements ...>&)
+     operator<(const tuple<_TElements...>& __t,
+     ^
+/usr/include/c++/5/tuple:928:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h:55:22: note:   ‘std::pair<Hash, int>’ is not derived from ‘const std::tuple<_Elements ...>’
+       { return *__it < __val; }
+                      ^
+In file included from /usr/include/c++/5/tuple:39:0,
+                 from /usr/include/c++/5/functional:55,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:70,
+                 from d.cpp:12:
+/usr/include/c++/5/array:250:5: note: candidate: template<class _Tp, long unsigned int _Nm> bool std::operator<(const std::array<_Tp, _Nm>&, const std::array<_Tp, _Nm>&)
+     operator<(const array<_Tp, _Nm>& __a, const array<_Tp, _Nm>& __b)
+     ^
+/usr/include/c++/5/array:250:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h:55:22: note:   ‘std::pair<Hash, int>’ is not derived from ‘const std::array<_Tp, _Nm>’
+       { return *__it < __val; }
+                      ^
+In file included from /usr/include/c++/5/deque:64:0,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:67,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/stl_deque.h:2238:5: note: candidate: template<class _Tp, class _Alloc> bool std::operator<(const std::deque<_Tp, _Alloc>&, const std::deque<_Tp, _Alloc>&)
+     operator<(const deque<_Tp, _Alloc>& __x,
+     ^
+/usr/include/c++/5/bits/stl_deque.h:2238:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h:55:22: note:   ‘std::pair<Hash, int>’ is not derived from ‘const std::deque<_Tp, _Alloc>’
+       { return *__it < __val; }
+                      ^
+In file included from /usr/include/c++/5/deque:64:0,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:67,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/stl_deque.h:299:5: note: candidate: template<class _Tp, class _RefL, class _PtrL, class _RefR, class _PtrR> bool std::operator<(const std::_Deque_iterator<_Tp, _Ref, _Ptr>&, const std::_Deque_iterator<_Tp, _RefR, _PtrR>&)
+     operator<(const _Deque_iterator<_Tp, _RefL, _PtrL>& __x,
+     ^
+/usr/include/c++/5/bits/stl_deque.h:299:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h:55:22: note:   ‘std::pair<Hash, int>’ is not derived from ‘const std::_Deque_iterator<_Tp, _Ref, _Ptr>’
+       { return *__it < __val; }
+                      ^
+In file included from /usr/include/c++/5/deque:64:0,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:67,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/stl_deque.h:291:5: note: candidate: template<class _Tp, class _Ref, class _Ptr> bool std::operator<(const std::_Deque_iterator<_Tp, _Ref, _Ptr>&, const std::_Deque_iterator<_Tp, _Ref, _Ptr>&)
+     operator<(const _Deque_iterator<_Tp, _Ref, _Ptr>& __x,
+     ^
+/usr/include/c++/5/bits/stl_deque.h:291:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h:55:22: note:   ‘std::pair<Hash, int>’ is not derived from ‘const std::_Deque_iterator<_Tp, _Ref, _Ptr>’
+       { return *__it < __val; }
+                      ^
+In file included from /usr/include/c++/5/vector:64:0,
+                 from /usr/include/c++/5/bits/random.h:34,
+                 from /usr/include/c++/5/random:49,
+                 from /usr/include/c++/5/bits/stl_algo.h:66,
+                 from /usr/include/c++/5/algorithm:62,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:64,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/stl_vector.h:1528:5: note: candidate: template<class _Tp, class _Alloc> bool std::operator<(const std::vector<_Tp, _Alloc>&, const std::vector<_Tp, _Alloc>&)
+     operator<(const vector<_Tp, _Alloc>& __x, const vector<_Tp, _Alloc>& __y)
+     ^
+/usr/include/c++/5/bits/stl_vector.h:1528:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h:55:22: note:   ‘std::pair<Hash, int>’ is not derived from ‘const std::vector<_Tp, _Alloc>’
+       { return *__it < __val; }
+                      ^
+In file included from /usr/include/c++/5/bits/ios_base.h:46:0,
+                 from /usr/include/c++/5/ios:42,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/system_error:274:3: note: candidate: bool std::operator<(const std::error_condition&, const std::error_condition&)
+   operator<(const error_condition& __lhs,
+   ^
+/usr/include/c++/5/system_error:274:3: note:   no known conversion for argument 1 from ‘std::pair<Hash, int>’ to ‘const std::error_condition&’
+/usr/include/c++/5/system_error:200:3: note: candidate: bool std::operator<(const std::error_code&, const std::error_code&)
+   operator<(const error_code& __lhs, const error_code& __rhs) noexcept
+   ^
+/usr/include/c++/5/system_error:200:3: note:   no known conversion for argument 1 from ‘std::pair<Hash, int>’ to ‘const std::error_code&’
+In file included from /usr/include/c++/5/string:52:0,
+                 from /usr/include/c++/5/bits/locale_classes.h:40,
+                 from /usr/include/c++/5/bits/ios_base.h:41,
+                 from /usr/include/c++/5/ios:42,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/basic_string.h:5011:5: note: candidate: template<class _CharT, class _Traits, class _Alloc> bool std::operator<(const _CharT*, const std::__cxx11::basic_string<_CharT, _Traits, _Alloc>&)
+     operator<(const _CharT* __lhs,
+     ^
+/usr/include/c++/5/bits/basic_string.h:5011:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h:55:22: note:   mismatched types ‘const _CharT*’ and ‘std::pair<Hash, int>’
+       { return *__it < __val; }
+                      ^
+In file included from /usr/include/c++/5/string:52:0,
+                 from /usr/include/c++/5/bits/locale_classes.h:40,
+                 from /usr/include/c++/5/bits/ios_base.h:41,
+                 from /usr/include/c++/5/ios:42,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/basic_string.h:4999:5: note: candidate: template<class _CharT, class _Traits, class _Alloc> bool std::operator<(const std::__cxx11::basic_string<_CharT, _Traits, _Alloc>&, const _CharT*)
+     operator<(const basic_string<_CharT, _Traits, _Alloc>& __lhs,
+     ^
+/usr/include/c++/5/bits/basic_string.h:4999:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h:55:22: note:   ‘std::pair<Hash, int>’ is not derived from ‘const std::__cxx11::basic_string<_CharT, _Traits, _Alloc>’
+       { return *__it < __val; }
+                      ^
+In file included from /usr/include/c++/5/string:52:0,
+                 from /usr/include/c++/5/bits/locale_classes.h:40,
+                 from /usr/include/c++/5/bits/ios_base.h:41,
+                 from /usr/include/c++/5/ios:42,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/basic_string.h:4987:5: note: candidate: template<class _CharT, class _Traits, class _Alloc> bool std::operator<(const std::__cxx11::basic_string<_CharT, _Traits, _Alloc>&, const std::__cxx11::basic_string<_CharT, _Traits, _Alloc>&)
+     operator<(const basic_string<_CharT, _Traits, _Alloc>& __lhs,
+     ^
+/usr/include/c++/5/bits/basic_string.h:4987:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h:55:22: note:   ‘std::pair<Hash, int>’ is not derived from ‘const std::__cxx11::basic_string<_CharT, _Traits, _Alloc>’
+       { return *__it < __val; }
+                      ^
+In file included from /usr/include/c++/5/bits/stl_algobase.h:67:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/stl_iterator.h:1095:5: note: candidate: template<class _Iterator> bool std::operator<(const std::move_iterator<_Iterator>&, const std::move_iterator<_Iterator>&)
+     operator<(const move_iterator<_Iterator>& __x,
+     ^
+/usr/include/c++/5/bits/stl_iterator.h:1095:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h:55:22: note:   ‘std::pair<Hash, int>’ is not derived from ‘const std::move_iterator<_Iterator>’
+       { return *__it < __val; }
+                      ^
+In file included from /usr/include/c++/5/bits/stl_algobase.h:67:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/stl_iterator.h:1089:5: note: candidate: template<class _IteratorL, class _IteratorR> bool std::operator<(const std::move_iterator<_Iterator>&, const std::move_iterator<_IteratorR>&)
+     operator<(const move_iterator<_IteratorL>& __x,
+     ^
+/usr/include/c++/5/bits/stl_iterator.h:1089:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h:55:22: note:   ‘std::pair<Hash, int>’ is not derived from ‘const std::move_iterator<_Iterator>’
+       { return *__it < __val; }
+                      ^
+In file included from /usr/include/c++/5/bits/stl_algobase.h:67:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/stl_iterator.h:348:5: note: candidate: template<class _IteratorL, class _IteratorR> bool std::operator<(const std::reverse_iterator<_Iterator>&, const std::reverse_iterator<_IteratorR>&)
+     operator<(const reverse_iterator<_IteratorL>& __x,
+     ^
+/usr/include/c++/5/bits/stl_iterator.h:348:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h:55:22: note:   ‘std::pair<Hash, int>’ is not derived from ‘const std::reverse_iterator<_Iterator>’
+       { return *__it < __val; }
+                      ^
+In file included from /usr/include/c++/5/bits/stl_algobase.h:67:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/stl_iterator.h:298:5: note: candidate: template<class _Iterator> bool std::operator<(const std::reverse_iterator<_Iterator>&, const std::reverse_iterator<_Iterator>&)
+     operator<(const reverse_iterator<_Iterator>& __x,
+     ^
+/usr/include/c++/5/bits/stl_iterator.h:298:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h:55:22: note:   ‘std::pair<Hash, int>’ is not derived from ‘const std::reverse_iterator<_Iterator>’
+       { return *__it < __val; }
+                      ^
+In file included from /usr/include/c++/5/bits/stl_algobase.h:64:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/stl_pair.h:220:5: note: candidate: template<class _T1, class _T2> constexpr bool std::operator<(const std::pair<_T1, _T2>&, const std::pair<_T1, _T2>&)
+     operator<(const pair<_T1, _T2>& __x, const pair<_T1, _T2>& __y)
+     ^
+/usr/include/c++/5/bits/stl_pair.h:220:5: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/5/bits/stl_algobase.h:71:0,
+                 from /usr/include/c++/5/bits/char_traits.h:39,
+                 from /usr/include/c++/5/ios:40,
+                 from /usr/include/c++/5/istream:38,
+                 from /usr/include/c++/5/sstream:38,
+                 from /usr/include/c++/5/complex:45,
+                 from /usr/include/c++/5/ccomplex:38,
+                 from /usr/include/x86_64-linux-gnu/c++/5/bits/stdc++.h:52,
+                 from d.cpp:12:
+/usr/include/c++/5/bits/predefined_ops.h:55:22: note:   ‘const Hash’ is not derived from ‘const std::pair<_T1, _T2>’
+       { return *__it < __val; }
+                      ^
