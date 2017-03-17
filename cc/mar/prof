@@ -1,0 +1,339 @@
+Flat profile:
+
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls  ms/call  ms/call  name    
+ 69.50      4.94     4.94       70    70.59   100.92  play(State)
+ 26.59      6.83     1.89    25579     0.07     0.08  genMoves(State const&)
+  2.11      6.98     0.15    25709     0.01     0.01  getNearest(State const&)
+  0.42      7.01     0.03   451342     0.00     0.00  std::_Deque_base<int, std::allocator<int> >::_M_initialize_map(unsigned long)
+  0.42      7.04     0.03   211611     0.00     0.00  std::_Hashtable<State, std::pair<State const, int>, std::allocator<std::pair<State const, int> >, std::__detail::_Select1st, std::equal_to<State>, std::hash<State>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_find_before_node(unsigned long, State const&, unsigned long) const
+  0.42      7.07     0.03                             play()
+  0.28      7.09     0.02   107065     0.00     0.00  __tcf_0
+  0.14      7.10     0.01  1804144     0.00     0.00  void std::deque<int, std::allocator<int> >::_M_push_back_aux<int const&>(int const&)
+  0.14      7.11     0.01    61983     0.00     0.00  std::_Hashtable<State, std::pair<State const, int>, std::allocator<std::pair<State const, int> >, std::__detail::_Select1st, std::equal_to<State>, std::hash<State>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_insert_unique_node(unsigned long, unsigned long, std::__detail::_Hash_node<std::pair<State const, int>, true>*)
+  0.00      7.11     0.00   451342     0.00     0.00  std::_Deque_base<int, std::allocator<int> >::~_Deque_base()
+  0.00      7.11     0.00   437055     0.00     0.00  void std::vector<int, std::allocator<int> >::_M_emplace_back_aux<int const&>(int const&)
+  0.00      7.11     0.00    68900     0.00     0.00  std::__detail::_Map_base<State, std::pair<State const, int>, std::allocator<std::pair<State const, int> >, std::__detail::_Select1st, std::equal_to<State>, std::hash<State>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true>, true>::operator[](State const&)
+  0.00      7.11     0.00     5279     0.00     0.00  std::vector<int, std::allocator<int> >::operator=(std::vector<int, std::allocator<int> > const&)
+  0.00      7.11     0.00     1141     0.00     0.00  std::_Rb_tree<std::pair<int, int>, std::pair<std::pair<int, int> const, int>, std::_Select1st<std::pair<std::pair<int, int> const, int> >, std::less<std::pair<int, int> >, std::allocator<std::pair<std::pair<int, int> const, int> > >::_M_insert_node(std::_Rb_tree_node_base*, std::_Rb_tree_node_base*, std::_Rb_tree_node<std::pair<std::pair<int, int> const, int> >*)
+  0.00      7.11     0.00     1141     0.00     0.00  std::_Rb_tree_iterator<std::pair<std::pair<int, int> const, int> > std::_Rb_tree<std::pair<int, int>, std::pair<std::pair<int, int> const, int>, std::_Select1st<std::pair<std::pair<int, int> const, int> >, std::less<std::pair<int, int> >, std::allocator<std::pair<std::pair<int, int> const, int> > >::_M_emplace_hint_unique<std::piecewise_construct_t const&, std::tuple<std::pair<int, int> const&>, std::tuple<> >(std::_Rb_tree_const_iterator<std::pair<std::pair<int, int> const, int> >, std::piecewise_construct_t const&, std::tuple<std::pair<int, int> const&>&&, std::tuple<>&&)
+  0.00      7.11     0.00     1141     0.00     0.00  std::_Rb_tree<std::pair<int, int>, std::pair<std::pair<int, int> const, int>, std::_Select1st<std::pair<std::pair<int, int> const, int> >, std::less<std::pair<int, int> >, std::allocator<std::pair<std::pair<int, int> const, int> > >::_M_get_insert_hint_unique_pos(std::_Rb_tree_const_iterator<std::pair<std::pair<int, int> const, int> >, std::pair<int, int> const&)
+  0.00      7.11     0.00      371     0.00     0.00  _gp(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)
+  0.00      7.11     0.00      200     0.00    35.41  getNextMove()
+  0.00      7.11     0.00      157     0.00     0.00  void _dt<int>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&&)
+  0.00      7.11     0.00       60     0.00     0.00  void _dt<bool&, int&, unsigned long>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, bool&, int&, unsigned long&&)
+  0.00      7.11     0.00       60     0.00     0.00  void _dt<int&, unsigned long>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&, unsigned long&&)
+  0.00      7.11     0.00       60     0.00     0.00  void _dt<unsigned long>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, unsigned long&&)
+  0.00      7.11     0.00       33     0.00     0.00  void _dt<char const (&) [4], bool&, int&, unsigned long>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char const (&) [4], bool&, int&, unsigned long&&)
+  0.00      7.11     0.00        1     0.00     0.00  _GLOBAL__sub_I__Z3_gpNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE
+  0.00      7.11     0.00        1     0.00     0.00  std::_Rb_tree<std::pair<int, int>, std::pair<std::pair<int, int> const, int>, std::_Select1st<std::pair<std::pair<int, int> const, int> >, std::less<std::pair<int, int> >, std::allocator<std::pair<std::pair<int, int> const, int> > >::_M_get_insert_unique_pos(std::pair<int, int> const&)
+
+ %         the percentage of the total running time of the
+time       program used by this function.
+
+cumulative a running sum of the number of seconds accounted
+ seconds   for by this function and those listed above it.
+
+ self      the number of seconds accounted for by this
+seconds    function alone.  This is the major sort for this
+           listing.
+
+calls      the number of times this function was invoked, if
+           this function is profiled, else blank.
+
+ self      the average number of milliseconds spent in this
+ms/call    function per call, if this function is profiled,
+	   else blank.
+
+ total     the average number of milliseconds spent in this
+ms/call    function and its descendents per call, if this
+	   function is profiled, else blank.
+
+name       the name of the function.  This is the minor sort
+           for this listing. The index shows the location of
+	   the function in the gprof listing. If the index is
+	   in parenthesis it shows where it would appear in
+	   the gprof listing if it were to be printed.
+
+Copyright (C) 2012-2015 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+		     Call graph (explanation follows)
+
+
+granularity: each sample hit covers 2 byte(s) for 0.14% of 7.11 seconds
+
+index % time    self  children    called     name
+                                                 <spontaneous>
+[1]    100.0    0.03    7.08                 play() [1]
+                0.00    7.08     200/200         getNextMove() [2]
+                0.00    0.00    2262/451342      std::_Deque_base<int, std::allocator<int> >::_M_initialize_map(unsigned long) [6]
+                0.00    0.00    8848/1804144     void std::deque<int, std::allocator<int> >::_M_push_back_aux<int const&>(int const&) [10]
+                0.00    0.00    2262/451342      std::_Deque_base<int, std::allocator<int> >::~_Deque_base() [25]
+                0.00    0.00    1487/437055      void std::vector<int, std::allocator<int> >::_M_emplace_back_aux<int const&>(int const&) [26]
+-----------------------------------------------
+                0.00    7.08     200/200         play() [1]
+[2]     99.6    0.00    7.08     200         getNextMove() [2]
+                4.94    2.12      70/70          play(State) [3]
+                0.01    0.00     200/25579       genMoves(State const&) [4]
+                0.00    0.00     130/25709       getNearest(State const&) [5]
+                0.00    0.00     130/157         void _dt<int>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&&) [14]
+                0.00    0.00     130/107065      __tcf_0 [8]
+-----------------------------------------------
+                              142641             play(State) [3]
+                4.94    2.12      70/70          getNextMove() [2]
+[3]     99.3    4.94    2.12      70+142641  play(State) [3]
+                1.88    0.16   25379/25579       genMoves(State const&) [4]
+                0.02    0.00  337446/451342      std::_Deque_base<int, std::allocator<int> >::_M_initialize_map(unsigned long) [6]
+                0.02    0.00  142711/211611      std::_Hashtable<State, std::pair<State const, int>, std::allocator<std::pair<State const, int> >, std::__detail::_Select1st, std::equal_to<State>, std::hash<State>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_find_before_node(unsigned long, State const&, unsigned long) const [7]
+                0.02    0.00  106040/107065      __tcf_0 [8]
+                0.00    0.02   68900/68900       std::__detail::_Map_base<State, std::pair<State const, int>, std::allocator<std::pair<State const, int> >, std::__detail::_Select1st, std::equal_to<State>, std::hash<State>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true>, true>::operator[](State const&) [9]
+                0.01    0.00 1348776/1804144     void std::deque<int, std::allocator<int> >::_M_push_back_aux<int const&>(int const&) [10]
+                0.00    0.00      33/33          void _dt<char const (&) [4], bool&, int&, unsigned long>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char const (&) [4], bool&, int&, unsigned long&&) [13]
+                0.00    0.00      27/60          void _dt<bool&, int&, unsigned long>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, bool&, int&, unsigned long&&) [12]
+                0.00    0.00      27/157         void _dt<int>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&&) [14]
+                0.00    0.00  337446/451342      std::_Deque_base<int, std::allocator<int> >::~_Deque_base() [25]
+                0.00    0.00  227226/437055      void std::vector<int, std::allocator<int> >::_M_emplace_back_aux<int const&>(int const&) [26]
+                              142641             play(State) [3]
+-----------------------------------------------
+                0.01    0.00     200/25579       getNextMove() [2]
+                1.88    0.16   25379/25579       play(State) [3]
+[4]     28.8    1.89    0.16   25579         genMoves(State const&) [4]
+                0.15    0.00   25579/25709       getNearest(State const&) [5]
+                0.01    0.00  111632/451342      std::_Deque_base<int, std::allocator<int> >::_M_initialize_map(unsigned long) [6]
+                0.00    0.00  446512/1804144     void std::deque<int, std::allocator<int> >::_M_push_back_aux<int const&>(int const&) [10]
+                0.00    0.00  111632/451342      std::_Deque_base<int, std::allocator<int> >::~_Deque_base() [25]
+                0.00    0.00   74148/437055      void std::vector<int, std::allocator<int> >::_M_emplace_back_aux<int const&>(int const&) [26]
+                0.00    0.00    5279/5279        std::vector<int, std::allocator<int> >::operator=(std::vector<int, std::allocator<int> > const&) [27]
+-----------------------------------------------
+                0.00    0.00     130/25709       getNextMove() [2]
+                0.15    0.00   25579/25709       genMoves(State const&) [4]
+[5]      2.1    0.15    0.00   25709         getNearest(State const&) [5]
+                0.00    0.00  129736/437055      void std::vector<int, std::allocator<int> >::_M_emplace_back_aux<int const&>(int const&) [26]
+-----------------------------------------------
+                0.00    0.00       2/451342      pre() [17]
+                0.00    0.00    2262/451342      play() [1]
+                0.01    0.00  111632/451342      genMoves(State const&) [4]
+                0.02    0.00  337446/451342      play(State) [3]
+[6]      0.4    0.03    0.00  451342         std::_Deque_base<int, std::allocator<int> >::_M_initialize_map(unsigned long) [6]
+-----------------------------------------------
+                0.01    0.00   68900/211611      std::__detail::_Map_base<State, std::pair<State const, int>, std::allocator<std::pair<State const, int> >, std::__detail::_Select1st, std::equal_to<State>, std::hash<State>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true>, true>::operator[](State const&) [9]
+                0.02    0.00  142711/211611      play(State) [3]
+[7]      0.4    0.03    0.00  211611         std::_Hashtable<State, std::pair<State const, int>, std::allocator<std::pair<State const, int> >, std::__detail::_Select1st, std::equal_to<State>, std::hash<State>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_find_before_node(unsigned long, State const&, unsigned long) const [7]
+-----------------------------------------------
+                              212579             __tcf_0 [8]
+                0.00    0.00      99/107065      void _dt<char const (&) [4], bool&, int&, unsigned long>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char const (&) [4], bool&, int&, unsigned long&&) [13]
+                0.00    0.00     120/107065      void _dt<unsigned long>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, unsigned long&&) [16]
+                0.00    0.00     130/107065      getNextMove() [2]
+                0.00    0.00     180/107065      void _dt<int&, unsigned long>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&, unsigned long&&) [15]
+                0.00    0.00     180/107065      void _dt<bool&, int&, unsigned long>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, bool&, int&, unsigned long&&) [12]
+                0.00    0.00     316/107065      void _dt<int>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&&) [14]
+                0.02    0.00  106040/107065      play(State) [3]
+[8]      0.3    0.02    0.00  107065+212579  __tcf_0 [8]
+                              212579             __tcf_0 [8]
+-----------------------------------------------
+                0.00    0.02   68900/68900       play(State) [3]
+[9]      0.3    0.00    0.02   68900         std::__detail::_Map_base<State, std::pair<State const, int>, std::allocator<std::pair<State const, int> >, std::__detail::_Select1st, std::equal_to<State>, std::hash<State>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true>, true>::operator[](State const&) [9]
+                0.01    0.00   61983/61983       std::_Hashtable<State, std::pair<State const, int>, std::allocator<std::pair<State const, int> >, std::__detail::_Select1st, std::equal_to<State>, std::hash<State>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_insert_unique_node(unsigned long, unsigned long, std::__detail::_Hash_node<std::pair<State const, int>, true>*) [11]
+                0.01    0.00   68900/211611      std::_Hashtable<State, std::pair<State const, int>, std::allocator<std::pair<State const, int> >, std::__detail::_Select1st, std::equal_to<State>, std::hash<State>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_find_before_node(unsigned long, State const&, unsigned long) const [7]
+-----------------------------------------------
+                0.00    0.00       8/1804144     pre() [17]
+                0.00    0.00    8848/1804144     play() [1]
+                0.00    0.00  446512/1804144     genMoves(State const&) [4]
+                0.01    0.00 1348776/1804144     play(State) [3]
+[10]     0.1    0.01    0.00 1804144         void std::deque<int, std::allocator<int> >::_M_push_back_aux<int const&>(int const&) [10]
+-----------------------------------------------
+                0.01    0.00   61983/61983       std::__detail::_Map_base<State, std::pair<State const, int>, std::allocator<std::pair<State const, int> >, std::__detail::_Select1st, std::equal_to<State>, std::hash<State>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true>, true>::operator[](State const&) [9]
+[11]     0.1    0.01    0.00   61983         std::_Hashtable<State, std::pair<State const, int>, std::allocator<std::pair<State const, int> >, std::__detail::_Select1st, std::equal_to<State>, std::hash<State>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_insert_unique_node(unsigned long, unsigned long, std::__detail::_Hash_node<std::pair<State const, int>, true>*) [11]
+-----------------------------------------------
+                0.00    0.00      27/60          play(State) [3]
+                0.00    0.00      33/60          void _dt<char const (&) [4], bool&, int&, unsigned long>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char const (&) [4], bool&, int&, unsigned long&&) [13]
+[12]     0.0    0.00    0.00      60         void _dt<bool&, int&, unsigned long>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, bool&, int&, unsigned long&&) [12]
+                0.00    0.00      60/60          void _dt<int&, unsigned long>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&, unsigned long&&) [15]
+                0.00    0.00     180/107065      __tcf_0 [8]
+                0.00    0.00      60/371         _gp(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [31]
+-----------------------------------------------
+                0.00    0.00      33/33          play(State) [3]
+[13]     0.0    0.00    0.00      33         void _dt<char const (&) [4], bool&, int&, unsigned long>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char const (&) [4], bool&, int&, unsigned long&&) [13]
+                0.00    0.00      33/60          void _dt<bool&, int&, unsigned long>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, bool&, int&, unsigned long&&) [12]
+                0.00    0.00      99/107065      __tcf_0 [8]
+                0.00    0.00      33/371         _gp(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [31]
+-----------------------------------------------
+                0.00    0.00      27/157         play(State) [3]
+                0.00    0.00     130/157         getNextMove() [2]
+[14]     0.0    0.00    0.00     157         void _dt<int>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&&) [14]
+                0.00    0.00     316/107065      __tcf_0 [8]
+                0.00    0.00     158/371         _gp(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [31]
+-----------------------------------------------
+                0.00    0.00      60/60          void _dt<bool&, int&, unsigned long>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, bool&, int&, unsigned long&&) [12]
+[15]     0.0    0.00    0.00      60         void _dt<int&, unsigned long>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&, unsigned long&&) [15]
+                0.00    0.00     180/107065      __tcf_0 [8]
+                0.00    0.00      60/60          void _dt<unsigned long>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, unsigned long&&) [16]
+                0.00    0.00      60/371         _gp(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [31]
+-----------------------------------------------
+                0.00    0.00      60/60          void _dt<int&, unsigned long>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&, unsigned long&&) [15]
+[16]     0.0    0.00    0.00      60         void _dt<unsigned long>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, unsigned long&&) [16]
+                0.00    0.00     120/107065      __tcf_0 [8]
+                0.00    0.00      60/371         _gp(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [31]
+-----------------------------------------------
+                                                 <spontaneous>
+[17]     0.0    0.00    0.00                 pre() [17]
+                0.00    0.00       2/451342      std::_Deque_base<int, std::allocator<int> >::_M_initialize_map(unsigned long) [6]
+                0.00    0.00       8/1804144     void std::deque<int, std::allocator<int> >::_M_push_back_aux<int const&>(int const&) [10]
+                0.00    0.00    4458/437055      void std::vector<int, std::allocator<int> >::_M_emplace_back_aux<int const&>(int const&) [26]
+                0.00    0.00    1141/1141        std::_Rb_tree_iterator<std::pair<std::pair<int, int> const, int> > std::_Rb_tree<std::pair<int, int>, std::pair<std::pair<int, int> const, int>, std::_Select1st<std::pair<std::pair<int, int> const, int> >, std::less<std::pair<int, int> >, std::allocator<std::pair<std::pair<int, int> const, int> > >::_M_emplace_hint_unique<std::piecewise_construct_t const&, std::tuple<std::pair<int, int> const&>, std::tuple<> >(std::_Rb_tree_const_iterator<std::pair<std::pair<int, int> const, int> >, std::piecewise_construct_t const&, std::tuple<std::pair<int, int> const&>&&, std::tuple<>&&) [29]
+                0.00    0.00       2/451342      std::_Deque_base<int, std::allocator<int> >::~_Deque_base() [25]
+-----------------------------------------------
+                0.00    0.00       2/451342      pre() [17]
+                0.00    0.00    2262/451342      play() [1]
+                0.00    0.00  111632/451342      genMoves(State const&) [4]
+                0.00    0.00  337446/451342      play(State) [3]
+[25]     0.0    0.00    0.00  451342         std::_Deque_base<int, std::allocator<int> >::~_Deque_base() [25]
+-----------------------------------------------
+                0.00    0.00    1487/437055      play() [1]
+                0.00    0.00    4458/437055      pre() [17]
+                0.00    0.00   74148/437055      genMoves(State const&) [4]
+                0.00    0.00  129736/437055      getNearest(State const&) [5]
+                0.00    0.00  227226/437055      play(State) [3]
+[26]     0.0    0.00    0.00  437055         void std::vector<int, std::allocator<int> >::_M_emplace_back_aux<int const&>(int const&) [26]
+-----------------------------------------------
+                0.00    0.00    5279/5279        genMoves(State const&) [4]
+[27]     0.0    0.00    0.00    5279         std::vector<int, std::allocator<int> >::operator=(std::vector<int, std::allocator<int> > const&) [27]
+-----------------------------------------------
+                0.00    0.00    1141/1141        std::_Rb_tree_iterator<std::pair<std::pair<int, int> const, int> > std::_Rb_tree<std::pair<int, int>, std::pair<std::pair<int, int> const, int>, std::_Select1st<std::pair<std::pair<int, int> const, int> >, std::less<std::pair<int, int> >, std::allocator<std::pair<std::pair<int, int> const, int> > >::_M_emplace_hint_unique<std::piecewise_construct_t const&, std::tuple<std::pair<int, int> const&>, std::tuple<> >(std::_Rb_tree_const_iterator<std::pair<std::pair<int, int> const, int> >, std::piecewise_construct_t const&, std::tuple<std::pair<int, int> const&>&&, std::tuple<>&&) [29]
+[28]     0.0    0.00    0.00    1141         std::_Rb_tree<std::pair<int, int>, std::pair<std::pair<int, int> const, int>, std::_Select1st<std::pair<std::pair<int, int> const, int> >, std::less<std::pair<int, int> >, std::allocator<std::pair<std::pair<int, int> const, int> > >::_M_insert_node(std::_Rb_tree_node_base*, std::_Rb_tree_node_base*, std::_Rb_tree_node<std::pair<std::pair<int, int> const, int> >*) [28]
+-----------------------------------------------
+                0.00    0.00    1141/1141        pre() [17]
+[29]     0.0    0.00    0.00    1141         std::_Rb_tree_iterator<std::pair<std::pair<int, int> const, int> > std::_Rb_tree<std::pair<int, int>, std::pair<std::pair<int, int> const, int>, std::_Select1st<std::pair<std::pair<int, int> const, int> >, std::less<std::pair<int, int> >, std::allocator<std::pair<std::pair<int, int> const, int> > >::_M_emplace_hint_unique<std::piecewise_construct_t const&, std::tuple<std::pair<int, int> const&>, std::tuple<> >(std::_Rb_tree_const_iterator<std::pair<std::pair<int, int> const, int> >, std::piecewise_construct_t const&, std::tuple<std::pair<int, int> const&>&&, std::tuple<>&&) [29]
+                0.00    0.00    1141/1141        std::_Rb_tree<std::pair<int, int>, std::pair<std::pair<int, int> const, int>, std::_Select1st<std::pair<std::pair<int, int> const, int> >, std::less<std::pair<int, int> >, std::allocator<std::pair<std::pair<int, int> const, int> > >::_M_get_insert_hint_unique_pos(std::_Rb_tree_const_iterator<std::pair<std::pair<int, int> const, int> >, std::pair<int, int> const&) [30]
+                0.00    0.00    1141/1141        std::_Rb_tree<std::pair<int, int>, std::pair<std::pair<int, int> const, int>, std::_Select1st<std::pair<std::pair<int, int> const, int> >, std::less<std::pair<int, int> >, std::allocator<std::pair<std::pair<int, int> const, int> > >::_M_insert_node(std::_Rb_tree_node_base*, std::_Rb_tree_node_base*, std::_Rb_tree_node<std::pair<std::pair<int, int> const, int> >*) [28]
+-----------------------------------------------
+                0.00    0.00    1141/1141        std::_Rb_tree_iterator<std::pair<std::pair<int, int> const, int> > std::_Rb_tree<std::pair<int, int>, std::pair<std::pair<int, int> const, int>, std::_Select1st<std::pair<std::pair<int, int> const, int> >, std::less<std::pair<int, int> >, std::allocator<std::pair<std::pair<int, int> const, int> > >::_M_emplace_hint_unique<std::piecewise_construct_t const&, std::tuple<std::pair<int, int> const&>, std::tuple<> >(std::_Rb_tree_const_iterator<std::pair<std::pair<int, int> const, int> >, std::piecewise_construct_t const&, std::tuple<std::pair<int, int> const&>&&, std::tuple<>&&) [29]
+[30]     0.0    0.00    0.00    1141         std::_Rb_tree<std::pair<int, int>, std::pair<std::pair<int, int> const, int>, std::_Select1st<std::pair<std::pair<int, int> const, int> >, std::less<std::pair<int, int> >, std::allocator<std::pair<std::pair<int, int> const, int> > >::_M_get_insert_hint_unique_pos(std::_Rb_tree_const_iterator<std::pair<std::pair<int, int> const, int> >, std::pair<int, int> const&) [30]
+                0.00    0.00       1/1           std::_Rb_tree<std::pair<int, int>, std::pair<std::pair<int, int> const, int>, std::_Select1st<std::pair<std::pair<int, int> const, int> >, std::less<std::pair<int, int> >, std::allocator<std::pair<std::pair<int, int> const, int> > >::_M_get_insert_unique_pos(std::pair<int, int> const&) [33]
+-----------------------------------------------
+                0.00    0.00      33/371         void _dt<char const (&) [4], bool&, int&, unsigned long>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char const (&) [4], bool&, int&, unsigned long&&) [13]
+                0.00    0.00      60/371         void _dt<unsigned long>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, unsigned long&&) [16]
+                0.00    0.00      60/371         void _dt<int&, unsigned long>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&, unsigned long&&) [15]
+                0.00    0.00      60/371         void _dt<bool&, int&, unsigned long>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, bool&, int&, unsigned long&&) [12]
+                0.00    0.00     158/371         void _dt<int>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&&) [14]
+[31]     0.0    0.00    0.00     371         _gp(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [31]
+-----------------------------------------------
+                0.00    0.00       1/1           __libc_csu_init [48]
+[32]     0.0    0.00    0.00       1         _GLOBAL__sub_I__Z3_gpNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE [32]
+-----------------------------------------------
+                0.00    0.00       1/1           std::_Rb_tree<std::pair<int, int>, std::pair<std::pair<int, int> const, int>, std::_Select1st<std::pair<std::pair<int, int> const, int> >, std::less<std::pair<int, int> >, std::allocator<std::pair<std::pair<int, int> const, int> > >::_M_get_insert_hint_unique_pos(std::_Rb_tree_const_iterator<std::pair<std::pair<int, int> const, int> >, std::pair<int, int> const&) [30]
+[33]     0.0    0.00    0.00       1         std::_Rb_tree<std::pair<int, int>, std::pair<std::pair<int, int> const, int>, std::_Select1st<std::pair<std::pair<int, int> const, int> >, std::less<std::pair<int, int> >, std::allocator<std::pair<std::pair<int, int> const, int> > >::_M_get_insert_unique_pos(std::pair<int, int> const&) [33]
+-----------------------------------------------
+                                1141             std::_Rb_tree<std::pair<int, int>, std::pair<std::pair<int, int> const, int>, std::_Select1st<std::pair<std::pair<int, int> const, int> >, std::less<std::pair<int, int> >, std::allocator<std::pair<std::pair<int, int> const, int> > >::_M_erase(std::_Rb_tree_node<std::pair<std::pair<int, int> const, int> >*) [41]
+[41]     0.0    0.00    0.00       0+1141    std::_Rb_tree<std::pair<int, int>, std::pair<std::pair<int, int> const, int>, std::_Select1st<std::pair<std::pair<int, int> const, int> >, std::less<std::pair<int, int> >, std::allocator<std::pair<std::pair<int, int> const, int> > >::_M_erase(std::_Rb_tree_node<std::pair<std::pair<int, int> const, int> >*) [41]
+                                1141             std::_Rb_tree<std::pair<int, int>, std::pair<std::pair<int, int> const, int>, std::_Select1st<std::pair<std::pair<int, int> const, int> >, std::less<std::pair<int, int> >, std::allocator<std::pair<std::pair<int, int> const, int> > >::_M_erase(std::_Rb_tree_node<std::pair<std::pair<int, int> const, int> >*) [41]
+-----------------------------------------------
+                                1141             std::_Rb_tree<std::pair<int, int>, std::pair<int, int>, std::_Identity<std::pair<int, int> >, std::less<std::pair<int, int> >, std::allocator<std::pair<int, int> > >::_M_erase(std::_Rb_tree_node<std::pair<int, int> >*) [42]
+[42]     0.0    0.00    0.00       0+1141    std::_Rb_tree<std::pair<int, int>, std::pair<int, int>, std::_Identity<std::pair<int, int> >, std::less<std::pair<int, int> >, std::allocator<std::pair<int, int> > >::_M_erase(std::_Rb_tree_node<std::pair<int, int> >*) [42]
+                                1141             std::_Rb_tree<std::pair<int, int>, std::pair<int, int>, std::_Identity<std::pair<int, int> >, std::less<std::pair<int, int> >, std::allocator<std::pair<int, int> > >::_M_erase(std::_Rb_tree_node<std::pair<int, int> >*) [42]
+-----------------------------------------------
+
+ This table describes the call tree of the program, and was sorted by
+ the total amount of time spent in each function and its children.
+
+ Each entry in this table consists of several lines.  The line with the
+ index number at the left hand margin lists the current function.
+ The lines above it list the functions that called this function,
+ and the lines below it list the functions this one called.
+ This line lists:
+     index	A unique number given to each element of the table.
+		Index numbers are sorted numerically.
+		The index number is printed next to every function name so
+		it is easier to look up where the function is in the table.
+
+     % time	This is the percentage of the `total' time that was spent
+		in this function and its children.  Note that due to
+		different viewpoints, functions excluded by options, etc,
+		these numbers will NOT add up to 100%.
+
+     self	This is the total amount of time spent in this function.
+
+     children	This is the total amount of time propagated into this
+		function by its children.
+
+     called	This is the number of times the function was called.
+		If the function called itself recursively, the number
+		only includes non-recursive calls, and is followed by
+		a `+' and the number of recursive calls.
+
+     name	The name of the current function.  The index number is
+		printed after it.  If the function is a member of a
+		cycle, the cycle number is printed between the
+		function's name and the index number.
+
+
+ For the function's parents, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the function into this parent.
+
+     children	This is the amount of time that was propagated from
+		the function's children into this parent.
+
+     called	This is the number of times this parent called the
+		function `/' the total number of times the function
+		was called.  Recursive calls to the function are not
+		included in the number after the `/'.
+
+     name	This is the name of the parent.  The parent's index
+		number is printed after it.  If the parent is a
+		member of a cycle, the cycle number is printed between
+		the name and the index number.
+
+ If the parents of the function cannot be determined, the word
+ `<spontaneous>' is printed in the `name' field, and all the other
+ fields are blank.
+
+ For the function's children, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the child into the function.
+
+     children	This is the amount of time that was propagated from the
+		child's children to the function.
+
+     called	This is the number of times the function called
+		this child `/' the total number of times the child
+		was called.  Recursive calls by the child are not
+		listed in the number after the `/'.
+
+     name	This is the name of the child.  The child's index
+		number is printed after it.  If the child is a
+		member of a cycle, the cycle number is printed
+		between the name and the index number.
+
+ If there are any cycles (circles) in the call graph, there is an
+ entry for the cycle-as-a-whole.  This entry shows who called the
+ cycle (as parents) and the members of the cycle (as children.)
+ The `+' recursive calls entry shows the number of function calls that
+ were internal to the cycle, and the calls entry for each member shows,
+ for that member, how many times it was called from other members of
+ the cycle.
+
+Copyright (C) 2012-2015 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+Index by function name
+
+  [32] _GLOBAL__sub_I__Z3_gpNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE [3] play(State) [27] std::vector<int, std::allocator<int> >::operator=(std::vector<int, std::allocator<int> > const&)
+   [5] getNearest(State const&) [1] play()                [28] std::_Rb_tree<std::pair<int, int>, std::pair<std::pair<int, int> const, int>, std::_Select1st<std::pair<std::pair<int, int> const, int> >, std::less<std::pair<int, int> >, std::allocator<std::pair<std::pair<int, int> const, int> > >::_M_insert_node(std::_Rb_tree_node_base*, std::_Rb_tree_node_base*, std::_Rb_tree_node<std::pair<std::pair<int, int> const, int> >*)
+   [2] getNextMove()           [4] genMoves(State const&) [29] std::_Rb_tree_iterator<std::pair<std::pair<int, int> const, int> > std::_Rb_tree<std::pair<int, int>, std::pair<std::pair<int, int> const, int>, std::_Select1st<std::pair<std::pair<int, int> const, int> >, std::less<std::pair<int, int> >, std::allocator<std::pair<std::pair<int, int> const, int> > >::_M_emplace_hint_unique<std::piecewise_construct_t const&, std::tuple<std::pair<int, int> const&>, std::tuple<> >(std::_Rb_tree_const_iterator<std::pair<std::pair<int, int> const, int> >, std::piecewise_construct_t const&, std::tuple<std::pair<int, int> const&>&&, std::tuple<>&&)
+  [13] void _dt<char const (&) [4], bool&, int&, unsigned long>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, char const (&) [4], bool&, int&, unsigned long&&) [7] std::_Hashtable<State, std::pair<State const, int>, std::allocator<std::pair<State const, int> >, std::__detail::_Select1st, std::equal_to<State>, std::hash<State>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_find_before_node(unsigned long, State const&, unsigned long) const [33] std::_Rb_tree<std::pair<int, int>, std::pair<std::pair<int, int> const, int>, std::_Select1st<std::pair<std::pair<int, int> const, int> >, std::less<std::pair<int, int> >, std::allocator<std::pair<std::pair<int, int> const, int> > >::_M_get_insert_unique_pos(std::pair<int, int> const&)
+  [12] void _dt<bool&, int&, unsigned long>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, bool&, int&, unsigned long&&) [11] std::_Hashtable<State, std::pair<State const, int>, std::allocator<std::pair<State const, int> >, std::__detail::_Select1st, std::equal_to<State>, std::hash<State>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_insert_unique_node(unsigned long, unsigned long, std::__detail::_Hash_node<std::pair<State const, int>, true>*) [30] std::_Rb_tree<std::pair<int, int>, std::pair<std::pair<int, int> const, int>, std::_Select1st<std::pair<std::pair<int, int> const, int> >, std::less<std::pair<int, int> >, std::allocator<std::pair<std::pair<int, int> const, int> > >::_M_get_insert_hint_unique_pos(std::_Rb_tree_const_iterator<std::pair<std::pair<int, int> const, int> >, std::pair<int, int> const&)
+  [15] void _dt<int&, unsigned long>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&, unsigned long&&) [6] std::_Deque_base<int, std::allocator<int> >::_M_initialize_map(unsigned long) [9] std::__detail::_Map_base<State, std::pair<State const, int>, std::allocator<std::pair<State const, int> >, std::__detail::_Select1st, std::equal_to<State>, std::hash<State>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true>, true>::operator[](State const&)
+  [14] void _dt<int>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&&) [25] std::_Deque_base<int, std::allocator<int> >::~_Deque_base() [8] __tcf_0
+  [16] void _dt<unsigned long>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, unsigned long&&) [10] void std::deque<int, std::allocator<int> >::_M_push_back_aux<int const&>(int const&)
+  [31] _gp(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [26] void std::vector<int, std::allocator<int> >::_M_emplace_back_aux<int const&>(int const&)
