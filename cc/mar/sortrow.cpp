@@ -165,57 +165,18 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx_n = 100006;
-string s;
+constexpr int mx_n = 302;
+int mat[mx_n][mx_n], n;
 
 int main() {
-    int t;
-    cin >> t;
-    while(t--) {
-        int n, k;
-        cin >> n >> k >> s;
-        multiset<int> blocks;
-        int last = -1, cnt = 0;
-        int odd = 0, even = 0;
-        fo(i, n) {
-            int x = s[i] - '0';
-            if(last == x) ++cnt;
-            if(last != x || i == n - 1) {
-                blocks.insert(cnt);
-                cnt = 1;
-            }
-            last = x;
-            if(x == 1) {
-                if(i % 2) ++odd;
-                else ++even;
-            }
-        }
-
-        int ocnt = n / 2;
-        int ecnt = n - ocnt;
-
-        int ans = oo;
-        if((ocnt - odd) + even <= k) ans = 1;
-        if((ecnt - even) + odd <= k) ans = 1;
-
-        int lo = 2, hi = n;
-        while(lo < hi) {
-            int m = (lo + hi) / 2;
-            int kcnt = 0;
-
-            for(auto b: blocks) {
-                kcnt += b / (m+1);
-            }
-
-            trace(m, kcnt);
-            if(kcnt <= k) hi = m;
-            else lo = m + 1;
-        }
-
-        ans = min(ans, lo);
-        cout << ans << endl;
+    cin >> n;
+    fo(i, n) fo(j, n) cin >> mat[i][j];
+    fo(i, n) sort(mat[i], mat[i] + n);
+    fo(i, n) {
+        fo(j, n) cout << mat[i][j] << " ";
+        cout << endl;
     }
-    
+
     
 	return 0;
 }

@@ -153,8 +153,8 @@ T1 modpow(T1 _a, T2 p, T3 mod) {
     return ret;
 }
 
-#define x1 _asdfzx1
-#define y1 _ysfdzy1
+#define left _asdfzx1
+#define right _ysfdzy1
 
 /* constants */
 constexpr int dx[] = {-1, 0, 1, 0, 1, 1, -1, -1};
@@ -165,56 +165,97 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx_n = 100006;
-string s;
+constexpr int mx_n = 2003;
+
+int n, m;
+string options[mx_n][2];
+int con[mx_n][mx_n];
+vi adj[mx_n];
+
+string ans[mx_n];
+string rev[mx_n];
+
+int left[mx_n], right[mx_n], vis[mx_n];
+
+bool dfs(int x) {
+    for(int y: adj[x]) if(!vis[y]) {
+        vis[y] = 1;
+        if(right[y] == -1 || dfs(right[y])) {
+            left[x] = y;
+            right[y] = x;
+            return true;
+        }
+    }
+
+    return false;
+}
+
+int bpm() {
+    int ret = 0;
+    ini(left, -1);
+    ini(right, -1);
+    fo(i, n) {
+        ini(vis, 0);
+        if(dfs(i)) ++ret;
+    }
+
+    return ret;
+}
+
+void solve() {
+    map<string, vi> fsame;
+    map<string, int> idx;
+
+    fo(i, n) {
+        fsame[options[i][0]].push_back(i);
+        fo(j, 2) {
+            string s = options[i][j];
+            if(!idx.count(s)) {
+                idx[s] = m++;
+                rev[idx[s]] = s;
+            }
+            con[i][idx[s]]++;
+        }
+    }
+    trace(idx);
+
+    for(auto entry: fsame) if(si(entry.se) > 1) {
+        int j = idx[entry.fi];
+        for(int i: entry.se) con[i][j]--;
+    }
+
+    fo(i, n) fo(j, m) if(con[i][j]) {
+        trace(i, rev[j]);
+        adj[i].push_back(j);
+    }
+
+    int match = bpm();
+    if(match < n) return;
+
+    fo(i, n) ans[i] = rev[left[i]];
+}
 
 int main() {
-    int t;
-    cin >> t;
-    while(t--) {
-        int n, k;
-        cin >> n >> k >> s;
-        multiset<int> blocks;
-        int last = -1, cnt = 0;
-        int odd = 0, even = 0;
-        fo(i, n) {
-            int x = s[i] - '0';
-            if(last == x) ++cnt;
-            if(last != x || i == n - 1) {
-                blocks.insert(cnt);
-                cnt = 1;
-            }
-            last = x;
-            if(x == 1) {
-                if(i % 2) ++odd;
-                else ++even;
-            }
-        }
-
-        int ocnt = n / 2;
-        int ecnt = n - ocnt;
-
-        int ans = oo;
-        if((ocnt - odd) + even <= k) ans = 1;
-        if((ecnt - even) + odd <= k) ans = 1;
-
-        int lo = 2, hi = n;
-        while(lo < hi) {
-            int m = (lo + hi) / 2;
-            int kcnt = 0;
-
-            for(auto b: blocks) {
-                kcnt += b / (m+1);
-            }
-
-            trace(m, kcnt);
-            if(kcnt <= k) hi = m;
-            else lo = m + 1;
-        }
-
-        ans = min(ans, lo);
-        cout << ans << endl;
+    cin >> n;
+    fo(i, n) {
+        string s1, s2;
+        cin >> s1 >> s2;
+        options[i][0] = s1.substr(0, 3);
+        options[i][1] = s1.substr(0, 2) + s2.substr(0, 1);
+        trace(i, options[i][0], options[i][1]);
     }
+
+
+    solve();
+
+    string pos = "YES";
+    fo(i, n) if(ans[i] == "") pos = "NO";
+
+    cout << pos << endl;
+    if(pos == "YES") {
+        fo(i, n) cout << ans[i] << endl;
+    }
+
     
     
 	return 0;

@@ -165,56 +165,178 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx_n = 100006;
-string s;
+constexpr int mx_n = 300005;
+
+// <HASH>
+constexpr int nhash = 2;
+int cbase[nhash][256], cpos[nhash][mx_n];
+
+bool isprime(int n) {
+    if(n % 2 == 0) return n == 2;
+    for(int i = 3; i * i <= n; i += 2) if(n % i == 0) return true;
+    return false;
+}
+
+
+int getRand() {
+    return 11l * rand() * rand() % numeric_limits<int>::max();
+}
+
+void preHash() {
+    srand(time(NULL));
+    fo(i, nhash) {
+        fo(c, 256) {
+            cbase[i][c] = getRand();
+        }
+        fo(j, mx_n) {
+            cpos[i][j] = getRand();
+        }
+    }
+
+}
+class Hash {
+    public:
+    int len;
+    int cur_hash[nhash];
+    Hash() {
+        len = 0;
+        fo(i, nhash) cur_hash[i] = 0;
+    }
+
+    void addCharToEnd(int c) {
+        fo(i, nhash) {
+            //trace(i, c, cur_hash[i], base[i], cbase[i][c], modpow(base[i], len - 1, modd[i]));
+            cur_hash[i] += (cbase[i][c] ^ cpos[i][len]);
+        }
+        ++len;
+    }
+
+    bool operator ==(const Hash &h) const {
+        if(len != h.len) return false;
+        fo(i, nhash) if(cur_hash[i] != h.cur_hash[i]) return false;
+        return true;
+    }
+
+    bool operator <(const Hash &h) const {
+        if(len != h.len) return len < h.len;
+        fo(i, nhash) if(cur_hash[i] != h.cur_hash[i]) return cur_hash[i] < h.cur_hash[i];
+        return false;
+    }
+
+};
+
+template<typename T> 
+ostream &operator <<(ostream &o, const Hash &h) { // print a hash
+    o << "<(" << h.len << ")";
+    bool first = true;
+    for(int i = 0; i < nhash; ++i) {
+        if(!first) o << "; ";
+         
+        o << h.cur_hash[i];
+        first = false;
+    }
+    o << ">";
+    return o;
+}
+namespace std {
+    template <>
+    struct hash<Hash>
+    {
+        std::size_t operator()(const Hash& k) const
+        {
+
+            size_t h = 0;
+            fo(i, nhash) {
+                h = ((h << 1) ^ k.cur_hash[i]);
+            }
+            return h;
+
+        }
+    };
+};
+
+// </HASH>
+
+vector<pi> nxt[mx_n];
+unordered_set<Hash> pref[mx_n];
+int reduce[mx_n];
+int sz[mx_n];
+int n;
+int order[mx_n], depth[mx_n];;
+
+void orit() {
+    queue<pi> q;
+    int cnt = 0;
+    q.push(mp(1, 0));
+    while(!q.empty()) {
+        auto cur = q.front(); q.pop();
+        order[cnt++] = cur.fi;
+        depth[cur.fi] = cur.se;
+
+        for(auto nx: nxt[cur.fi]) {
+            q.push(mp(nx.fi, cur.se + 1));
+        }
+    }
+
+    reverse(order, order + n);
+}
+
+void solve() {
+    orit();
+    fo(ii, n) {
+        int x = order[ii];
+        int d = depth[x];
+        sz[x] = 1;
+
+        for(auto nx: nxt[x]) {
+            sz[x] += sz[nx.fi];
+            pref[x].insert(all(pref[nx.fi]));
+        }
+
+        reduce[d] += sz[x] - si(pref[x]) - 1;;
+        trace(x, d, reduce[d], sz[x], si(pref[x]));
+
+        pref[x].clear();
+        for(auto nx: nxt[x]) {
+            for(Hash h: pref[nx.fi]) {
+                h.addCharToEnd(nx.se);
+                pref[x].insert(h);
+            }
+            pref[nx.fi].clear();
+            Hash h;
+            h.addCharToEnd(nx.se);
+            pref[x].insert(h);
+        }
+    trace(x, d, si(pref[x]));
+    }
+
+}
+
 
 int main() {
-    int t;
-    cin >> t;
-    while(t--) {
-        int n, k;
-        cin >> n >> k >> s;
-        multiset<int> blocks;
-        int last = -1, cnt = 0;
-        int odd = 0, even = 0;
-        fo(i, n) {
-            int x = s[i] - '0';
-            if(last == x) ++cnt;
-            if(last != x || i == n - 1) {
-                blocks.insert(cnt);
-                cnt = 1;
-            }
-            last = x;
-            if(x == 1) {
-                if(i % 2) ++odd;
-                else ++even;
-            }
-        }
-
-        int ocnt = n / 2;
-        int ecnt = n - ocnt;
-
-        int ans = oo;
-        if((ocnt - odd) + even <= k) ans = 1;
-        if((ecnt - even) + odd <= k) ans = 1;
-
-        int lo = 2, hi = n;
-        while(lo < hi) {
-            int m = (lo + hi) / 2;
-            int kcnt = 0;
-
-            for(auto b: blocks) {
-                kcnt += b / (m+1);
-            }
-
-            trace(m, kcnt);
-            if(kcnt <= k) hi = m;
-            else lo = m + 1;
-        }
-
-        ans = min(ans, lo);
-        cout << ans << endl;
+    cin.sync_with_stdio(false);
+    preHash();
+    cin >> n;
+    fo(i, n - 1) {
+        int u, v;
+        char c;
+        cin >> u >> v >> c;
+        trace(u, v, c);
+        nxt[u].push_back(mp(v, c));
     }
+
+    solve();
+
+    int ans1 = oo, ans2 = -1;
+    fo(i, n) {
+        int cur = n - reduce[i];
+        if(cur < ans1) {
+            ans1 = cur;
+            ans2 = i + 1;
+        }
+    }
+
+    cout << ans1 << endl << ans2 << endl;
     
     
 	return 0;

@@ -17,6 +17,7 @@ using namespace std;
 using vi  = vector<int>;
 using pi  = pair<int, int>;
 using ll  = long long int;
+using vs  = vector<string>;
 
 /* shortcut macros */
 #define mp              make_pair
@@ -165,57 +166,110 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx_n = 100006;
-string s;
+constexpr int mx_n = 5003;
+
+int n, m;
+int b, v;
+
+map<string, int> varIdx;
+int val[mx_n];
+class Operation {
+    public:
+    virtual int eval() = 0;
+};
+
+class Assignment: public Operation {
+    public:
+    string val;
+
+    Assignment(string _val) {
+        val = _val;
+    }
+
+    int eval() {
+        return val[b] - '0';;
+    }
+};
+
+class Operator: public Operation {
+    public:
+    int v1, v2;
+    string op;
+    Operator(string _op, int _v1, int _v2) {
+        v1 = _v1;
+        v2 = _v2;
+        op = _op;
+    }
+
+    int eval() {
+        int val1 = val[v1], val2 = val[v2];
+        switch(op[0]) {
+            case 'X': return val1 ^ val2;
+            case 'O': return val1 | val2;
+            default: return val1 & val2;
+        }
+    }
+};
+
+Operation* ops[mx_n];
+
+int eval() {
+    val[n] = v;
+    fo(i, n) {
+        val[i] = ops[i]->eval();
+    }
+
+    int ret = 0;
+    fo(i, n) ret += val[i];
+
+    return ret;
+}
 
 int main() {
-    int t;
-    cin >> t;
-    while(t--) {
-        int n, k;
-        cin >> n >> k >> s;
-        multiset<int> blocks;
-        int last = -1, cnt = 0;
-        int odd = 0, even = 0;
-        fo(i, n) {
-            int x = s[i] - '0';
-            if(last == x) ++cnt;
-            if(last != x || i == n - 1) {
-                blocks.insert(cnt);
-                cnt = 1;
-            }
-            last = x;
-            if(x == 1) {
-                if(i % 2) ++odd;
-                else ++even;
-            }
+    cin.sync_with_stdio(false);
+    cin >> n >> m;
+    string line;
+    getline(cin, line);
+    varIdx["?"] = n;
+    fo(i, n) {
+        getline(cin, line);
+        istringstream iss(line);
+        string s;
+        vs inp;
+        while(iss >> s) inp.push_back(s);
+        if(si(inp) == 3) {
+            ops[i] = new Assignment(inp[2]);
+        } else {
+            ops[i] = new Operator(inp[3], varIdx[inp[2]], varIdx[inp[4]]);
         }
 
-        int ocnt = n / 2;
-        int ecnt = n - ocnt;
-
-        int ans = oo;
-        if((ocnt - odd) + even <= k) ans = 1;
-        if((ecnt - even) + odd <= k) ans = 1;
-
-        int lo = 2, hi = n;
-        while(lo < hi) {
-            int m = (lo + hi) / 2;
-            int kcnt = 0;
-
-            for(auto b: blocks) {
-                kcnt += b / (m+1);
-            }
-
-            trace(m, kcnt);
-            if(kcnt <= k) hi = m;
-            else lo = m + 1;
-        }
-
-        ans = min(ans, lo);
-        cout << ans << endl;
+        varIdx[inp[0]] = i;
     }
-    
+
+    string ans1, ans2;
+    for(b = 0; b < m; ++b) {
+        v = 0;
+        int v0 = eval();
+        v = 1;
+        int v1 = eval();
+        //trace(b, v, v0, v1);
+
+        if(v0 >= v1) {
+            ans2 += "0";
+        } else {
+            ans2 += "1";
+        }
+
+        if(v0 <= v1) {
+            ans1 += "0";
+        } else {
+            ans1 += "1";
+        }
+    }
+
+    cout << ans1 << endl;
+    cout << ans2 << endl;
+
     
 	return 0;
 }

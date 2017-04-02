@@ -165,55 +165,44 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx_n = 100006;
-string s;
+constexpr int mx_d4 = (1 << 16) + 10;
+
+int val(char c) {
+    if(isdigit(c)) return c - '0';
+    return c - 'a' + 10;
+}
+
+ll solve(string l, string r) {
+}
+
+int sum[mx_d4];
+void pre() {
+    fo(i, 16) fo(j, 16) fo(k, 16) fo(l, 16) {
+        int v = ((i << 12) | (j << 8) | (k << 4) | l);
+        int mask = ((1 << i) | (1 << j) | (1 << k) | (1 << l));
+
+        int superset = (1 << 16) - 1;
+        superset ^= mask;
+        for(int sub = superset; sub >= 0; sub = ((sub - 1) & superset)) {
+            int cmask = (mask | sub);
+            if((v^cmask) < v) ++sum[cmask];
+            if(sub == 0) break;
+        }
+    }
+}
 
 int main() {
-    int t;
-    cin >> t;
-    while(t--) {
-        int n, k;
-        cin >> n >> k >> s;
-        multiset<int> blocks;
-        int last = -1, cnt = 0;
-        int odd = 0, even = 0;
-        fo(i, n) {
-            int x = s[i] - '0';
-            if(last == x) ++cnt;
-            if(last != x || i == n - 1) {
-                blocks.insert(cnt);
-                cnt = 1;
-            }
-            last = x;
-            if(x == 1) {
-                if(i % 2) ++odd;
-                else ++even;
-            }
-        }
+    cin.sync_with_stdio(false);
+    cout.sync_with_stdio(false);
 
-        int ocnt = n / 2;
-        int ecnt = n - ocnt;
-
-        int ans = oo;
-        if((ocnt - odd) + even <= k) ans = 1;
-        if((ecnt - even) + odd <= k) ans = 1;
-
-        int lo = 2, hi = n;
-        while(lo < hi) {
-            int m = (lo + hi) / 2;
-            int kcnt = 0;
-
-            for(auto b: blocks) {
-                kcnt += b / (m+1);
-            }
-
-            trace(m, kcnt);
-            if(kcnt <= k) hi = m;
-            else lo = m + 1;
-        }
-
-        ans = min(ans, lo);
-        cout << ans << endl;
+    pre();
+    return 0;
+    int q;
+    cin >> q;
+    while(q--) {
+        string l, r;
+        cin >> l >> r;
+        cout << solve(l, r) << endl;
     }
     
     

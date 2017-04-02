@@ -1,0 +1,5 @@
+solve:304: x = 1 | d = 0 | reduce[d] = 0 |
+
+real	0m0.006s
+user	0m0.004s
+sys	0m0.000s

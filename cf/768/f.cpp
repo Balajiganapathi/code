@@ -165,57 +165,56 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx_n = 100006;
-string s;
+constexpr int mx_n = 100005;
+int ways[2][mx_n][2];
+int fact[mx_n], ifact[mx_n];
+int f, w, h, ans[2];
+
+int calc(int n, int k) {
+    if(n < 0) return 0;
+    if(k <= 0) return 0;
+    n += k - 1;
+    return 1ll * fact[n] * ifact[n-(k-1)] % mod * ifact[k-1] % mod;
+}
+
+void pre() {
+    fact[0] = 1;
+    re(i, 1, mx_n) {
+        fact[i] = 1ll * i * fact[i-1] % mod;
+    }
+    fo(i, mx_n) ifact[i] = modpow(fact[i], mod - 2, mod);
+}
+
+void fillit(int idx, int n) {
+    rep(i, 1, n) {
+        ways[idx][i][0] = calc(n - i, i);
+        ways[idx][i][1] = calc(n - i * (h + 1), i);
+        trace(i, idx, n, ways[idx][i][0], ways[idx][i][1]);
+    }
+}
 
 int main() {
-    int t;
-    cin >> t;
-    while(t--) {
-        int n, k;
-        cin >> n >> k >> s;
-        multiset<int> blocks;
-        int last = -1, cnt = 0;
-        int odd = 0, even = 0;
-        fo(i, n) {
-            int x = s[i] - '0';
-            if(last == x) ++cnt;
-            if(last != x || i == n - 1) {
-                blocks.insert(cnt);
-                cnt = 1;
-            }
-            last = x;
-            if(x == 1) {
-                if(i % 2) ++odd;
-                else ++even;
-            }
-        }
-
-        int ocnt = n / 2;
-        int ecnt = n - ocnt;
-
-        int ans = oo;
-        if((ocnt - odd) + even <= k) ans = 1;
-        if((ecnt - even) + odd <= k) ans = 1;
-
-        int lo = 2, hi = n;
-        while(lo < hi) {
-            int m = (lo + hi) / 2;
-            int kcnt = 0;
-
-            for(auto b: blocks) {
-                kcnt += b / (m+1);
-            }
-
-            trace(m, kcnt);
-            if(kcnt <= k) hi = m;
-            else lo = m + 1;
-        }
-
-        ans = min(ans, lo);
-        cout << ans << endl;
+    pre();
+    cin >> f >> w >> h;
+    if(f == 0 || w == 0) {
+        cout << (max(f, w) > h? 1: 0) << endl;
+        return 0;
     }
-    
+    fillit(0, f);
+    fillit(1, w);
+
+    rep(i, 0, f) {
+        rep(d, -1, 1) {
+            int j = i + d;
+            if(j < 0 || j  >= mx_n) continue;
+            ans[0] = (ans[0] + (d == 0? 2ll: 1ll) * ways[0][i][0] * ways[1][j][0]) % mod;
+            ans[1] = (ans[1] + (d == 0? 2ll: 1ll) * ways[0][i][0] * ways[1][j][1]) % mod;
+        }
+    }
+
+    trace(ans[0], ans[1]);
+    int res = 1ll * ans[1] * modpow(ans[0], mod - 2, mod) % mod;
+    cout << res << endl;
     
 	return 0;
 }

@@ -4,8 +4,9 @@
 #ifdef LOCAL
 #   define TRACE
 #   define TEST
-#else
 //#   define NDEBUG
+#else
+#   define NDEBUG
 //#   define FAST
 #endif
 
@@ -165,54 +166,270 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx = -1, mx_cells = 1530;
+constexpr int mx = -1, mx_cells = 1150;
 int m;
 constexpr int N = 20;
-
-class Cell {
-public:
-    int r, c;
-    Cell(): r(0), c(0) {}
-    Cell(int _r, int _c): r(_r), c(_c){}
-
-    bool operator <(const Cell &cell) const {
-        return r < cell.r || (r == cell.r && c < cell.c);
-    }
-};
-
-set<int> borderCells;
-int tot;
-map<Cell, int> idx;
-Cell crev[mx_cells];
-int isBorder[mx_cells], blocked[mx_cells];
-int dist[mx_cells][mx_cells];
-int cdist[mx_cells][mx_cells];
-int bdist[mx_cells];
 
 bool isvalid(int r, int c) {
     return abs(r) < N && abs(c) < N;
 }
 
-set<Cell> cells;
-set<pair<Cell, int>> vis;
+int tot;
+pi crev[mx_cells];
+set<pi> cells;
 vi adj[mx_cells];
-int badj[mx_cells];
-vi imp;
+map<pi, int> idx;
+int isBorder[mx_cells];
+vi border;
+int vis[mx_cells], mark;
+int dist[mx_cells][mx_cells];
+int isNearest[mx_cells];
 
-void calcDist(int s) {
-    queue<int> q;
-    fo(i, mx_cells) dist[s][i] = oo;
-    dist[s][s] = 0;
-    q.push(s);
-    while(!q.empty()) {
-        int cur = q.front(); q.pop();
-        for(int nxt:adj[cur]) if(!blocked[nxt]) {
-            if(dist[s][nxt] > dist[s][cur] + 1) {
-                dist[s][nxt] = dist[s][cur] + 1;
-                q.push(nxt);
+class State {
+public:
+    bool catMove;
+    int cat;
+    bitset<mx_cells> blocked;
+
+    void blockCell(int m) {
+        assert(cat != m);
+        assert(blocked[m] == 0);
+        blocked[m] = 1;
+        catMove = true;
+    }
+
+    void catTo(int m) {
+        assert(blocked[m] == 0);
+        assert(find(all(adj[cat]), m) != adj[cat].end());
+        cat = m;
+        catMove = false;
+    }
+
+    bool winning;
+    void dfs(int x) {
+        if(winning == false || vis[x] == mark || blocked[x]) return;
+        vis[x] = mark;
+        if(isBorder[x]) {
+            winning = false;
+            return;
+        }
+        for(int y: adj[x]) {
+            dfs(y);
+            if(!winning) return;
+        }
+    }
+
+    bool hasWon() {
+        winning = false;
+        if(isBorder[cat]) return false;
+        ++mark;
+        winning = true;
+        dfs(cat);
+        return winning;
+    }
+
+    bool hasLost() {
+        if(isBorder[cat] || blocked.count() >= m) return true;
+        int av = 0;
+        for(int a: adj[cat]) if(isBorder[a] && !blocked[a]) ++av;
+        if(av >= 2) return true;
+        return false;
+    }
+
+    pi getNext(const State &s) const {
+        int played = s.blocked.count();
+    }
+
+    void calcDist(int start) const {
+        fo(i, tot) dist[start][i] = oo;
+        if(blocked[start]) return;
+        queue<int> q;
+        q.push(start);
+        dist[start][start] = 0;
+        while(!q.empty()) {
+            auto cur = q.front(); q.pop();
+            for(int a: adj[cur]) if(!blocked[a] && dist[start][a] == oo) {
+                dist[start][a] = dist[start][cur] + 1;
+                q.push(a);
             }
         }
-    }}
+    }
+
+    vi getCatMoves() {
+        assert(catMove);
+        calcDist(cat);
+        for(int a: adj[cat]) calcDist(a);
+
+        vi nearest;
+        int minDist = oo;
+        for(int b: border) if(!blocked[b]) {
+            if(dist[cat][b] < minDist) {
+                minDist = dist[cat][b];
+                nearest.clear();
+            }
+            if(dist[cat][b] == minDist) nearest.push_back(b);
+        }
+
+        vi catMoves;
+        for(int a: adj[cat]) if(!blocked[a]) {
+            for(int b: nearest) {
+                if(dist[cat][b] == dist[a][b] + 1) {
+                    catMoves.push_back(a);
+                    break;
+                }
+            }
+        }
+
+        return catMoves;
+    }
+
+    bool operator ==(const State &s) const {
+        return s.cat == cat &&
+            s.blocked == blocked &&
+            s.catMove == catMove;
+    }
+} global;
+
+namespace std {
+  template <>
+  struct hash<State> {
+    size_t operator()(const State& s) const {
+        size_t hcat = hash<int>()(s.cat);
+        size_t hblocked = hash<bitset<mx_cells>>()(s.blocked);
+        //for(int x: s.blocked) hblocked ^= hash<int>()(x);
+        size_t hmove = hash<bool>()(s.catMove);
+
+        return hcat ^ hblocked ^ hmove;
+    }
+  };
+}
+
+vi genMoves(const State &s) {
+    vi moves;
+    s.calcDist(s.cat);
+
+    vi nearest;
+    int minDist = oo;
+    for(int b: border) if(!s.blocked[b]) {
+        if(dist[s.cat][b] < minDist) {
+            minDist = dist[s.cat][b];
+            nearest.clear();
+        }
+        if(dist[s.cat][b] == minDist) nearest.push_back(b);
+    }
+    ++mark;
+    for(int b: nearest) {
+        isNearest[b] = mark;
+        s.calcDist(b);
+    }
+
+    if(si(nearest) > 3) {
+        for(int a: adj[s.cat]) if(!s.blocked[a]) {
+            moves.push_back(a);
+        }
+        /*
+        fo(i, tot) if(s.cat != i && !s.blocked[i]) {
+            if(dist[s.cat][i] <= 1) {
+                moves.push_back(i);
+            }
+        }
+        */
+    } else {
+        vector<tuple<int, int, int, int>> v;
+        fo(i, tot) if(s.cat != i && !s.blocked[i]) {
+            bool ok = false;
+            int cn = 0;
+            if(isBorder[i]) {
+                for(int a: adj[i]) {
+                    if(isNearest[a] >= mark || s.blocked[a]) ++cn;
+                }
+            }
+
+            int db = oo;
+            for(int b: nearest) {
+                db = min(db, dist[b][i]);
+                if(dist[s.cat][i] + dist[b][i] <= minDist + 3) {
+                    ok = true;
+                }
+            }
+            //if(dist[s.cat][i] > m - s.blocked.count()) ok = false;
+            if(!ok) continue;
+            //moves.push_back(i);
+            v.push_back(mt(!(isNearest[i] >= mark && cn == 1), cn, db, i));
+        }
+        sort(all(v));
+        if(si(nearest) > oo) {
+            fo(i, min(si(v), 1)) moves.push_back(gt(v[i], 3));
+        } else {
+            for(auto x: v) if(gt(x, 3) != nearest.front()) moves.push_back(gt(x, 3));
+            moves.push_back(nearest.front());
+        }
+    }
+    //trace(moves, si(nearest), s.blocked.count());
+    //for(int m: moves) trace(m, crev[m]);
+
+    return moves;
+}
+int evals;
+
+unordered_map<State, int> cache;
+
+int play(State state) {
+    if(cache.find(state) != cache.end()) {
+        return cache[state];
+    }
+    int ret;
+    if(++evals % 5001 == 0) {
+        trace(evals);
+        trace(state.catMove, state.cat, state.blocked.count());
+    }
+    //if(evals > 50) exit(0);
+
+    if(state.hasWon()) {
+        trace("WIN", state.catMove, state.cat, state.blocked.count());
+        return oo;
+    }
+
+    if(state.hasLost()) {
+        //trace("LOST", state.catMove, state.cat, isBorder[state.cat], state.blocked);
+        return -oo;
+    }
+
+    if(state.catMove) {
+        vi catMoves = state.getCatMoves();
+        //trace(catMoves);
+        ret = oo;
+        for(int nxt: catMoves) {
+            State cur = state;
+            cur.catTo(nxt);
+            int mv = play(cur);
+            if(mv == -oo) {
+                ret = -oo;
+                break;
+            }
+        }
+    } else {
+        ret = -oo;
+        vi moves = genMoves(state);
+        //trace(moves);
+        for(auto nxt: moves) {
+            State cur = state;
+            cur.blockCell(nxt);
+            int mv = play(cur);
+            if(mv != -oo) {
+                ret = nxt;
+                break;
+            }
+        }
+    }
+    cache[state] = ret;
+    return ret;
+}
+
+int getNextMove() {
+    int nxt = play(global);
+    return nxt;
+}
 
 void pre() {
     rep(r, -(N-1), N-1) {
@@ -225,7 +442,7 @@ void pre() {
             b = N - r;
         }
 
-        re(c, a, b) cells.insert(Cell(r, c));
+        re(c, a, b) cells.insert(mp(r, c));
     }
     for(auto c: cells) {
         idx[c] = tot++;
@@ -234,151 +451,65 @@ void pre() {
     tot = si(idx);
     for(auto c: cells) {
         fo(d, 6) {
-            Cell nxt(c.r + dx[d], c.c + dy[d]);
+            pi nxt(c.fi + dx[d], c.se + dy[d]);
             if(!cells.count(nxt)) {
-                isBorder[idx[c]] = 1;
-                borderCells.insert(idx[c]);
+                if(!isBorder[idx[c]]) {
+                    isBorder[idx[c]] = 1;
+                    border.push_back(idx[c]);
+                }
             } else {
                 adj[idx[c]].push_back(idx[nxt]);
             }
         }
     }
 
-    fo(c, tot) {
-        for(auto n: adj[c]) if(isBorder[n]) ++badj[c];
-    }
-
-    trace(si(idx), si(borderCells));
-#ifdef TRACE
-    for(auto c: cells) cerr << "(" << c.r << " " << c.c << ") "; cerr << endl;
-#endif
-
-    fo(i, tot) calcDist(i);
-    int origin = idx[Cell(0,0)];
-    fo(c, tot) if(badj[c] >= 3 || isBorder[c]) imp.push_back(c);
-}
-
-int cat;
-
-void calcCatDist(int s) {
-    fo(i, mx_cells) cdist[s][i] = oo;
-    cdist[s][s] = 0;
-    queue<int> q;
-    q.push(s);
-    while(!q.empty()) {
-        int cur = q.front(); q.pop();
-        for(int nxt:adj[cur]) if(!blocked[nxt]) {
-            if(cdist[s][nxt] > cdist[s][cur] + 1) {
-                cdist[s][nxt] = cdist[s][cur] + 1;
-                q.push(nxt);
-            }
-        }
-    }
-}
-
-bool shouldUse(int nxt, int cur) {
-    if(nxt == -1) return true;
-    //if(isBorder[cur] != isBorder[nxt]) {
-        //if(isBorder[cur]) return cdist[cat][cur] < 3 * cdist[cat][nxt];
-        //return cdist[cat][nxt] < 3 * cdist[cat][cur];
-    //}
-    if(bdist[cur] != bdist[nxt]) return bdist[cur] < bdist[nxt];
-    if(isBorder[cur] != isBorder[nxt]) return isBorder[cur] > isBorder[nxt];
-    if(badj[cur] != badj[nxt]) return badj[cur] > badj[nxt];
-    if(cdist[cat][cur] != cdist[cat][nxt]) return cdist[cat][cur] < cdist[cat][nxt];
-    return false;
-}
-
-vi getCatMoves() {
-    calcCatDist(cat);
-    for(int d: adj[cat]) if(!blocked[d]) calcCatDist(d);
-
-    int cnxt = -1;
-    vi cmoves;
-    for(int b: borderCells) {
-        if(cnxt == -1 || cdist[cat][b] < cdist[cat][cnxt]) {
-            cnxt = b;
-            cmoves.clear();
-        }
-        if(cdist[cat][b] == cdist[cat][cnxt]) cmoves.push_back(b);
-    }
-
-    if(si(cmoves) == 0) return cmoves;
-    set<int> ret;
-    for(int b: cmoves) {
-        for(int ca: adj[cat]) if(!blocked[ca] && cdist[cat][b] == cdist[ca][b] + 1) ret.insert(ca);
-    }
-
-    return vi(all(ret));
 }
 
 void play() {
 #ifdef TEST
     cout << "clear()" << endl;
 #endif
-    srand(time(NULL));
-    cat = idx[Cell(0, 0)];
-    ini(blocked, 0);
-    string move;
+    global = State();
+    global.catMove = true;
+    global.cat = idx[mp(0, 0)];
     while(1) {
-        trace(cat);
-        assert(!isBorder[cat]);
+        int cat;
 #ifdef TEST
-        vi cmoves = getCatMoves();
-        if(si(cmoves) == 0) return;
-        cat = cmoves[rand() % si(cmoves)];
-        cout << "cat(" << crev[cat].r << "," << crev[cat].c << ")" << endl;
+        vi pos = global.getCatMoves();
+        if(si(pos) == 0) return;
+        assert(global.blocked.count() <= m);
+        cat = pos[rand() % si(pos)];
+        cout << "cat(" << crev[cat].fi << ", " << crev[cat].se << ")" << endl;
 #else
+        string move;
         cin >> move;
         if(move == "WIN") return;
         int r, c;
         cin >> r >> c;
-        cat = idx[Cell(r, c)];
+        cat = idx[mp(r, c)];
 #endif
-        trace(cat);
 
-                int nxt = -1;
-        vi pos;
-        set<int> consider;
-        //consider.insert(all(imp));
-        //vi ncmoves = getCatMoves();
-        //consider.insert(all(ncmoves));
-        fo(i, tot) if(!blocked[i] && i != cat && (badj[i] == 3 || cdist[cat][i] == 5 || (isBorder[i] && cdist[cat][i] <= 5))) consider.insert(i);
-        for(int a: adj[cat]) consider.insert(a);
+        global.catTo(cat);
 
-        for(int i: consider) calcCatDist(i);
-        for(int i: consider) {
-            bdist[i] = oo;
-            for(int b: borderCells) if(!blocked[b]) bdist[i] = min(bdist[i], cdist[i][b]);
-        }
+        int nxt = play(global);
+        assert(nxt >= 0 && nxt < tot);
+        pi nx = crev[nxt];
+        global.blockCell(nxt);
 
-        for(int b: consider) if(!blocked[b] && cat != b) {
-            if(nxt == -1 || shouldUse(nxt, b)) {
-                nxt = b;
-                pos.clear();
-            }
-            if(!shouldUse(b, nxt) && !shouldUse(nxt, b)) pos.push_back(b);
-        }
-        nxt = pos[rand() % si(pos)];
-        assert(nxt != -1 && !blocked[nxt] && nxt != cat);
-        trace(nxt, dist[nxt][cat]);
-        Cell nx = crev[nxt];
 #ifdef TEST
-        cout << "block(" << nx.r << "," << nx.c << ")" << endl;
+        cout << "block(" << crev[nxt].fi << ", " << crev[nxt].se << ")" << endl;
 #else
-        cout << "BLOCK " << nx.r << " " << nx.c << '\n';
-        fflush(stdout);
+        cout << "BLOCK " << crev[nxt].fi << " " << crev[nxt].se << endl;
 #endif
-        
-        blocked[nxt] = 1;
     }
 }
 
 int main() {
     pre();
+    trace(tot);
     int t;
 #ifdef TEST
-    t = 10, m = 500;
+    t = 10, m = N;
 #else
     cin >> t >> m;
 #endif

@@ -165,56 +165,71 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx_n = 100006;
-string s;
+constexpr int mx_n = 200105;
+
+int n, m;
+int r[mx_n];
+vi connected[mx_n];
+int comp[mx_n], vis[mx_n];
+vi adj[mx_n];
+
+void add(int a, int b) {
+    adj[a].push_back(b);
+    adj[b].push_back(a);
+}
+
+int ccomp;
+void dfs(int x) {
+    if(vis[x]) return;
+    vis[x] = 1;
+    comp[x] = ccomp;
+
+    for(int y: adj[x]) dfs(y);
+}
+
+void scc() {
+    fo(i, 2 * m) {
+        ++ccomp;
+        dfs(i);
+    }
+}
+
+bool possible() {
+    fo(i, n) {
+        int a = connected[i][0];
+        int b = connected[i][1];
+        if(r[i] == 0) {
+            add(2 * a, 2 * b + 1);
+            add(2 * b, 2 * a + 1);
+        } else {
+            add(2 * a + 1, 2 * b + 1);
+            add(2 * a, 2 * b);
+        }
+    }
+
+    scc();
+    fo(i, m) if(comp[2 * i] == comp[2 * i + 1]) return false;
+
+    return true;
+}
+
 
 int main() {
-    int t;
-    cin >> t;
-    while(t--) {
-        int n, k;
-        cin >> n >> k >> s;
-        multiset<int> blocks;
-        int last = -1, cnt = 0;
-        int odd = 0, even = 0;
-        fo(i, n) {
-            int x = s[i] - '0';
-            if(last == x) ++cnt;
-            if(last != x || i == n - 1) {
-                blocks.insert(cnt);
-                cnt = 1;
-            }
-            last = x;
-            if(x == 1) {
-                if(i % 2) ++odd;
-                else ++even;
-            }
+    cin >> n >> m;
+    fo(i, n) cin >> r[i];
+    fo(i, m) {
+        int x;
+        cin >> x;
+        fo(j, x) {
+            int s;
+            cin >> s;
+            --s;
+            connected[s].push_back(i);
         }
-
-        int ocnt = n / 2;
-        int ecnt = n - ocnt;
-
-        int ans = oo;
-        if((ocnt - odd) + even <= k) ans = 1;
-        if((ecnt - even) + odd <= k) ans = 1;
-
-        int lo = 2, hi = n;
-        while(lo < hi) {
-            int m = (lo + hi) / 2;
-            int kcnt = 0;
-
-            for(auto b: blocks) {
-                kcnt += b / (m+1);
-            }
-
-            trace(m, kcnt);
-            if(kcnt <= k) hi = m;
-            else lo = m + 1;
-        }
-
-        ans = min(ans, lo);
-        cout << ans << endl;
     }
+
+    bool ans = possible();
+    cout << (ans? "YES": "NO") << endl;
     
     
 	return 0;

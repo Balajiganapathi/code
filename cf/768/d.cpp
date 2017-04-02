@@ -161,58 +161,54 @@ constexpr int dx[] = {-1, 0, 1, 0, 1, 1, -1, -1};
 constexpr int dy[] = {0, -1, 0, 1, 1, -1, 1, -1};
 constexpr auto PI  = 3.14159265358979323846L;
 constexpr auto oo  = numeric_limits<int>::max() / 2 - 2;
-constexpr auto eps = 1e-6;
+constexpr auto eps = 1e-8L;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx_n = 100006;
-string s;
+constexpr int mx_k = 1003;
+using ld = long double;
+
+ld p;
+int k;
+ld ex[mx_k];
+vector<ld> probs;
+/* util functions */
+template<typename T1, typename T2>
+T1 mpow(T1 _a, T2 p) {
+    assert(p >= 0);
+    T1 ret = 1, a = _a;
+
+    for(; p > 0; p /= 2) {
+        if(p & 1) ret = ret * a;
+        a = a * a;
+    }
+
+    return ret;
+}
+
+
+
+ld solve(int d) {
+    ex[0] = 0;
+    for(int i = 1; i <= k; ++i) {
+        ex[i] = 2000.0L * mpow(1.0L * i / k, d) - ex[i-1];
+    }
+
+    return ex[k];
+}
 
 int main() {
-    int t;
-    cin >> t;
-    while(t--) {
-        int n, k;
-        cin >> n >> k >> s;
-        multiset<int> blocks;
-        int last = -1, cnt = 0;
-        int odd = 0, even = 0;
-        fo(i, n) {
-            int x = s[i] - '0';
-            if(last == x) ++cnt;
-            if(last != x || i == n - 1) {
-                blocks.insert(cnt);
-                cnt = 1;
-            }
-            last = x;
-            if(x == 1) {
-                if(i % 2) ++odd;
-                else ++even;
-            }
-        }
+    int q;
+    cin >> k >> q;
+    rep(i, 1, 10001) {
+        probs.push_back(solve(i));
+    }
 
-        int ocnt = n / 2;
-        int ecnt = n - ocnt;
+    while(q--) {
+        cin >> p;
+        int ans = k;
+        ans = max(ans, (int)(lower_bound(all(probs), p, [](const ld& a, const ld& b) -> bool {return a < b - eps;}) - probs.begin()));
 
-        int ans = oo;
-        if((ocnt - odd) + even <= k) ans = 1;
-        if((ecnt - even) + odd <= k) ans = 1;
-
-        int lo = 2, hi = n;
-        while(lo < hi) {
-            int m = (lo + hi) / 2;
-            int kcnt = 0;
-
-            for(auto b: blocks) {
-                kcnt += b / (m+1);
-            }
-
-            trace(m, kcnt);
-            if(kcnt <= k) hi = m;
-            else lo = m + 1;
-        }
-
-        ans = min(ans, lo);
         cout << ans << endl;
     }
     

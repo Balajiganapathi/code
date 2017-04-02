@@ -2,7 +2,7 @@
 
 //#define LOCAL
 #ifdef LOCAL
-#   define TRACE
+//#   define TRACE
 #   define TEST
 #else
 #   define NDEBUG
@@ -165,55 +165,184 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx_n = 100006;
-string s;
+constexpr int mx_n = 3 * 1000008;
+int O[mx_n], R[mx_n], n;
+int center_dist[mx_n];
+vector<pi> adj[mx_n];
+
+void input() {
+    cin >> n;
+    int a, b, c, d;
+    cin >> O[0] >> a >> b >> c >> d;
+    trace(n, O[0], a, b, c, d);
+    re(i, 1, n) {
+        O[i] = (1ll * a * O[i-1] + b) % c + d;
+    }
+    cin >> R[0] >> a >> b >> c >> d;
+    trace(n, R[0], a, b, c, d);
+    re(i, 1, n) {
+        R[i] = (1ll * a * R[i-1] + b) % c + d;
+    }
+}
+
+void calc_center() {
+    fo(i, n) center_dist[i] = oo;
+    center_dist[n] = 0;
+    set<pi> q;
+    q.insert({0,n});
+    while(!q.empty()) {
+        auto cur = *q.begin(); q.erase(q.begin());
+        int i = cur.se;
+        if(center_dist[i] < cur.fi) continue;
+        for(auto ne: adj[i]) {
+            auto nxt = mp(ne.se + cur.fi, ne.fi);
+            if(center_dist[nxt.se] > nxt.fi) {
+                center_dist[nxt.se] = nxt.fi;
+                q.insert(nxt);
+            }
+        }
+    }
+}
+
+ll cdist1[mx_n], tot_dist;
+int cr[mx_n];
+int ccdist1[mx_n];
+
+void init() {
+    fo(i, mx_n) {
+        adj[i].clear();
+    }
+    tot_dist = 0;
+    fo(i, n) {
+        int j = (i+1) % n;
+        adj[i].push_back({j, O[i]});
+        adj[j].push_back({i, O[i]});
+        adj[n].push_back({i, R[i]});
+        adj[i].push_back({n, R[i]});
+    }
+    calc_center();
+    fo(i, n) {
+        tot_dist += O[i];
+    }
+
+    ll cur = 0, ccur = 0;
+    int rcur = 0;
+    fo(i, 2 * n) {
+        cdist1[i] = cur;
+
+        ccdist1[i] = ccur;
+        cur += O[i%n];
+        ccur = (cur + ccur) % mod;
+
+        rcur += center_dist[i%n];
+        if(rcur >= mod) rcur -= mod;
+        cr[i] = rcur;
+        trace(i, cdist1[i], ccdist1[i], cr[i]);
+    }
+    trace(tot_dist);
+}
+
+ll dist1(int a, int b) {
+    return cdist1[b] - cdist1[a];
+}
+
+ll dist2(int a, int b) {
+    return center_dist[a%n] + center_dist[b%n];
+}
+
+ll dist3(int a, int b) {
+    return tot_dist - dist1(a, b);
+}
+
+int calc1(int x, int t) {
+    x %= n; t %= n;
+    int ans;
+    if(x > t) {
+        ans = calc1(x, n - 1) + calc1(0, t);
+        //trace(x, t, ans);
+        if(ans >= mod) ans -= mod;
+        ans = (1ll * (dist1(x, n - 1) + O[n-1]) % mod * (t+1) + ans) % mod;
+        //trace(x, t, ans);
+    } else {
+        ans = (ccdist1[t] - ccdist1[x] + mod) % mod;
+        ans = (ans - 1ll * (t - x) * cdist1[x] % mod + mod) % mod;
+    }
+    return ans;
+}
+
+int calc2(int x, int t1, int t2) {
+    int ans = (cr[t2] - cr[t1] + mod) % mod;
+    ans = (ans + 1ll * (t2 - t1) * center_dist[x%n]) % mod;
+    return ans;
+}
+
+int calc3(int x, int t) {
+    int ans = (calc1(x, x + n - 1) + mod - calc1(x, t)) % mod;
+    //trace(x, t, calc1(x, t), calc1(x, x + n - 1));
+    //trace(ans);
+    ans = (1ll * (x + n - 1 - t) * tot_dist % mod + mod - ans) % mod;
+    return ans;
+}
+
+int calc(int x) {
+    int t1, t2;
+    int lo = x, hi = x + n - 1;
+    while(lo < hi) {
+        //trace(lo, hi);
+        int m = (lo + hi + 1) / 2;
+        trace(x, m, dist1(x, m), dist2(x, m), dist3(x, m));
+        if(dist1(x, m) < min(dist2(x, m), dist3(x, m))) lo = m;
+        else hi = m - 1;
+    }
+    t1 = lo;
+    hi = x + n - 1;
+    //trace(lo, hi);
+    while(lo < hi) {
+        int m = (lo + hi + 1) / 2;
+        //trace(lo, hi, m, dist1(x, m), dist2(x, m), dist3(x, m));
+        if(dist2(x, m) < dist3(x, m)) lo = m;
+        else hi = m - 1;
+    }
+
+    t2 = lo;
+    trace(x, t1, t2);
+    trace(calc1(x, t1), calc2(x, t1, t2), calc3(x, t2));
+    int ans = 0;
+    ans = calc1(x, t1);
+    ans += calc2(x, t1, t2);
+    if(ans >= mod) ans -= mod;
+    ans += calc3(x, t2);
+    if(ans >= mod) ans -= mod;
+    ans = (ans + 2ll * center_dist[x]) % mod;
+    trace(x, ans);
+
+    return ans;
+}
+
+int solve() {
+    int ans = 0;
+
+    fo(i, n) {
+        ans += calc(i);
+        if(ans >= mod) ans -= mod;
+    }
+
+    trace(ans);
+    ans = 1ll *  ans * modpow(2, mod - 2, mod) % mod;
+
+    return ans;
+}
 
 int main() {
     int t;
     cin >> t;
-    while(t--) {
-        int n, k;
-        cin >> n >> k >> s;
-        multiset<int> blocks;
-        int last = -1, cnt = 0;
-        int odd = 0, even = 0;
-        fo(i, n) {
-            int x = s[i] - '0';
-            if(last == x) ++cnt;
-            if(last != x || i == n - 1) {
-                blocks.insert(cnt);
-                cnt = 1;
-            }
-            last = x;
-            if(x == 1) {
-                if(i % 2) ++odd;
-                else ++even;
-            }
-        }
+    rep(kase, 1, t) {
+        input();
+        init();
+        int ans = solve();
 
-        int ocnt = n / 2;
-        int ecnt = n - ocnt;
+        cout << "Case #" << kase << ": " << ans << endl;
 
-        int ans = oo;
-        if((ocnt - odd) + even <= k) ans = 1;
-        if((ecnt - even) + odd <= k) ans = 1;
-
-        int lo = 2, hi = n;
-        while(lo < hi) {
-            int m = (lo + hi) / 2;
-            int kcnt = 0;
-
-            for(auto b: blocks) {
-                kcnt += b / (m+1);
-            }
-
-            trace(m, kcnt);
-            if(kcnt <= k) hi = m;
-            else lo = m + 1;
-        }
-
-        ans = min(ans, lo);
-        cout << ans << endl;
     }
     
     

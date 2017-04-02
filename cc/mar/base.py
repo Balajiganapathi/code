@@ -1,6 +1,6 @@
 # The example usage is shown at the bottom of the program.
 
-SLEEP_TIME = 1 # time waited after draw()
+SLEEP_TIME = 0.01 # time waited after draw()
 ALWAYS_DRAW = True # "True" if you want to run draw() automatically after each cat() and block()
 N = 20 # the size of the grid
 where_cat = (0, 0)

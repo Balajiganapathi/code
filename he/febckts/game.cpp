@@ -165,54 +165,92 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx_n = 100006;
-string s;
+constexpr int mx = -1;
+
+int ans, n, q;
+map<int, vi> obstacles;
+vi rows;
+set<pi> vis;
+
+bool blocked(vi o1, vi o2) {
+    int r1[3] = {0}, r2[3] = {0};
+    for(int x: o1) r1[x-1] = 1;
+    for(int x: o2) r2[x-1] = 1;
+
+    fo(j, 3) if(r1[j] == 0) {
+        rep(jx, -1, 1) {
+            int nj = j + jx;
+            if(nj >= 0 && nj < 3 && r2[nj] == 0) {
+                trace(j, nj);
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+void dfs(int i, int j) {
+    trace(i, j);
+    pi idx(i, j);
+    if(vis.count(idx)) return;
+    vis.insert(idx);
+    ans = max(ans, rows[i]);
+    if(i >= si(rows) - 1) {
+        trace(n);
+        ans = max(ans, n);
+        return;
+    }
+
+    if(rows[i+1] == rows[i] + 1) {
+        int r2[3] = {0};
+        for(int x: obstacles[rows[i+1]]) r2[x] = 1;
+
+        rep(jx, -1, 1) {
+            int nj = j + jx;
+            if(nj >= 0 && nj < 3 && r2[nj] == 0) {
+                trace(rows[i+1], nj);
+                dfs(i+1, nj);
+            }
+        }
+    } else {
+        fo(j, 3) dfs(i+1, j);
+    }
+}
 
 int main() {
     int t;
     cin >> t;
     while(t--) {
-        int n, k;
-        cin >> n >> k >> s;
-        multiset<int> blocks;
-        int last = -1, cnt = 0;
-        int odd = 0, even = 0;
-        fo(i, n) {
-            int x = s[i] - '0';
-            if(last == x) ++cnt;
-            if(last != x || i == n - 1) {
-                blocks.insert(cnt);
-                cnt = 1;
-            }
-            last = x;
-            if(x == 1) {
-                if(i % 2) ++odd;
-                else ++even;
+        obstacles.clear();
+        vis.clear();
+        rows.clear();
+        ans = 0;
+
+        cin >> n >> q;
+        while(q--) {
+            int x, y;
+            cin >> x >> y;
+            --y;
+            obstacles[x].push_back(y);
+        }
+
+        for(auto entry: obstacles) {
+            int r = entry.fi;
+            rows.push_back(r);
+        }
+
+        if(si(rows) == 0) {
+            ans = n;
+        } else {
+            int r = *rows.begin();
+            ans = r - 1;
+            trace(r, obstacles[r]);
+            fo(j, 3) {
+                if(find(all(obstacles[r]), j) == obstacles[r].end()) dfs(0, j);
             }
         }
 
-        int ocnt = n / 2;
-        int ecnt = n - ocnt;
-
-        int ans = oo;
-        if((ocnt - odd) + even <= k) ans = 1;
-        if((ecnt - even) + odd <= k) ans = 1;
-
-        int lo = 2, hi = n;
-        while(lo < hi) {
-            int m = (lo + hi) / 2;
-            int kcnt = 0;
-
-            for(auto b: blocks) {
-                kcnt += b / (m+1);
-            }
-
-            trace(m, kcnt);
-            if(kcnt <= k) hi = m;
-            else lo = m + 1;
-        }
-
-        ans = min(ans, lo);
         cout << ans << endl;
     }
     

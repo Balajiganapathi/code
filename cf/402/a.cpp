@@ -165,56 +165,41 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx_n = 100006;
-string s;
+constexpr int mx_n = 200005;
+
+string t, p;
+int a[mx_n], n;
+int rem[mx_n];
+
+bool ok(int at) {
+    int j = 0;
+    fo(i, n) if(rem[i] > at) {
+        if(t[i] == p[j]) ++j;
+        if(j == si(p)) break;
+    }
+
+    return j == si(p);
+}
 
 int main() {
-    int t;
-    cin >> t;
-    while(t--) {
-        int n, k;
-        cin >> n >> k >> s;
-        multiset<int> blocks;
-        int last = -1, cnt = 0;
-        int odd = 0, even = 0;
-        fo(i, n) {
-            int x = s[i] - '0';
-            if(last == x) ++cnt;
-            if(last != x || i == n - 1) {
-                blocks.insert(cnt);
-                cnt = 1;
-            }
-            last = x;
-            if(x == 1) {
-                if(i % 2) ++odd;
-                else ++even;
-            }
-        }
-
-        int ocnt = n / 2;
-        int ecnt = n - ocnt;
-
-        int ans = oo;
-        if((ocnt - odd) + even <= k) ans = 1;
-        if((ecnt - even) + odd <= k) ans = 1;
-
-        int lo = 2, hi = n;
-        while(lo < hi) {
-            int m = (lo + hi) / 2;
-            int kcnt = 0;
-
-            for(auto b: blocks) {
-                kcnt += b / (m+1);
-            }
-
-            trace(m, kcnt);
-            if(kcnt <= k) hi = m;
-            else lo = m + 1;
-        }
-
-        ans = min(ans, lo);
-        cout << ans << endl;
+    cin.sync_with_stdio(false);
+    cin >> t >> p;
+    n = si(t);
+    fo(i, n) {
+        cin >> a[i];
+        rem[a[i]-1] = i + 1;
     }
+
+    int lo = 0, hi = n;
+    while(lo < hi) {
+        int m = (lo + hi + 1) / 2;
+        trace(lo, hi, m, ok(m));
+        if(ok(m)) lo = m;
+        else hi = m - 1;
+    }
+
+    cout << lo << endl;
+
     
     
 	return 0;

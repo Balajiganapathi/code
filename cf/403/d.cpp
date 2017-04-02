@@ -165,57 +165,49 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx_n = 100006;
-string s;
+constexpr int mx_n = 502;
+constexpr int mx_lim = 5003;
+int n, m;
+int mat[mx_n][mx_n][2];
+vi adj[2][mx_n];
+int vis[mx_n][mx_lim];
+vi order;
+int ans;
+
+void dfs(int x, int idx) {
+    if(idx >= mx_lim) return;
+    if(vis[x][idx]) return;
+    vis[x][idx] = 1;
+    ans = max(ans, idx);
+
+    for(auto nxt: adj[order[idx]][x]) {
+        dfs(nxt, idx + 1);
+    }
+}
+
+void gen() {
+    order.push_back(0);
+    while(si(order) < mx_lim) {
+        vi tmp = order;
+        for(int x: tmp) order.push_back(1-x);
+    }
+}
 
 int main() {
-    int t;
-    cin >> t;
-    while(t--) {
-        int n, k;
-        cin >> n >> k >> s;
-        multiset<int> blocks;
-        int last = -1, cnt = 0;
-        int odd = 0, even = 0;
-        fo(i, n) {
-            int x = s[i] - '0';
-            if(last == x) ++cnt;
-            if(last != x || i == n - 1) {
-                blocks.insert(cnt);
-                cnt = 1;
-            }
-            last = x;
-            if(x == 1) {
-                if(i % 2) ++odd;
-                else ++even;
-            }
-        }
-
-        int ocnt = n / 2;
-        int ecnt = n - ocnt;
-
-        int ans = oo;
-        if((ocnt - odd) + even <= k) ans = 1;
-        if((ecnt - even) + odd <= k) ans = 1;
-
-        int lo = 2, hi = n;
-        while(lo < hi) {
-            int m = (lo + hi) / 2;
-            int kcnt = 0;
-
-            for(auto b: blocks) {
-                kcnt += b / (m+1);
-            }
-
-            trace(m, kcnt);
-            if(kcnt <= k) hi = m;
-            else lo = m + 1;
-        }
-
-        ans = min(ans, lo);
-        cout << ans << endl;
+    gen();
+    cin >> n >> m;
+    while(m--) {
+        int u, v, t;
+        cin >> u >> v >> t;
+        mat[u][v][t] = 1;
     }
+    rep(i, 1, n) rep(j, 1, n) fo(k, 2) if(mat[i][j][k]) adj[k][i].push_back(j);
+
+    rep(i, 1, n) dfs(i, 0);
+
     
+    if(ans >= mx_lim - 2) ans = -1;
+    cout << ans << endl;
     
 	return 0;
 }

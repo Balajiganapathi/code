@@ -165,56 +165,117 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx_n = 100006;
-string s;
+constexpr int mx_n = 300005;
+vi adj[mx_n];
+int n;
+
+int vis[mx_n];
+int sz[mx_n];
+
+void dfs(int x, int p) {
+    if(vis[x]) return;
+    vis[x] = 1;
+    sz[x] = 1;
+    for(int y: adj[x]) if(y != p) {
+        dfs(y, x);
+        sz[x] += sz[y];
+    }
+}
+
+int ans1, ans2;
+int pairs;
+int start;
+int calc(int s) {
+    return 1ll * s * (s - 1) / 2 % mod * (s - 2) / 3 % mod;
+}
+
+int calc(vi s) {
+    if(si(s) <= 2) return 0;
+    int sum = accumulate(all(s), 0);
+    int s3 = 1ll * sum * sum % mod * sum % mod;
+
+    for(int x: s) {
+        int sub = 1ll * x * x % mod * (sum - x) % mod;
+        sum = (sum + mod - sub) % mod;
+        sum = (sum + mod - 1ll * x * x % mod * x % mod) % mod;
+    }
+
+    return 1ll * sum * modpow(6, mod - 2, mod) % mod;
+}
+
+
+void brute(int x, int p) {
+    if(p != -1) {
+        ans1 += pairs;
+        if(ans1 >= mod) ans1 -= mod;
+        ans2 = (ans2 + 1ll * calc(start) * calc(sz[x] - 1)) % mod;
+        trace(x, p, ans1, ans2, start, pairs, sz[x]);
+    } else {
+        int other = 0;
+        int tot = calc(n);
+        tot = (tot - other + mod) % mod;
+    }
+
+    vi szs;
+    for(int y: adj[x]) szs.push_back(sz[y]);
+    ans2 = (ans2 + calc(szs)) % mod;
+
+    for(int y: adj[x]) if(y != p) {
+        int s = sz[y];
+        pairs = (pairs + 1ll * s * (s - 1) / 2) % mod;
+    }
+
+
+    for(int y: adj[x]) if(y != p) {
+        int s = sz[y];
+        pairs = (pairs - 1ll * s * (s - 1) / 2 % mod + mod) % mod;
+        if(p == -1) {
+            start -= sz[y];
+        }
+        brute(y, x);
+        if(p == -1) {
+            start += sz[y];
+        }
+        pairs = (pairs + 1ll * s * (s - 1) / 2) % mod;
+    }
+
+    for(int y: adj[x]) if(y != p) {
+        int s = sz[y];
+        pairs = (pairs - 1ll * s * (s - 1) / 2 % mod + mod) % mod;
+    }
+}
+
+int brute() {
+    ans1 = ans2 = 0;
+    fo(i, n) {
+        ini(vis, 0);
+        dfs(i, -1);
+        start = n;
+        brute(i, -1);
+        trace(i, ans1, ans2);
+    }
+
+    int ans = (ans1 + ans2) % mod;
+    
+    return ans;
+}
+
+int solve() {
+    return brute();
+}
 
 int main() {
-    int t;
-    cin >> t;
-    while(t--) {
-        int n, k;
-        cin >> n >> k >> s;
-        multiset<int> blocks;
-        int last = -1, cnt = 0;
-        int odd = 0, even = 0;
-        fo(i, n) {
-            int x = s[i] - '0';
-            if(last == x) ++cnt;
-            if(last != x || i == n - 1) {
-                blocks.insert(cnt);
-                cnt = 1;
-            }
-            last = x;
-            if(x == 1) {
-                if(i % 2) ++odd;
-                else ++even;
-            }
-        }
-
-        int ocnt = n / 2;
-        int ecnt = n - ocnt;
-
-        int ans = oo;
-        if((ocnt - odd) + even <= k) ans = 1;
-        if((ecnt - even) + odd <= k) ans = 1;
-
-        int lo = 2, hi = n;
-        while(lo < hi) {
-            int m = (lo + hi) / 2;
-            int kcnt = 0;
-
-            for(auto b: blocks) {
-                kcnt += b / (m+1);
-            }
-
-            trace(m, kcnt);
-            if(kcnt <= k) hi = m;
-            else lo = m + 1;
-        }
-
-        ans = min(ans, lo);
-        cout << ans << endl;
+    cin >> n;
+    fo(i, n - 1) {
+        int a, b;
+        cin >> a >> b;
+        --a; --b;
+        adj[a].push_back(b);
+        adj[b].push_back(a);
     }
+
+    int ans = solve();
+    cout << ans << endl;
     
     
 	return 0;
