@@ -169,12 +169,11 @@ constexpr int mx = -1;
 
 int main() {
     vi v;
-    fo(i, 15) {
-        v.push_back(1 << (rand() % 6));
+    fo(i, 25) {
+        v.push_back(i);
+        v.push_back(i);
     }
-    fo(i, 15 - si(v)) {
-        v.push_back(0);
-    }
+    fo(i, 50 - si(v)) v.push_back(rand() % 50);
     random_shuffle(all(v));
     trace(v);
     

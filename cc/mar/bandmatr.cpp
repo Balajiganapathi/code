@@ -76,10 +76,10 @@ template<typename H, typename ...T> void _dt(string u, H&& v, T&&... r) {
 
 template<typename T> 
 ostream &operator <<(ostream &o, vector<T> v) { // print a vector
-    o << "{";
+    o << "[";
     fo(i, si(v) - 1) o << v[i] << ", ";
     if(si(v)) o << v.back();
-    o << "}";
+    o << "]";
     return o;
 }
 
@@ -165,18 +165,31 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx = -1;
+constexpr int mx_n = 502;
+int mat[mx_n][mx_n], n;
 
 int main() {
-    vi v;
-    fo(i, 15) {
-        v.push_back(1 << (rand() % 6));
+    int t;
+    cin >> t;
+    while(t--) {
+        cin >> n;
+        int sum = 0;
+        fo(i, n) fo(j, n) {
+            cin >> mat[i][j];
+            sum += mat[i][j];
+        }
+        map<int, int> cnt;
+        fo(i, n) fo(j, n) ++cnt[abs(i-j)];
+
+        int ans = 0;
+        for(const auto &entry: cnt) {
+            if(sum <= 0) break;
+            sum -= entry.se;
+            ans = entry.fi;
+        }
+
+        cout << ans << endl;
     }
-    fo(i, 15 - si(v)) {
-        v.push_back(0);
-    }
-    random_shuffle(all(v));
-    trace(v);
     
     
 	return 0;
