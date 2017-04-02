@@ -1,0 +1,414 @@
+Flat profile:
+
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls  ms/call  ms/call  name    
+ 67.72      5.20     5.20 16229556     0.00     0.00  void std::__adjust_heap<__gnu_cxx::__normal_iterator<Candidate*, std::vector<Candidate, std::allocator<Candidate> > >, long, Candidate, __gnu_cxx::__ops::_Iter_comp_iter<std::less<Candidate> > >(__gnu_cxx::__normal_iterator<Candidate*, std::vector<Candidate, std::allocator<Candidate> > >, long, long, Candidate, __gnu_cxx::__ops::_Iter_comp_iter<std::less<Candidate> >)
+  8.99      5.89     0.69      168     4.11    38.97  Genome::randInit()
+  8.73      6.56     0.67  1197853     0.00     0.00  std::_Rb_tree<std::pair<int, int>, std::pair<int, int>, std::_Identity<std::pair<int, int> >, std::less<std::pair<int, int> >, std::allocator<std::pair<int, int> > >::find(std::pair<int, int> const&) const
+  6.12      7.03     0.47 32459280     0.00     0.00  void std::__push_heap<__gnu_cxx::__normal_iterator<Candidate*, std::vector<Candidate, std::allocator<Candidate> > >, long, Candidate, __gnu_cxx::__ops::_Iter_comp_val<std::less<Candidate> > >(__gnu_cxx::__normal_iterator<Candidate*, std::vector<Candidate, std::allocator<Candidate> > >, long, long, Candidate, __gnu_cxx::__ops::_Iter_comp_val<std::less<Candidate> >)
+  4.04      7.34     0.31  1159266     0.00     0.00  std::pair<std::_Rb_tree_iterator<std::pair<int, int> >, bool> std::_Rb_tree<std::pair<int, int>, std::pair<int, int>, std::_Identity<std::pair<int, int> >, std::less<std::pair<int, int> >, std::allocator<std::pair<int, int> > >::_M_insert_unique<std::pair<int, int> >(std::pair<int, int>&&)
+  1.43      7.45     0.11  1007586     0.00     0.00  std::pair<std::_Rb_tree_iterator<int>, bool> std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_M_insert_unique<int>(int&&)
+  0.65      7.50     0.05     2996     0.02     0.02  void std::vector<Candidate, std::allocator<Candidate> >::_M_emplace_back_aux<Candidate>(Candidate&&)
+  0.52      7.54     0.04       12     3.33     3.33  std::_Rb_tree<std::pair<int, int>, std::pair<int, int>, std::_Identity<std::pair<int, int> >, std::less<std::pair<int, int> >, std::allocator<std::pair<int, int> > >::_M_erase(std::_Rb_tree_node<std::pair<int, int> >*)
+  0.52      7.58     0.04                             pre()
+  0.52      7.62     0.04                             input()
+  0.26      7.64     0.02      208     0.10     0.21  dfs2(int, int)
+  0.26      7.66     0.02       25     0.80     0.80  std::_Rb_tree_node<int>* std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_M_copy<std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_Reuse_or_alloc_node>(std::_Rb_tree_node<int> const*, std::_Rb_tree_node<int>*, std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_Reuse_or_alloc_node&)
+  0.13      7.67     0.01     2365     0.00     0.00  __tcf_0
+  0.13      7.68     0.01     1465     0.01     0.01  std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_M_erase(std::_Rb_tree_node<int>*)
+  0.00      7.68     0.00  1642891     0.00     0.00  void std::vector<std::pair<int, int>, std::allocator<std::pair<int, int> > >::emplace_back<int&, int&>(int&, int&)
+  0.00      7.68     0.00   375248     0.00     0.00  std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_M_erase_aux(std::_Rb_tree_const_iterator<int>)
+  0.00      7.68     0.00    15058     0.00     0.00  void std::vector<std::pair<int, int>, std::allocator<std::pair<int, int> > >::_M_emplace_back_aux<int&, int&>(int&, int&)
+  0.00      7.68     0.00     3537     0.00     0.00  DSU::find(int)
+  0.00      7.68     0.00      720     0.00     0.00  _gp(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)
+  0.00      7.68     0.00      428     0.00     0.01  std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::operator=(std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >&&)
+  0.00      7.68     0.00      420     0.00     0.01  void _dt<long long>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, long long&&)
+  0.00      7.68     0.00      240     0.00     0.02  void _dt<int&, long long>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&, long long&&)
+  0.00      7.68     0.00      214     0.00     0.00  Solution::connected() const
+  0.00      7.68     0.00      208     0.00     0.00  dfs(int, int)
+  0.00      7.68     0.00      208     0.00     0.22  trim(Solution const&)
+  0.00      7.68     0.00      208     0.00     0.10  submit(Solution const&)
+  0.00      7.68     0.00      190     0.00     0.00  std::_Rb_tree_node<int>* std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_M_copy<std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_Alloc_node>(std::_Rb_tree_node<int> const*, std::_Rb_tree_node<int>*, std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_Alloc_node&)
+  0.00      7.68     0.00      132     0.00     0.00  void std::vector<int, std::allocator<int> >::_M_emplace_back_aux<int const&>(int const&)
+  0.00      7.68     0.00       36     0.00     0.01  void _dt<int&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&)
+  0.00      7.68     0.00       25     0.00     0.00  std::vector<std::pair<int, int>, std::allocator<std::pair<int, int> > >::operator=(std::vector<std::pair<int, int>, std::allocator<std::pair<int, int> > > const&)
+  0.00      7.68     0.00       24     0.00     0.00  tryKruskal()
+  0.00      7.68     0.00       24     0.00     0.04  void std::__insertion_sort<Genome*, __gnu_cxx::__ops::_Iter_less_iter>(Genome*, Genome*, __gnu_cxx::__ops::_Iter_less_iter)
+  0.00      7.68     0.00       12     0.00     0.03  void _dt<int&, int&, int&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&, int&, int&)
+  0.00      7.68     0.00       12     0.00     0.02  void _dt<int&, int&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&, int&)
+  0.00      7.68     0.00        1     0.00     0.00  _GLOBAL__sub_I__Z3_gpNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE
+
+ %         the percentage of the total running time of the
+time       program used by this function.
+
+cumulative a running sum of the number of seconds accounted
+ seconds   for by this function and those listed above it.
+
+ self      the number of seconds accounted for by this
+seconds    function alone.  This is the major sort for this
+           listing.
+
+calls      the number of times this function was invoked, if
+           this function is profiled, else blank.
+
+ self      the average number of milliseconds spent in this
+ms/call    function per call, if this function is profiled,
+	   else blank.
+
+ total     the average number of milliseconds spent in this
+ms/call    function and its descendents per call, if this
+	   function is profiled, else blank.
+
+name       the name of the function.  This is the minor sort
+           for this listing. The index shows the location of
+	   the function in the gprof listing. If the index is
+	   in parenthesis it shows where it would appear in
+	   the gprof listing if it were to be printed.
+
+Copyright (C) 2012-2015 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+		     Call graph (explanation follows)
+
+
+granularity: each sample hit covers 2 byte(s) for 0.13% of 7.68 seconds
+
+index % time    self  children    called     name
+                                                 <spontaneous>
+[1]     85.7    0.00    6.58                 ga() [1]
+                0.69    5.86     168/168         Genome::randInit() [2]
+                0.01    0.00  119920/1007586     std::pair<std::_Rb_tree_iterator<int>, bool> std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_M_insert_unique<int>(int&&) [8]
+                0.00    0.01      40/208         trim(Solution const&) [10]
+                0.00    0.01     240/240         void _dt<int&, long long>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&, long long&&) [18]
+                0.00    0.00      40/208         submit(Solution const&) [14]
+                0.00    0.00     264/2365        __tcf_0 [16]
+                0.00    0.00      24/24          void std::__insertion_sort<Genome*, __gnu_cxx::__ops::_Iter_less_iter>(Genome*, Genome*, __gnu_cxx::__ops::_Iter_less_iter) [21]
+                0.00    0.00     120/1465        std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_M_erase(std::_Rb_tree_node<int>*) [17]
+                0.00    0.00      40/428         std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::operator=(std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >&&) [20]
+                0.00    0.00      24/36          void _dt<int&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&) [23]
+                0.00    0.00   39960/1642891     void std::vector<std::pair<int, int>, std::allocator<std::pair<int, int> > >::emplace_back<int&, int&>(int&, int&) [33]
+                0.00    0.00   39920/375248      std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_M_erase_aux(std::_Rb_tree_const_iterator<int>) [34]
+                0.00    0.00     440/15058       void std::vector<std::pair<int, int>, std::allocator<std::pair<int, int> > >::_M_emplace_back_aux<int&, int&>(int&, int&) [35]
+                0.00    0.00      24/24          tryKruskal() [43]
+-----------------------------------------------
+                0.69    5.86     168/168         ga() [1]
+[2]     85.2    0.69    5.86     168         Genome::randInit() [2]
+                5.20    0.24 16229556/16229556     void std::__adjust_heap<__gnu_cxx::__normal_iterator<Candidate*, std::vector<Candidate, std::allocator<Candidate> > >, long, Candidate, __gnu_cxx::__ops::_Iter_comp_iter<std::less<Candidate> > >(__gnu_cxx::__normal_iterator<Candidate*, std::vector<Candidate, std::allocator<Candidate> > >, long, long, Candidate, __gnu_cxx::__ops::_Iter_comp_iter<std::less<Candidate> >) [3]
+                0.24    0.00 16229724/32459280     void std::__push_heap<__gnu_cxx::__normal_iterator<Candidate*, std::vector<Candidate, std::allocator<Candidate> > >, long, Candidate, __gnu_cxx::__ops::_Iter_comp_val<std::less<Candidate> > >(__gnu_cxx::__normal_iterator<Candidate*, std::vector<Candidate, std::allocator<Candidate> > >, long, long, Candidate, __gnu_cxx::__ops::_Iter_comp_val<std::less<Candidate> >) [6]
+                0.07    0.00  671664/1007586     std::pair<std::_Rb_tree_iterator<int>, bool> std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_M_insert_unique<int>(int&&) [8]
+                0.05    0.00    2996/2996        void std::vector<Candidate, std::allocator<Candidate> >::_M_emplace_back_aux<Candidate>(Candidate&&) [9]
+                0.00    0.04     168/208         trim(Solution const&) [10]
+                0.00    0.02     168/208         submit(Solution const&) [14]
+                0.00    0.00     672/1465        std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_M_erase(std::_Rb_tree_node<int>*) [17]
+                0.00    0.00     168/420         void _dt<long long>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, long long&&) [19]
+                0.00    0.00     168/428         std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::operator=(std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >&&) [20]
+                0.00    0.00     168/2365        __tcf_0 [16]
+                0.00    0.00  335664/1642891     void std::vector<std::pair<int, int>, std::allocator<std::pair<int, int> > >::emplace_back<int&, int&>(int&, int&) [33]
+                0.00    0.00  335328/375248      std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_M_erase_aux(std::_Rb_tree_const_iterator<int>) [34]
+                0.00    0.00    3696/15058       void std::vector<std::pair<int, int>, std::allocator<std::pair<int, int> > >::_M_emplace_back_aux<int&, int&>(int&, int&) [35]
+-----------------------------------------------
+                5.20    0.24 16229556/16229556     Genome::randInit() [2]
+[3]     70.8    5.20    0.24 16229556         void std::__adjust_heap<__gnu_cxx::__normal_iterator<Candidate*, std::vector<Candidate, std::allocator<Candidate> > >, long, Candidate, __gnu_cxx::__ops::_Iter_comp_iter<std::less<Candidate> > >(__gnu_cxx::__normal_iterator<Candidate*, std::vector<Candidate, std::allocator<Candidate> > >, long, long, Candidate, __gnu_cxx::__ops::_Iter_comp_iter<std::less<Candidate> >) [3]
+                0.24    0.00 16229556/32459280     void std::__push_heap<__gnu_cxx::__normal_iterator<Candidate*, std::vector<Candidate, std::allocator<Candidate> > >, long, Candidate, __gnu_cxx::__ops::_Iter_comp_val<std::less<Candidate> > >(__gnu_cxx::__normal_iterator<Candidate*, std::vector<Candidate, std::allocator<Candidate> > >, long, long, Candidate, __gnu_cxx::__ops::_Iter_comp_val<std::less<Candidate> >) [6]
+-----------------------------------------------
+                                                 <spontaneous>
+[4]     13.8    0.04    1.02                 input() [4]
+                0.67    0.00 1197853/1197853     std::_Rb_tree<std::pair<int, int>, std::pair<int, int>, std::_Identity<std::pair<int, int> >, std::less<std::pair<int, int> >, std::allocator<std::pair<int, int> > >::find(std::pair<int, int> const&) const [5]
+                0.31    0.00 1159266/1159266     std::pair<std::_Rb_tree_iterator<std::pair<int, int> >, bool> std::_Rb_tree<std::pair<int, int>, std::pair<int, int>, std::_Identity<std::pair<int, int> >, std::less<std::pair<int, int> >, std::allocator<std::pair<int, int> > >::_M_insert_unique<std::pair<int, int> >(std::pair<int, int>&&) [7]
+                0.04    0.00      12/12          std::_Rb_tree<std::pair<int, int>, std::pair<int, int>, std::_Identity<std::pair<int, int> >, std::less<std::pair<int, int> >, std::allocator<std::pair<int, int> > >::_M_erase(std::_Rb_tree_node<std::pair<int, int> >*) [13]
+                0.00    0.00      12/12          void _dt<int&, int&, int&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&, int&, int&) [22]
+                0.00    0.00      12/2365        __tcf_0 [16]
+                0.00    0.00     132/132         void std::vector<int, std::allocator<int> >::_M_emplace_back_aux<int const&>(int const&) [41]
+-----------------------------------------------
+                0.67    0.00 1197853/1197853     input() [4]
+[5]      8.7    0.67    0.00 1197853         std::_Rb_tree<std::pair<int, int>, std::pair<int, int>, std::_Identity<std::pair<int, int> >, std::less<std::pair<int, int> >, std::allocator<std::pair<int, int> > >::find(std::pair<int, int> const&) const [5]
+-----------------------------------------------
+                0.24    0.00 16229556/32459280     void std::__adjust_heap<__gnu_cxx::__normal_iterator<Candidate*, std::vector<Candidate, std::allocator<Candidate> > >, long, Candidate, __gnu_cxx::__ops::_Iter_comp_iter<std::less<Candidate> > >(__gnu_cxx::__normal_iterator<Candidate*, std::vector<Candidate, std::allocator<Candidate> > >, long, long, Candidate, __gnu_cxx::__ops::_Iter_comp_iter<std::less<Candidate> >) [3]
+                0.24    0.00 16229724/32459280     Genome::randInit() [2]
+[6]      6.1    0.47    0.00 32459280         void std::__push_heap<__gnu_cxx::__normal_iterator<Candidate*, std::vector<Candidate, std::allocator<Candidate> > >, long, Candidate, __gnu_cxx::__ops::_Iter_comp_val<std::less<Candidate> > >(__gnu_cxx::__normal_iterator<Candidate*, std::vector<Candidate, std::allocator<Candidate> > >, long, long, Candidate, __gnu_cxx::__ops::_Iter_comp_val<std::less<Candidate> >) [6]
+-----------------------------------------------
+                0.31    0.00 1159266/1159266     input() [4]
+[7]      4.0    0.31    0.00 1159266         std::pair<std::_Rb_tree_iterator<std::pair<int, int> >, bool> std::_Rb_tree<std::pair<int, int>, std::pair<int, int>, std::_Identity<std::pair<int, int> >, std::less<std::pair<int, int> >, std::allocator<std::pair<int, int> > >::_M_insert_unique<std::pair<int, int> >(std::pair<int, int>&&) [7]
+-----------------------------------------------
+                0.01    0.00  119920/1007586     ga() [1]
+                0.02    0.00  216002/1007586     dfs2(int, int) [11]
+                0.07    0.00  671664/1007586     Genome::randInit() [2]
+[8]      1.4    0.11    0.00 1007586         std::pair<std::_Rb_tree_iterator<int>, bool> std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_M_insert_unique<int>(int&&) [8]
+-----------------------------------------------
+                0.05    0.00    2996/2996        Genome::randInit() [2]
+[9]      0.7    0.05    0.00    2996         void std::vector<Candidate, std::allocator<Candidate> >::_M_emplace_back_aux<Candidate>(Candidate&&) [9]
+-----------------------------------------------
+                0.00    0.01      40/208         ga() [1]
+                0.00    0.04     168/208         Genome::randInit() [2]
+[10]     0.6    0.00    0.05     208         trim(Solution const&) [10]
+                0.02    0.02     208/208         dfs2(int, int) [11]
+                0.00    0.00     208/1465        std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_M_erase(std::_Rb_tree_node<int>*) [17]
+                0.00    0.00     208/428         std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::operator=(std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >&&) [20]
+                0.00    0.00     208/208         dfs(int, int) [39]
+                0.00    0.00     190/190         std::_Rb_tree_node<int>* std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_M_copy<std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_Alloc_node>(std::_Rb_tree_node<int> const*, std::_Rb_tree_node<int>*, std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_Alloc_node&) [40]
+-----------------------------------------------
+                              108001             dfs2(int, int) [11]
+                0.02    0.02     208/208         trim(Solution const&) [10]
+[11]     0.6    0.02    0.02     208+108001  dfs2(int, int) [11]
+                0.02    0.00  216002/1007586     std::pair<std::_Rb_tree_iterator<int>, bool> std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_M_insert_unique<int>(int&&) [8]
+                0.00    0.00  108001/1642891     void std::vector<std::pair<int, int>, std::allocator<std::pair<int, int> > >::emplace_back<int&, int&>(int&, int&) [33]
+                0.00    0.00    1922/15058       void std::vector<std::pair<int, int>, std::allocator<std::pair<int, int> > >::_M_emplace_back_aux<int&, int&>(int&, int&) [35]
+                              108001             dfs2(int, int) [11]
+-----------------------------------------------
+                                                 <spontaneous>
+[12]     0.5    0.04    0.00                 pre() [12]
+                0.00    0.00      12/428         std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::operator=(std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >&&) [20]
+                0.00    0.00      12/1465        std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_M_erase(std::_Rb_tree_node<int>*) [17]
+                0.00    0.00 1159266/1642891     void std::vector<std::pair<int, int>, std::allocator<std::pair<int, int> > >::emplace_back<int&, int&>(int&, int&) [33]
+                0.00    0.00    9000/15058       void std::vector<std::pair<int, int>, std::allocator<std::pair<int, int> > >::_M_emplace_back_aux<int&, int&>(int&, int&) [35]
+-----------------------------------------------
+                             1158692             std::_Rb_tree<std::pair<int, int>, std::pair<int, int>, std::_Identity<std::pair<int, int> >, std::less<std::pair<int, int> >, std::allocator<std::pair<int, int> > >::_M_erase(std::_Rb_tree_node<std::pair<int, int> >*) [13]
+                0.04    0.00      12/12          input() [4]
+[13]     0.5    0.04    0.00      12+1158692 std::_Rb_tree<std::pair<int, int>, std::pair<int, int>, std::_Identity<std::pair<int, int> >, std::less<std::pair<int, int> >, std::allocator<std::pair<int, int> > >::_M_erase(std::_Rb_tree_node<std::pair<int, int> >*) [13]
+                             1158692             std::_Rb_tree<std::pair<int, int>, std::pair<int, int>, std::_Identity<std::pair<int, int> >, std::less<std::pair<int, int> >, std::allocator<std::pair<int, int> > >::_M_erase(std::_Rb_tree_node<std::pair<int, int> >*) [13]
+-----------------------------------------------
+                0.00    0.00      40/208         ga() [1]
+                0.00    0.02     168/208         Genome::randInit() [2]
+[14]     0.3    0.00    0.02     208         submit(Solution const&) [14]
+                0.02    0.00      25/25          std::_Rb_tree_node<int>* std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_M_copy<std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_Reuse_or_alloc_node>(std::_Rb_tree_node<int> const*, std::_Rb_tree_node<int>*, std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_Reuse_or_alloc_node&) [15]
+                0.00    0.00      25/1465        std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_M_erase(std::_Rb_tree_node<int>*) [17]
+                0.00    0.00     190/214         Solution::connected() const [38]
+                0.00    0.00      25/25          std::vector<std::pair<int, int>, std::allocator<std::pair<int, int> > >::operator=(std::vector<std::pair<int, int>, std::allocator<std::pair<int, int> > > const&) [42]
+-----------------------------------------------
+                                8072             std::_Rb_tree_node<int>* std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_M_copy<std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_Reuse_or_alloc_node>(std::_Rb_tree_node<int> const*, std::_Rb_tree_node<int>*, std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_Reuse_or_alloc_node&) [15]
+                0.02    0.00      25/25          submit(Solution const&) [14]
+[15]     0.3    0.02    0.00      25+8072    std::_Rb_tree_node<int>* std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_M_copy<std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_Reuse_or_alloc_node>(std::_Rb_tree_node<int> const*, std::_Rb_tree_node<int>*, std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_Reuse_or_alloc_node&) [15]
+                                8072             std::_Rb_tree_node<int>* std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_M_copy<std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_Reuse_or_alloc_node>(std::_Rb_tree_node<int> const*, std::_Rb_tree_node<int>*, std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_Reuse_or_alloc_node&) [15]
+-----------------------------------------------
+                0.00    0.00      12/2365        output() [25]
+                0.00    0.00      12/2365        input() [4]
+                0.00    0.00      36/2365        void _dt<int&, int&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&, int&) [24]
+                0.00    0.00      36/2365        void _dt<int&, int&, int&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&, int&, int&) [22]
+                0.00    0.00      72/2365        void _dt<int&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&) [23]
+                0.00    0.00     168/2365        Genome::randInit() [2]
+                0.00    0.00     205/2365        void std::__insertion_sort<Genome*, __gnu_cxx::__ops::_Iter_less_iter>(Genome*, Genome*, __gnu_cxx::__ops::_Iter_less_iter) [21]
+                0.00    0.00     264/2365        ga() [1]
+                0.00    0.00     720/2365        void _dt<int&, long long>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&, long long&&) [18]
+                0.00    0.00     840/2365        void _dt<long long>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, long long&&) [19]
+[16]     0.1    0.01    0.00    2365         __tcf_0 [16]
+-----------------------------------------------
+                              432798             std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_M_erase(std::_Rb_tree_node<int>*) [17]
+                0.00    0.00      12/1465        pre() [12]
+                0.00    0.00      25/1465        submit(Solution const&) [14]
+                0.00    0.00     120/1465        ga() [1]
+                0.00    0.00     208/1465        trim(Solution const&) [10]
+                0.00    0.00     428/1465        std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::operator=(std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >&&) [20]
+                0.00    0.00     672/1465        Genome::randInit() [2]
+[17]     0.1    0.01    0.00    1465+432798  std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_M_erase(std::_Rb_tree_node<int>*) [17]
+                              432798             std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_M_erase(std::_Rb_tree_node<int>*) [17]
+-----------------------------------------------
+                0.00    0.01     240/240         ga() [1]
+[18]     0.1    0.00    0.01     240         void _dt<int&, long long>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&, long long&&) [18]
+                0.00    0.00     720/2365        __tcf_0 [16]
+                0.00    0.00     240/420         void _dt<long long>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, long long&&) [19]
+                0.00    0.00     240/720         _gp(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [37]
+-----------------------------------------------
+                0.00    0.00      12/420         output() [25]
+                0.00    0.00     168/420         Genome::randInit() [2]
+                0.00    0.00     240/420         void _dt<int&, long long>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&, long long&&) [18]
+[19]     0.0    0.00    0.00     420         void _dt<long long>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, long long&&) [19]
+                0.00    0.00     840/2365        __tcf_0 [16]
+                0.00    0.00     420/720         _gp(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [37]
+-----------------------------------------------
+                0.00    0.00      12/428         pre() [12]
+                0.00    0.00      40/428         ga() [1]
+                0.00    0.00     168/428         Genome::randInit() [2]
+                0.00    0.00     208/428         trim(Solution const&) [10]
+[20]     0.0    0.00    0.00     428         std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::operator=(std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >&&) [20]
+                0.00    0.00     428/1465        std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_M_erase(std::_Rb_tree_node<int>*) [17]
+-----------------------------------------------
+                0.00    0.00      24/24          ga() [1]
+[21]     0.0    0.00    0.00      24         void std::__insertion_sort<Genome*, __gnu_cxx::__ops::_Iter_less_iter>(Genome*, Genome*, __gnu_cxx::__ops::_Iter_less_iter) [21]
+                0.00    0.00     205/2365        __tcf_0 [16]
+-----------------------------------------------
+                0.00    0.00      12/12          input() [4]
+[22]     0.0    0.00    0.00      12         void _dt<int&, int&, int&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&, int&, int&) [22]
+                0.00    0.00      12/12          void _dt<int&, int&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&, int&) [24]
+                0.00    0.00      36/2365        __tcf_0 [16]
+                0.00    0.00      12/720         _gp(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [37]
+-----------------------------------------------
+                0.00    0.00      12/36          void _dt<int&, int&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&, int&) [24]
+                0.00    0.00      24/36          ga() [1]
+[23]     0.0    0.00    0.00      36         void _dt<int&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&) [23]
+                0.00    0.00      72/2365        __tcf_0 [16]
+                0.00    0.00      36/720         _gp(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [37]
+-----------------------------------------------
+                0.00    0.00      12/12          void _dt<int&, int&, int&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&, int&, int&) [22]
+[24]     0.0    0.00    0.00      12         void _dt<int&, int&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&, int&) [24]
+                0.00    0.00      36/2365        __tcf_0 [16]
+                0.00    0.00      12/36          void _dt<int&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&) [23]
+                0.00    0.00      12/720         _gp(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [37]
+-----------------------------------------------
+                                                 <spontaneous>
+[25]     0.0    0.00    0.00                 output() [25]
+                0.00    0.00      12/420         void _dt<long long>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, long long&&) [19]
+                0.00    0.00      12/2365        __tcf_0 [16]
+                0.00    0.00      24/214         Solution::connected() const [38]
+-----------------------------------------------
+                0.00    0.00   39960/1642891     ga() [1]
+                0.00    0.00  108001/1642891     dfs2(int, int) [11]
+                0.00    0.00  335664/1642891     Genome::randInit() [2]
+                0.00    0.00 1159266/1642891     pre() [12]
+[33]     0.0    0.00    0.00 1642891         void std::vector<std::pair<int, int>, std::allocator<std::pair<int, int> > >::emplace_back<int&, int&>(int&, int&) [33]
+-----------------------------------------------
+                0.00    0.00   39920/375248      ga() [1]
+                0.00    0.00  335328/375248      Genome::randInit() [2]
+[34]     0.0    0.00    0.00  375248         std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_M_erase_aux(std::_Rb_tree_const_iterator<int>) [34]
+-----------------------------------------------
+                0.00    0.00     440/15058       ga() [1]
+                0.00    0.00    1922/15058       dfs2(int, int) [11]
+                0.00    0.00    3696/15058       Genome::randInit() [2]
+                0.00    0.00    9000/15058       pre() [12]
+[35]     0.0    0.00    0.00   15058         void std::vector<std::pair<int, int>, std::allocator<std::pair<int, int> > >::_M_emplace_back_aux<int&, int&>(int&, int&) [35]
+-----------------------------------------------
+                                2099             DSU::find(int) [36]
+                0.00    0.00    3537/3537        Solution::connected() const [38]
+[36]     0.0    0.00    0.00    3537+2099    DSU::find(int) [36]
+                                2099             DSU::find(int) [36]
+-----------------------------------------------
+                0.00    0.00      12/720         void _dt<int&, int&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&, int&) [24]
+                0.00    0.00      12/720         void _dt<int&, int&, int&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&, int&, int&) [22]
+                0.00    0.00      36/720         void _dt<int&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&) [23]
+                0.00    0.00     240/720         void _dt<int&, long long>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&, long long&&) [18]
+                0.00    0.00     420/720         void _dt<long long>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, long long&&) [19]
+[37]     0.0    0.00    0.00     720         _gp(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [37]
+-----------------------------------------------
+                0.00    0.00      24/214         output() [25]
+                0.00    0.00     190/214         submit(Solution const&) [14]
+[38]     0.0    0.00    0.00     214         Solution::connected() const [38]
+                0.00    0.00    3537/3537        DSU::find(int) [36]
+-----------------------------------------------
+                              207792             dfs(int, int) [39]
+                0.00    0.00     208/208         trim(Solution const&) [10]
+[39]     0.0    0.00    0.00     208+207792  dfs(int, int) [39]
+                              207792             dfs(int, int) [39]
+-----------------------------------------------
+                               54524             std::_Rb_tree_node<int>* std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_M_copy<std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_Alloc_node>(std::_Rb_tree_node<int> const*, std::_Rb_tree_node<int>*, std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_Alloc_node&) [40]
+                0.00    0.00     190/190         trim(Solution const&) [10]
+[40]     0.0    0.00    0.00     190+54524   std::_Rb_tree_node<int>* std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_M_copy<std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_Alloc_node>(std::_Rb_tree_node<int> const*, std::_Rb_tree_node<int>*, std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_Alloc_node&) [40]
+                               54524             std::_Rb_tree_node<int>* std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_M_copy<std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_Alloc_node>(std::_Rb_tree_node<int> const*, std::_Rb_tree_node<int>*, std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_Alloc_node&) [40]
+-----------------------------------------------
+                0.00    0.00     132/132         input() [4]
+[41]     0.0    0.00    0.00     132         void std::vector<int, std::allocator<int> >::_M_emplace_back_aux<int const&>(int const&) [41]
+-----------------------------------------------
+                0.00    0.00      25/25          submit(Solution const&) [14]
+[42]     0.0    0.00    0.00      25         std::vector<std::pair<int, int>, std::allocator<std::pair<int, int> > >::operator=(std::vector<std::pair<int, int>, std::allocator<std::pair<int, int> > > const&) [42]
+-----------------------------------------------
+                0.00    0.00      24/24          ga() [1]
+[43]     0.0    0.00    0.00      24         tryKruskal() [43]
+-----------------------------------------------
+                0.00    0.00       1/1           __libc_csu_init [66]
+[44]     0.0    0.00    0.00       1         _GLOBAL__sub_I__Z3_gpNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE [44]
+-----------------------------------------------
+
+ This table describes the call tree of the program, and was sorted by
+ the total amount of time spent in each function and its children.
+
+ Each entry in this table consists of several lines.  The line with the
+ index number at the left hand margin lists the current function.
+ The lines above it list the functions that called this function,
+ and the lines below it list the functions this one called.
+ This line lists:
+     index	A unique number given to each element of the table.
+		Index numbers are sorted numerically.
+		The index number is printed next to every function name so
+		it is easier to look up where the function is in the table.
+
+     % time	This is the percentage of the `total' time that was spent
+		in this function and its children.  Note that due to
+		different viewpoints, functions excluded by options, etc,
+		these numbers will NOT add up to 100%.
+
+     self	This is the total amount of time spent in this function.
+
+     children	This is the total amount of time propagated into this
+		function by its children.
+
+     called	This is the number of times the function was called.
+		If the function called itself recursively, the number
+		only includes non-recursive calls, and is followed by
+		a `+' and the number of recursive calls.
+
+     name	The name of the current function.  The index number is
+		printed after it.  If the function is a member of a
+		cycle, the cycle number is printed between the
+		function's name and the index number.
+
+
+ For the function's parents, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the function into this parent.
+
+     children	This is the amount of time that was propagated from
+		the function's children into this parent.
+
+     called	This is the number of times this parent called the
+		function `/' the total number of times the function
+		was called.  Recursive calls to the function are not
+		included in the number after the `/'.
+
+     name	This is the name of the parent.  The parent's index
+		number is printed after it.  If the parent is a
+		member of a cycle, the cycle number is printed between
+		the name and the index number.
+
+ If the parents of the function cannot be determined, the word
+ `<spontaneous>' is printed in the `name' field, and all the other
+ fields are blank.
+
+ For the function's children, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the child into the function.
+
+     children	This is the amount of time that was propagated from the
+		child's children to the function.
+
+     called	This is the number of times the function called
+		this child `/' the total number of times the child
+		was called.  Recursive calls by the child are not
+		listed in the number after the `/'.
+
+     name	This is the name of the child.  The child's index
+		number is printed after it.  If the child is a
+		member of a cycle, the cycle number is printed
+		between the name and the index number.
+
+ If there are any cycles (circles) in the call graph, there is an
+ entry for the cycle-as-a-whole.  This entry shows who called the
+ cycle (as parents) and the members of the cycle (as children.)
+ The `+' recursive calls entry shows the number of function calls that
+ were internal to the cycle, and the calls entry for each member shows,
+ for that member, how many times it was called from other members of
+ the cycle.
+
+Copyright (C) 2012-2015 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+Index by function name
+
+  [44] _GLOBAL__sub_I__Z3_gpNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE [4] input() [13] std::_Rb_tree<std::pair<int, int>, std::pair<int, int>, std::_Identity<std::pair<int, int> >, std::less<std::pair<int, int> >, std::allocator<std::pair<int, int> > >::_M_erase(std::_Rb_tree_node<std::pair<int, int> >*)
+  [43] tryKruskal()           [14] submit(Solution const&) [34] std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_M_erase_aux(std::_Rb_tree_const_iterator<int>)
+  [23] void _dt<int&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&) [36] DSU::find(int) [8] std::pair<std::_Rb_tree_iterator<int>, bool> std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_M_insert_unique<int>(int&&)
+  [22] void _dt<int&, int&, int&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&, int&, int&) [2] Genome::randInit() [40] std::_Rb_tree_node<int>* std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_M_copy<std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_Alloc_node>(std::_Rb_tree_node<int> const*, std::_Rb_tree_node<int>*, std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_Alloc_node&)
+  [18] void _dt<int&, long long>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&, long long&&) [38] Solution::connected() const [15] std::_Rb_tree_node<int>* std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_M_copy<std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_Reuse_or_alloc_node>(std::_Rb_tree_node<int> const*, std::_Rb_tree_node<int>*, std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_Reuse_or_alloc_node&)
+  [24] void _dt<int&, int&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&, int&) [5] std::_Rb_tree<std::pair<int, int>, std::pair<int, int>, std::_Identity<std::pair<int, int> >, std::less<std::pair<int, int> >, std::allocator<std::pair<int, int> > >::find(std::pair<int, int> const&) const [17] std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::_M_erase(std::_Rb_tree_node<int>*)
+  [19] void _dt<long long>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, long long&&) [9] void std::vector<Candidate, std::allocator<Candidate> >::_M_emplace_back_aux<Candidate>(Candidate&&) [20] std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >::operator=(std::_Rb_tree<int, int, std::_Identity<int>, std::less<int>, std::allocator<int> >&&)
+  [37] _gp(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [33] void std::vector<std::pair<int, int>, std::allocator<std::pair<int, int> > >::emplace_back<int&, int&>(int&, int&) [6] void std::__push_heap<__gnu_cxx::__normal_iterator<Candidate*, std::vector<Candidate, std::allocator<Candidate> > >, long, Candidate, __gnu_cxx::__ops::_Iter_comp_val<std::less<Candidate> > >(__gnu_cxx::__normal_iterator<Candidate*, std::vector<Candidate, std::allocator<Candidate> > >, long, long, Candidate, __gnu_cxx::__ops::_Iter_comp_val<std::less<Candidate> >)
+  [39] dfs(int, int)          [35] void std::vector<std::pair<int, int>, std::allocator<std::pair<int, int> > >::_M_emplace_back_aux<int&, int&>(int&, int&) [3] void std::__adjust_heap<__gnu_cxx::__normal_iterator<Candidate*, std::vector<Candidate, std::allocator<Candidate> > >, long, Candidate, __gnu_cxx::__ops::_Iter_comp_iter<std::less<Candidate> > >(__gnu_cxx::__normal_iterator<Candidate*, std::vector<Candidate, std::allocator<Candidate> > >, long, long, Candidate, __gnu_cxx::__ops::_Iter_comp_iter<std::less<Candidate> >)
+  [12] pre()                  [42] std::vector<std::pair<int, int>, std::allocator<std::pair<int, int> > >::operator=(std::vector<std::pair<int, int>, std::allocator<std::pair<int, int> > > const&) [21] void std::__insertion_sort<Genome*, __gnu_cxx::__ops::_Iter_less_iter>(Genome*, Genome*, __gnu_cxx::__ops::_Iter_less_iter)
+  [11] dfs2(int, int)         [41] void std::vector<int, std::allocator<int> >::_M_emplace_back_aux<int const&>(int const&) [16] __tcf_0
+  [10] trim(Solution const&)   [7] std::pair<std::_Rb_tree_iterator<std::pair<int, int> >, bool> std::_Rb_tree<std::pair<int, int>, std::pair<int, int>, std::_Identity<std::pair<int, int> >, std::less<std::pair<int, int> >, std::allocator<std::pair<int, int> > >::_M_insert_unique<std::pair<int, int> >(std::pair<int, int>&&)
