@@ -168,10 +168,28 @@ constexpr auto mod = 1000000007;
 constexpr int mx = -1;
 
 int main() {
-    vi v;
-    fo(i, 50) v.push_back(i + 1);
-    random_shuffle(all(v));
-    trace(v);
+    int t;
+    cin >> t;
+    while(t--) {
+        string s;
+        cin >> s;
+        bool lastzero = false;
+        int zcnt = 0, ocnt = 0;
+        ll ans = 0;
+        for(int i = si(s) - 1; i >= 0; --i) {
+            if(s[i] == '0') {
+                if(!lastzero) ++zcnt;
+                lastzero = true;
+            } else {
+                ++ocnt;
+                ans += zcnt;
+                ans += si(s) - ocnt - i;
+                lastzero = false;
+            }
+        }
+
+        cout << ans << endl;
+    }
     
     
 	return 0;

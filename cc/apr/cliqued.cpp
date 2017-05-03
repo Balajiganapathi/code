@@ -160,18 +160,74 @@ T1 modpow(T1 _a, T2 p, T3 mod) {
 constexpr int dx[] = {-1, 0, 1, 0, 1, 1, -1, -1};
 constexpr int dy[] = {0, -1, 0, 1, 1, -1, 1, -1};
 constexpr auto PI  = 3.14159265358979323846L;
-constexpr auto oo  = numeric_limits<int>::max() / 2 - 2;
+constexpr auto oo  = numeric_limits<ll>::max() / 2 - 2;
 constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx = -1;
+constexpr int mx_n = 100005;
+ll dist[mx_n];
+vector<pi> adj[mx_n];
+int n, m, k, x, s;
+
+class State {
+public:
+    ll d;
+    int x;
+
+    State(int _x, ll _d) {
+        x = _x;
+        d = _d;
+    }
+
+    bool operator<(const State &s) const {
+        if(d != s.d) return d < s.d;
+        return x < s.x;
+    }
+};
+set<State> q;
+
+void add(int x, ll d) {
+    if(dist[x] <= d) return;
+    trace(x, d);
+    q.erase(State(x, dist[x]));
+    dist[x] = d;
+    q.insert(State(x, d));
+}
 
 int main() {
-    vi v;
-    fo(i, 50) v.push_back(i + 1);
-    random_shuffle(all(v));
-    trace(v);
+    int t;
+    cin >> t;
+    while(t--) {
+        q.clear();
+        fo(i, mx_n) {
+            adj[i].clear();
+            dist[i] = oo;
+        }
+        cin >> n >> k >> x >> m >> s;
+        trace(n, k, x, m, s);
+        while(m--) {
+            int a, b, c;
+            cin >> a >> b >> c;
+            trace(a, b, c);
+            adj[a].emplace_back(b, c);
+            adj[b].emplace_back(a, c);
+        }
+        add(s, 0);
+        bool kDone = false;
+        while(!q.empty()) {
+            auto cur = *q.begin(); q.erase(q.begin());
+            trace(cur.x, cur.d, kDone);
+            if(cur.x <= k && !kDone) {
+                kDone = true;
+                rep(i, 1, k) add(i, cur.d + x);
+            }
+            trace(cur.x, adj[cur.x]);
+            for(auto nxt: adj[cur.x]) add(nxt.fi, cur.d + nxt.se);
+        }
+
+        rep(i, 1, n) cout << dist[i] << " "; cout << endl;
+    }
     
     
 	return 0;

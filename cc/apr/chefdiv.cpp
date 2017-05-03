@@ -26,7 +26,7 @@ using ll  = long long int;
 #define gt(t, i)        get<i>(t)
 #define all(x)          (x).begin(), (x).end()
 #define ini(a, v)       memset(a, v, sizeof(a))
-#define rep(i, s, n)    for(int i = (s), _##i = (n); i <= _##i; ++i)
+#define rep(i, s, n)    for(auto i = (s), _##i = (n); i <= _##i; ++i)
 #define re(i, s, n)     rep(i, (s), (n) - 1)
 #define fo(i, n)        re(i, 0, n)
 #define si(x)           (int((x).size()))
@@ -165,14 +165,73 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx = -1;
+constexpr int mx_div = 100005, mx_p = 1000006;
+vi cnts[mx_div];
+ll rem[mx_div];
+ll a, b;
+bitset<mx_p> notp;
+vi primes;
+
+void seive() {
+    notp[0] = notp[1] = 1;
+    for(int i = 2; i * i < mx_p; ++i) if(!notp[i]) {
+        for(int j = i * i; j < mx_p; j += i) notp[j] = 1;
+    }
+    fo(i, mx_p) if(!notp[i]) primes.push_back(i);
+}
+
+map<vi, ll> cache;
+
+ll solve(vi v) {
+    vi tmp;
+    for(int c: v) if(c) tmp.push_back(c);
+    v = tmp;
+    if(si(v) == 0) return 0;
+
+    sort(all(v));
+    auto it = cache.find(v);
+    if(it != cache.end()) return it->se;
+
+    ll ret = 1;
+    for(int c: v) ret *= (1 + c);
+    --ret;
+    --v.back();
+    ret += solve(v);
+    ++v.back();
+
+    trace(v, ret);
+    
+    return cache[v] = ret;
+}
+
+ll getval(vi c) {
+    ll ret = solve(c);
+    ret += accumulate(all(c), 0);
+
+    return ret;
+}
 
 int main() {
-    vi v;
-    fo(i, 50) v.push_back(i + 1);
-    random_shuffle(all(v));
-    trace(v);
-    
+    seive();
+    cin >> a >> b;
+    rep(i, a, b) rem[i-a] = i;
+    for(int p: primes) {
+        ll fa = (a + p - 1) / p * p, fb = b / p * p;
+        for(ll i = fa; i <= fb; i += p) {
+            int c = 0;
+            for(ll &tmp = rem[i-a]; tmp % p == 0; tmp /= p) ++c;
+            cnts[i-a].push_back(c);
+        }
+    }
+    trace(a, b);
+    ll ret = 0;
+    rep(i, a, b) {
+        if(rem[i-a] > 1) cnts[i-a].push_back(1);
+        //trace(i, cnts[i-a], getval(cnts[i-a]));
+        ret += getval(cnts[i-a]);
+    }
+
+    cout << ret << endl;
     
 	return 0;
 }

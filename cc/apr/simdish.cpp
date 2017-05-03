@@ -168,10 +168,21 @@ constexpr auto mod = 1000000007;
 constexpr int mx = -1;
 
 int main() {
-    vi v;
-    fo(i, 50) v.push_back(i + 1);
-    random_shuffle(all(v));
-    trace(v);
+    int t;
+    cin >> t;
+    while(t--) {
+        map<string, int> cnt;
+        string s;
+        fo(i, 8) {
+            cin >> s;
+            ++cnt[s];
+        }
+        int same = 0;
+        for(auto entry: cnt) if(entry.se >= 2) ++same;
+
+        cout << (same >= 2? "similar": "dissimilar") << '\n';
+
+    }
     
     
 	return 0;

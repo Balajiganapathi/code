@@ -165,13 +165,40 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx = -1;
+constexpr int mx_n = 100005, mx_k = 100005;
+vi has[mx_n];
+int cnt[mx_k], n, k;
 
 int main() {
-    vi v;
-    fo(i, 50) v.push_back(i + 1);
-    random_shuffle(all(v));
-    trace(v);
+    int t;
+    cin >> t;
+    while(t--) {
+        cin >> n >> k;
+        ini(cnt, 0);
+        fo(i, n) {
+            has[i].clear();
+            int pi, x;
+            cin >> pi;
+            fo(j, pi) {
+                cin >> x;
+                has[i].push_back(x);
+                ++cnt[x];
+            }
+        }
+
+        string ans = "all";
+        rep(i, 1, k) if(cnt[i] == 0) ans = "sad";
+        if(ans != "sad") {
+            fo(i, n) {
+                bool ok = true;
+                for(int x: has[i]) if(--cnt[x] == 0) ok = false;
+                for(int x: has[i]) ++cnt[x];
+                if(ok) ans = "some";
+            }
+        }
+
+        cout << ans << endl;
+    }
     
     
 	return 0;
