@@ -4,12 +4,15 @@
 #ifdef LOCAL
 #   define TRACE
 #   define TEST
+#   include "lisp_plus_plus3.h"
 #else
+#   include "lisp_plus_plus.h"
 #   define NDEBUG
 //#   define FAST
 #endif
 
 #include<bits/stdc++.h>
+#include<message.h>
 
 using namespace std;
 
@@ -160,159 +163,105 @@ T1 modpow(T1 _a, T2 p, T3 mod) {
 constexpr int dx[] = {-1, 0, 1, 0, 1, 1, -1, -1};
 constexpr int dy[] = {0, -1, 0, 1, 1, -1, 1, -1};
 constexpr auto PI  = 3.14159265358979323846L;
-constexpr auto oo  = numeric_limits<ll>::max() / 2 - 2;
-constexpr auto eps = 1E-9L;
+constexpr auto oo  = numeric_limits<int>::max() / 2 - 2;
+constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
+constexpr int master = 0;
 
 /* code */
-constexpr int mx_n = 100005, mx_m = 100005, mx_p = 102;
+constexpr int mx = -1;
 
-int n, m, p, h[mx_m];
-ll d[mx_n], t[mx_n], cd[mx_n];
-ll req[mx_n], cr[mx_n];
+int nodes, id;
+int n, block, b1, b2;
 
-class Fraction {
-public:
-    ll n, d;
-    Fraction(ll _n, ll _d) {
-        n = _n; d = _d;
-    }
-
-    bool operator <(const Fraction &f) const {
-        //return 1.0L * n * f.d < 1.0L * f.n * d - eps;
-        return 1.0L * n / d < 1.0L * f.n / f.d + eps;
-    }
-
-    bool operator <=(const Fraction &f) const {
-        //return 1.0L * n * f.d <= 1.0L * f.n * d + eps;
-        return 1.0L * n / d <= 1.0L * f.n / f.d + eps;
-    }
-
-    bool operator ==(const Fraction &f) const {
-        return n == f.n && d == f.d;
-    }
-};
-
-class Line {
-public:
-    ll m, c;
-    Line(ll _m, ll _c) {
-        m = _m; c = _c;
-        if(c >= oo) c = oo;
-    }
-
-    Fraction intX(const Line &l) const {
-        return Fraction(l.c - c, m - l.m);
-    }
-
-    ll eval(ll x) {
-        if(c >= oo) return oo;
-        return m * x + c;
-    }
-};
-
-bool canRemove(const Line &l1, const Line &l2, const Line &l) {
-    return l.intX(l1) <= l1.intX(l2);
+tuple<int, int> calc(int i) {
+    return mt(min(n, i * block), min(n, i * block + block));
+}
+void pre() {
+    nodes = NumberOfNodes();
+    id = MyNodeId();
+    n = GetLength();
+    block = (n + nodes - 1) / nodes;
+    tie(b1, b2) = calc(id);
+    trace(id, b1, b2);
 }
 
-class ConvexHullOpti {
-public:
-    deque<pair<Fraction, Line>> hull;
+bool ismaster() {
+    return id == master;
+}
 
-    void add(const Line &l) {
-        assert(hull.empty() || hull.back().se.m >= l.m);
-        if(si(hull) < 1) {
-            hull.emplace_back(Fraction(oo, 1), l);
-            return;
-        }
-
-        while(si(hull) > 2 && canRemove(hull[si(hull) - 2].se, hull.back().se, l)) {
-            hull.pop_back();
-        }
-
-        hull.back().fi = hull.back().se.intX(l);
-        //while(si(hull) >= 2 && hull.back().fi == hull[si(hull) - 2].fi) hull.pop_back();
-        hull.emplace_back(Fraction(oo, 1), l);
+string par;
+void computeSum() {
+    int sum = 0;
+    re(i, b1, b2) {
+        char c = GetCharacter(i);
+        if(c == '(') ++sum;
+        else --sum;
+        par += c;
     }
-};
+    trace(id, sum);
+    PutInt(master, sum);
+    Send(master);
+}
 
-ll dp[2][mx_n];
-int c = 0;
-
-void solveRow() {
-    /*
-    dp[c][0] = 0;
-    rep(i, 1, m) {
-        dp[c][i] = oo;
-        fo(j, i) dp[c][i] = min(dp[c][i], dp[1-c][j] + 1ll * (i - j) * req[i] - (cr[i] - cr[j]));
-        trace(i, dp[c][i]);
+int tot;
+void computePre() {
+    vector<int> sums;
+    fo(i, nodes) {
+        Receive(i);
+        sums.push_back(GetInt(i));
     }
-    */
-    ConvexHullOpti opti;
-    rep(i, 0, m) if(dp[1-c][i] < oo) {
-        //trace(i, dp[1-c][i]);
-        opti.add(Line(-i, dp[1-c][i] + cr[i]));
-    }
-    //fo(i, si(opti.hull)) trace(i, opti.hull[i].fi.n, opti.hull[i].fi.d, opti.hull[i].se.m, opti.hull[i].se.c);
-    dp[c][0] = 0;
-    int idx = 0;
-    rep(i, 1, m) {
-        ll x = req[i];
-        while(idx + 1 < si(opti.hull) && 1.0L * x * opti.hull[idx].fi.d > opti.hull[idx].fi.n + eps) {
-            ++idx;
-        }
-        dp[c][i] = opti.hull[idx].se.eval(x) + x * i - cr[i];
-        //dp[c][i] = oo;
-#ifndef NDEBUG
-        ll cdp = oo;
-        fo(j, i) cdp = min(cdp, dp[1-c][j] + 1ll * (i-j) * req[i] - (cr[i] - cr[j]));
-        //trace(i, cdp, dp[c][i], req[i-1]);
-        assert(cdp == dp[c][i]);
-#endif
-        //fo(j, i) dp[c][i] = min(dp[c][i], dp[1-c][j] + 1ll * (i-j) * req[i]);
+    tot = accumulate(all(sums), 0);
+    partial_sum(all(sums), sums.begin());
+    fo(i, nodes) {
+        int cur = (i == 0? 0: sums[i-1]);
+        trace(id, i, cur);
+        PutInt(i, cur);
+        Send(i);
     }
 }
 
-ll solve() {
-    c = 0;
-    rep(i, 1, m) dp[c][i] = oo;
-    dp[c][0] = 0;
-    rep(k, 1, p) {
-        c = 1 - c;
-        solveRow();
+void computeAns() {
+    Receive(master);
+    int sum = GetInt(master);
+    int pos = oo;
+
+    re(i, b1, b2) {
+        char c = par[i-b1];
+        if(c == '(') ++sum;
+        else --sum;
+        if(sum < 0) {
+            pos = i;
+            break;
+        }
     }
-    return dp[c][m];
+
+    trace(id, pos);
+    PutInt(master, pos);
+    Send(master);
+}
+
+void collect() {
+    int ans = -1;
+    fo(i, nodes) {
+        Receive(i);
+        int cur = GetInt(i);
+        if(cur != oo && ans == -1) {
+            ans = cur;
+        }
+    }
+    if(ans == -1 && tot > 0) ans = n;
+
+    cout << ans << endl;
 }
 
 int main() {
-#ifndef TEST
-    cin >> n >> m >> p;
-    rep(i, 2, n) cin >> d[i];
-    rep(i, 1, m) {
-        cin >> h[i] >> t[i];
-    }
-#else
-    n = 1000; m = 20000; p = 20;
-    rep(i, 2, n) d[i] = rand() % 10000 + 1;
-    rep(i, 1, m) {
-        h[i] = rand() % n + 1;
-        t[i] = rand() % 10000000000 + 1;
-    }
-#endif
-    rep(i, 1, n) cd[i] = cd[i-1] + d[i];
-    rep(i, 1, n) trace(i, d[i], cd[i]);
-    rep(i, 1, m) {
-        trace(i, h[i], t[i], cd[h[i]]);
-        req[i] = 1ll * t[i] - cd[h[i]];
-    }
-
-    sort(req + 1, req + m + 1);
-    rep(i, 1, m) trace(i, req[i]);
-    rep(i, 1, m) cr[i] = cr[i-1] + req[i];
-
-    ll ans = solve();
-
-    cout << ans << '\n';
+    pre();
+    computeSum();
+    if(ismaster()) computePre();
+    computeAns();
+    if(ismaster()) collect();
+    
     
 	return 0;
 }

@@ -161,158 +161,107 @@ constexpr int dx[] = {-1, 0, 1, 0, 1, 1, -1, -1};
 constexpr int dy[] = {0, -1, 0, 1, 1, -1, 1, -1};
 constexpr auto PI  = 3.14159265358979323846L;
 constexpr auto oo  = numeric_limits<ll>::max() / 2 - 2;
-constexpr auto eps = 1E-9L;
+constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx_n = 100005, mx_m = 100005, mx_p = 102;
+constexpr int mx_n = 13, mx_k = 11, mx_full = 600005;
+int m, n;
+int k[mx_n], l[mx_n], a[mx_n][mx_k], c[mx_n][mx_k];
 
-int n, m, p, h[mx_m];
-ll d[mx_n], t[mx_n], cd[mx_n];
-ll req[mx_n], cr[mx_n];
-
-class Fraction {
-public:
-    ll n, d;
-    Fraction(ll _n, ll _d) {
-        n = _n; d = _d;
+vector<pair<ll, ll>> gen(const vi &v, int idx) {
+    vector<pair<ll, ll>> ret;
+    if(idx >= si(v)) {
+        ret.emplace_back(0ll, 0ll);
+        return ret;
     }
 
-    bool operator <(const Fraction &f) const {
-        //return 1.0L * n * f.d < 1.0L * f.n * d - eps;
-        return 1.0L * n / d < 1.0L * f.n / f.d + eps;
+    auto prev = gen(v, idx + 1);
+
+    int i = v[idx];
+    ll cur = 0;
+    rep(j, l[i], k[i]) {
+        vector<pair<ll, ll>> tmp;
+        for(auto entry: prev) {
+            tmp.emplace_back(entry.fi + cur, entry.se + a[i][j]);
+        }
+        sort(all(tmp));
+        //trace(i, j, tmp);
+        for(auto entry: tmp) ret.push_back(entry);
+        cur += c[i][j];
     }
 
-    bool operator <=(const Fraction &f) const {
-        //return 1.0L * n * f.d <= 1.0L * f.n * d + eps;
-        return 1.0L * n / d <= 1.0L * f.n / f.d + eps;
-    }
-
-    bool operator ==(const Fraction &f) const {
-        return n == f.n && d == f.d;
-    }
-};
-
-class Line {
-public:
-    ll m, c;
-    Line(ll _m, ll _c) {
-        m = _m; c = _c;
-        if(c >= oo) c = oo;
-    }
-
-    Fraction intX(const Line &l) const {
-        return Fraction(l.c - c, m - l.m);
-    }
-
-    ll eval(ll x) {
-        if(c >= oo) return oo;
-        return m * x + c;
-    }
-};
-
-bool canRemove(const Line &l1, const Line &l2, const Line &l) {
-    return l.intX(l1) <= l1.intX(l2);
+    return ret;
 }
 
-class ConvexHullOpti {
-public:
-    deque<pair<Fraction, Line>> hull;
+ll solve(vi v) {
+    int n = si(v);
+    int n1 = (n + 1) / 2;
+    int n2 = n - n2;
 
-    void add(const Line &l) {
-        assert(hull.empty() || hull.back().se.m >= l.m);
-        if(si(hull) < 1) {
-            hull.emplace_back(Fraction(oo, 1), l);
-            return;
+    vi part1, part2;
+    fo(i, n1) part1.push_back(v[i]);
+    re(i, n1, n) part2.push_back(v[i]);
+    //trace(part1, part2);
+    vector<pair<ll, ll>> pos1 = gen(part1, 0);
+    vector<pair<ll, ll>> pos2 = gen(part2, 0);
+
+    sort(all(pos1));
+    sort(all(pos2));
+    ll cur = 0;
+    fo(i, si(pos2)) {
+        cur = max(cur, pos2[i].se);
+        pos2[i].se = cur;
+    }
+
+    //trace(pos1);
+    //trace(pos2);
+    ll ans = 0;
+    fo(i, si(pos1)) if(pos1[i].fi <= m) {
+        ll r = m - pos1[i].fi;
+        int idx = upper_bound(all(pos2), mp(r, oo)) - pos2.begin();
+        if(idx > 0) {
+            --idx;
+            ll cur = pos1[i].se + pos2[idx].se;
+            //trace(i, idx, pos1[i], pos2[idx], cur);
+            assert(pos1[i].fi + pos2[idx].fi <= m);
+            ans = max(ans, cur);
         }
-
-        while(si(hull) > 2 && canRemove(hull[si(hull) - 2].se, hull.back().se, l)) {
-            hull.pop_back();
-        }
-
-        hull.back().fi = hull.back().se.intX(l);
-        //while(si(hull) >= 2 && hull.back().fi == hull[si(hull) - 2].fi) hull.pop_back();
-        hull.emplace_back(Fraction(oo, 1), l);
     }
-};
 
-ll dp[2][mx_n];
-int c = 0;
-
-void solveRow() {
-    /*
-    dp[c][0] = 0;
-    rep(i, 1, m) {
-        dp[c][i] = oo;
-        fo(j, i) dp[c][i] = min(dp[c][i], dp[1-c][j] + 1ll * (i - j) * req[i] - (cr[i] - cr[j]));
-        trace(i, dp[c][i]);
-    }
-    */
-    ConvexHullOpti opti;
-    rep(i, 0, m) if(dp[1-c][i] < oo) {
-        //trace(i, dp[1-c][i]);
-        opti.add(Line(-i, dp[1-c][i] + cr[i]));
-    }
-    //fo(i, si(opti.hull)) trace(i, opti.hull[i].fi.n, opti.hull[i].fi.d, opti.hull[i].se.m, opti.hull[i].se.c);
-    dp[c][0] = 0;
-    int idx = 0;
-    rep(i, 1, m) {
-        ll x = req[i];
-        while(idx + 1 < si(opti.hull) && 1.0L * x * opti.hull[idx].fi.d > opti.hull[idx].fi.n + eps) {
-            ++idx;
-        }
-        dp[c][i] = opti.hull[idx].se.eval(x) + x * i - cr[i];
-        //dp[c][i] = oo;
-#ifndef NDEBUG
-        ll cdp = oo;
-        fo(j, i) cdp = min(cdp, dp[1-c][j] + 1ll * (i-j) * req[i] - (cr[i] - cr[j]));
-        //trace(i, cdp, dp[c][i], req[i-1]);
-        assert(cdp == dp[c][i]);
-#endif
-        //fo(j, i) dp[c][i] = min(dp[c][i], dp[1-c][j] + 1ll * (i-j) * req[i]);
-    }
+    //trace(v, ans);
+    return ans;
 }
 
-ll solve() {
-    c = 0;
-    rep(i, 1, m) dp[c][i] = oo;
-    dp[c][0] = 0;
-    rep(k, 1, p) {
-        c = 1 - c;
-        solveRow();
+ll genSolve(vi v, int i) {
+    if(si(v) == 8) {
+        return solve(v);
     }
-    return dp[c][m];
+    if(i >= n) return -oo;
+
+    ll ret = genSolve(v, i + 1);
+    v.push_back(i);
+    ret = max(ret, genSolve(v, i + 1));
+
+    return ret;
 }
 
 int main() {
-#ifndef TEST
-    cin >> n >> m >> p;
-    rep(i, 2, n) cin >> d[i];
-    rep(i, 1, m) {
-        cin >> h[i] >> t[i];
-    }
-#else
-    n = 1000; m = 20000; p = 20;
-    rep(i, 2, n) d[i] = rand() % 10000 + 1;
-    rep(i, 1, m) {
-        h[i] = rand() % n + 1;
-        t[i] = rand() % 10000000000 + 1;
-    }
-#endif
-    rep(i, 1, n) cd[i] = cd[i-1] + d[i];
-    rep(i, 1, n) trace(i, d[i], cd[i]);
-    rep(i, 1, m) {
-        trace(i, h[i], t[i], cd[h[i]]);
-        req[i] = 1ll * t[i] - cd[h[i]];
-    }
+    int t;
+    cin >> t;
+    rep(kase, 1, t) {
+        cin >> m >> n;
+        fo(i, n) {
+            cin >> k[i] >> l[i];
+            rep(j, 1, k[i]) cin >> a[i][j];
+            rep(j, 1, k[i] - 1) cin >> c[i][j];
+        }
 
-    sort(req + 1, req + m + 1);
-    rep(i, 1, m) trace(i, req[i]);
-    rep(i, 1, m) cr[i] = cr[i-1] + req[i];
+        ll ans = genSolve(vi(), 0);
+        cout << "Case #" << kase << ": " << ans << endl;
 
-    ll ans = solve();
-
-    cout << ans << '\n';
+    }
+    
     
 	return 0;
 }

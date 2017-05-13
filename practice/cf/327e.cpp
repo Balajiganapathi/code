@@ -160,159 +160,90 @@ T1 modpow(T1 _a, T2 p, T3 mod) {
 constexpr int dx[] = {-1, 0, 1, 0, 1, 1, -1, -1};
 constexpr int dy[] = {0, -1, 0, 1, 1, -1, 1, -1};
 constexpr auto PI  = 3.14159265358979323846L;
-constexpr auto oo  = numeric_limits<ll>::max() / 2 - 2;
-constexpr auto eps = 1E-9L;
+constexpr auto oo  = numeric_limits<int>::max() / 2 - 2;
+constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx_n = 100005, mx_m = 100005, mx_p = 102;
+constexpr int mx_n = 24;
 
-int n, m, p, h[mx_m];
-ll d[mx_n], t[mx_n], cd[mx_n];
-ll req[mx_n], cr[mx_n];
+int dp[(1 << mx_n)], n, a[mx_n], k, b[mx_n];
 
-class Fraction {
-public:
-    ll n, d;
-    Fraction(ll _n, ll _d) {
-        n = _n; d = _d;
-    }
-
-    bool operator <(const Fraction &f) const {
-        //return 1.0L * n * f.d < 1.0L * f.n * d - eps;
-        return 1.0L * n / d < 1.0L * f.n / f.d + eps;
-    }
-
-    bool operator <=(const Fraction &f) const {
-        //return 1.0L * n * f.d <= 1.0L * f.n * d + eps;
-        return 1.0L * n / d <= 1.0L * f.n / f.d + eps;
-    }
-
-    bool operator ==(const Fraction &f) const {
-        return n == f.n && d == f.d;
-    }
-};
-
-class Line {
-public:
-    ll m, c;
-    Line(ll _m, ll _c) {
-        m = _m; c = _c;
-        if(c >= oo) c = oo;
-    }
-
-    Fraction intX(const Line &l) const {
-        return Fraction(l.c - c, m - l.m);
-    }
-
-    ll eval(ll x) {
-        if(c >= oo) return oo;
-        return m * x + c;
-    }
-};
-
-bool canRemove(const Line &l1, const Line &l2, const Line &l) {
-    return l.intX(l1) <= l1.intX(l2);
+bool isbad(int mask) {
+    if(k == 0) return false;
+    int sum = 0;
+    fo(i, n) if(is1(mask, i)) sum += a[i];
+    return sum == b[0] || (k == 2 && sum == b[1]);
 }
 
-class ConvexHullOpti {
-public:
-    deque<pair<Fraction, Line>> hull;
+int solve(int mask) {
+    int &ret = dp[mask];
+    if(ret != -1) return ret;
+    ret = 0;
+    if(mask == (1 << n) - 1) return ret=1;
 
-    void add(const Line &l) {
-        assert(hull.empty() || hull.back().se.m >= l.m);
-        if(si(hull) < 1) {
-            hull.emplace_back(Fraction(oo, 1), l);
-            return;
+    int rm = (mask ^ ((1 << n) - 1));
+    //trace(mask, rm);
+    int sum = 0;
+    int cm = mask;
+    fo(i, n) {
+        if(is1(mask, i)) {
+            sum += a[i];
+        } else {
+            ret += solve(mask | (1 << i));
+            if(ret >= mod) ret -= mod;
         }
-
-        while(si(hull) > 2 && canRemove(hull[si(hull) - 2].se, hull.back().se, l)) {
-            hull.pop_back();
-        }
-
-        hull.back().fi = hull.back().se.intX(l);
-        //while(si(hull) >= 2 && hull.back().fi == hull[si(hull) - 2].fi) hull.pop_back();
-        hull.emplace_back(Fraction(oo, 1), l);
     }
-};
 
-ll dp[2][mx_n];
-int c = 0;
-
-void solveRow() {
-    /*
-    dp[c][0] = 0;
-    rep(i, 1, m) {
-        dp[c][i] = oo;
-        fo(j, i) dp[c][i] = min(dp[c][i], dp[1-c][j] + 1ll * (i - j) * req[i] - (cr[i] - cr[j]));
-        trace(i, dp[c][i]);
+    if((k > 0 && sum == b[0]) || (k == 2 && sum == b[1])) {
+        ret = 0;
     }
-    */
-    ConvexHullOpti opti;
-    rep(i, 0, m) if(dp[1-c][i] < oo) {
-        //trace(i, dp[1-c][i]);
-        opti.add(Line(-i, dp[1-c][i] + cr[i]));
-    }
-    //fo(i, si(opti.hull)) trace(i, opti.hull[i].fi.n, opti.hull[i].fi.d, opti.hull[i].se.m, opti.hull[i].se.c);
-    dp[c][0] = 0;
-    int idx = 0;
-    rep(i, 1, m) {
-        ll x = req[i];
-        while(idx + 1 < si(opti.hull) && 1.0L * x * opti.hull[idx].fi.d > opti.hull[idx].fi.n + eps) {
-            ++idx;
-        }
-        dp[c][i] = opti.hull[idx].se.eval(x) + x * i - cr[i];
-        //dp[c][i] = oo;
-#ifndef NDEBUG
-        ll cdp = oo;
-        fo(j, i) cdp = min(cdp, dp[1-c][j] + 1ll * (i-j) * req[i] - (cr[i] - cr[j]));
-        //trace(i, cdp, dp[c][i], req[i-1]);
-        assert(cdp == dp[c][i]);
-#endif
-        //fo(j, i) dp[c][i] = min(dp[c][i], dp[1-c][j] + 1ll * (i-j) * req[i]);
-    }
-}
-
-ll solve() {
-    c = 0;
-    rep(i, 1, m) dp[c][i] = oo;
-    dp[c][0] = 0;
-    rep(k, 1, p) {
-        c = 1 - c;
-        solveRow();
-    }
-    return dp[c][m];
+    
+    return ret;
 }
 
 int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
 #ifndef TEST
-    cin >> n >> m >> p;
-    rep(i, 2, n) cin >> d[i];
-    rep(i, 1, m) {
-        cin >> h[i] >> t[i];
-    }
+    cin >> n;
+    fo(i, n) cin >> a[i];
+    cin >> k;
+    fo(i, k) cin >> b[i];
 #else
-    n = 1000; m = 20000; p = 20;
-    rep(i, 2, n) d[i] = rand() % 10000 + 1;
-    rep(i, 1, m) {
-        h[i] = rand() % n + 1;
-        t[i] = rand() % 10000000000 + 1;
-    }
+    n = 24;
+    fo(i, n) a[i] = rand() % 1000;
+    k = 2;
+    fo(i, k) b[i] = rand() % 10000;
 #endif
-    rep(i, 1, n) cd[i] = cd[i-1] + d[i];
-    rep(i, 1, n) trace(i, d[i], cd[i]);
-    rep(i, 1, m) {
-        trace(i, h[i], t[i], cd[h[i]]);
-        req[i] = 1ll * t[i] - cd[h[i]];
+    if(k == 2 && b[0] == b[1]) --k;
+    if(k == 2 && b[1] < b[0]) swap(b[0], b[1]);
+
+    dp[(1 << n)-1] = (isbad((1 << n) - 1)? 0: 1);
+
+    for(int mask = (1 << n) - 2; mask >= 0; --mask) {
+        dp[mask] = 0;
+
+        int rm = (mask ^ ((1 << n) - 1));
+        int sum = 0;
+        int cm = mask;
+        fo(i, n) {
+            if(is1(mask, i)) {
+                sum += a[i];
+            } else {
+                dp[mask] += dp[mask | (1 << i)];
+                if(dp[mask] >= mod) dp[mask] -= mod;
+            }
+        }
+
+        if((k > 0 && sum == b[0]) || (k == 2 && sum == b[1])) {
+            dp[mask] = 0;
+        }
+
+
     }
-
-    sort(req + 1, req + m + 1);
-    rep(i, 1, m) trace(i, req[i]);
-    rep(i, 1, m) cr[i] = cr[i-1] + req[i];
-
-    ll ans = solve();
-
-    cout << ans << '\n';
+    cout << dp[0] << endl;
+    
     
 	return 0;
 }

@@ -160,160 +160,84 @@ T1 modpow(T1 _a, T2 p, T3 mod) {
 constexpr int dx[] = {-1, 0, 1, 0, 1, 1, -1, -1};
 constexpr int dy[] = {0, -1, 0, 1, 1, -1, 1, -1};
 constexpr auto PI  = 3.14159265358979323846L;
-constexpr auto oo  = numeric_limits<ll>::max() / 2 - 2;
-constexpr auto eps = 1E-9L;
+constexpr auto oo  = numeric_limits<int>::max() / 2 - 2;
+constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx_n = 100005, mx_m = 100005, mx_p = 102;
+constexpr int mx_n = 100005;
+int n, e[mx_n];
+int a, b, h, w;
 
-int n, m, p, h[mx_m];
-ll d[mx_n], t[mx_n], cd[mx_n];
-ll req[mx_n], cr[mx_n];
+pi ok[2][(1 << 20) + 100];
 
-class Fraction {
-public:
-    ll n, d;
-    Fraction(ll _n, ll _d) {
-        n = _n; d = _d;
-    }
+int tryIt(int cnt, int x, int y) {
+    trace(cnt, x, y);
+    int nn = n;
+    if(cnt <= 1) {
+        fo(mask, (1 << cnt)) {
+            int cx = (x + w - 1) / w, cy = (y + h - 1) / h;
+            fo(i, cnt) {
+                if(is1(mask, i)) cx = (cx + e[i] - 1) / e[i];
+                else cy = (cy + e[i] - 1) / e[i];
+            }
 
-    bool operator <(const Fraction &f) const {
-        //return 1.0L * n * f.d < 1.0L * f.n * d - eps;
-        return 1.0L * n / d < 1.0L * f.n / f.d + eps;
-    }
-
-    bool operator <=(const Fraction &f) const {
-        //return 1.0L * n * f.d <= 1.0L * f.n * d + eps;
-        return 1.0L * n / d <= 1.0L * f.n / f.d + eps;
-    }
-
-    bool operator ==(const Fraction &f) const {
-        return n == f.n && d == f.d;
-    }
-};
-
-class Line {
-public:
-    ll m, c;
-    Line(ll _m, ll _c) {
-        m = _m; c = _c;
-        if(c >= oo) c = oo;
-    }
-
-    Fraction intX(const Line &l) const {
-        return Fraction(l.c - c, m - l.m);
-    }
-
-    ll eval(ll x) {
-        if(c >= oo) return oo;
-        return m * x + c;
-    }
-};
-
-bool canRemove(const Line &l1, const Line &l2, const Line &l) {
-    return l.intX(l1) <= l1.intX(l2);
-}
-
-class ConvexHullOpti {
-public:
-    deque<pair<Fraction, Line>> hull;
-
-    void add(const Line &l) {
-        assert(hull.empty() || hull.back().se.m >= l.m);
-        if(si(hull) < 1) {
-            hull.emplace_back(Fraction(oo, 1), l);
-            return;
+            trace(mask, cx, cy);
+            if(cx == 1 && cy == 1) return cnt;
         }
 
-        while(si(hull) > 2 && canRemove(hull[si(hull) - 2].se, hull.back().se, l)) {
-            hull.pop_back();
+        return oo;
+    }
+
+    int n[2];
+    n[0] = cnt / 2;
+    n[1] = cnt - n[0];
+    int add[] = {0, n[0]};
+
+    trace(cnt, n[0], n[1]);
+    fo(i, 2) {
+        fo(mask, (1 << n[i])) {
+            int mx = 1, my = 1;
+            fo(j, n[i]) {
+                if(is1(mask, j)) mx = min(1ll * oo, 1ll * mx * e[j + add[i]]);
+                else my = min(1ll * oo, 1ll * my * e[j + add[i]]);
+            }
+            ok[i][mask] = mp(mx, my);
+            trace(i, mask, ok[i][mask]);
         }
+        sort(ok[i], ok[i] + (1 << n[i]));
+    }
 
-        hull.back().fi = hull.back().se.intX(l);
-        //while(si(hull) >= 2 && hull.back().fi == hull[si(hull) - 2].fi) hull.pop_back();
-        hull.emplace_back(Fraction(oo, 1), l);
+    fo(i, (1 << n[0])) {
+        int cx = (x + ok[0][i].fi - 1) / ok[0][i].fi;
+        int cy = (y + ok[0][i].se - 1) / ok[0][i].se;
+        int nx = (cx + w - 1) / w;
+        int ny = (cy + h - 1) / h;
+        int idx = lower_bound(ok[1], ok[1] + (1 << n[1]), mp(nx, -oo)) - ok[1];
+        trace(i, cx, cy, nx, ny, idx, ok[1][idx].se);
+        if(idx < (1 << n[1]) && ny <= ok[1][idx].se) return cnt;
     }
-};
 
-ll dp[2][mx_n];
-int c = 0;
-
-void solveRow() {
-    /*
-    dp[c][0] = 0;
-    rep(i, 1, m) {
-        dp[c][i] = oo;
-        fo(j, i) dp[c][i] = min(dp[c][i], dp[1-c][j] + 1ll * (i - j) * req[i] - (cr[i] - cr[j]));
-        trace(i, dp[c][i]);
-    }
-    */
-    ConvexHullOpti opti;
-    rep(i, 0, m) if(dp[1-c][i] < oo) {
-        //trace(i, dp[1-c][i]);
-        opti.add(Line(-i, dp[1-c][i] + cr[i]));
-    }
-    //fo(i, si(opti.hull)) trace(i, opti.hull[i].fi.n, opti.hull[i].fi.d, opti.hull[i].se.m, opti.hull[i].se.c);
-    dp[c][0] = 0;
-    int idx = 0;
-    rep(i, 1, m) {
-        ll x = req[i];
-        while(idx + 1 < si(opti.hull) && 1.0L * x * opti.hull[idx].fi.d > opti.hull[idx].fi.n + eps) {
-            ++idx;
-        }
-        dp[c][i] = opti.hull[idx].se.eval(x) + x * i - cr[i];
-        //dp[c][i] = oo;
-#ifndef NDEBUG
-        ll cdp = oo;
-        fo(j, i) cdp = min(cdp, dp[1-c][j] + 1ll * (i-j) * req[i] - (cr[i] - cr[j]));
-        //trace(i, cdp, dp[c][i], req[i-1]);
-        assert(cdp == dp[c][i]);
-#endif
-        //fo(j, i) dp[c][i] = min(dp[c][i], dp[1-c][j] + 1ll * (i-j) * req[i]);
-    }
-}
-
-ll solve() {
-    c = 0;
-    rep(i, 1, m) dp[c][i] = oo;
-    dp[c][0] = 0;
-    rep(k, 1, p) {
-        c = 1 - c;
-        solveRow();
-    }
-    return dp[c][m];
+    return oo;
 }
 
 int main() {
-#ifndef TEST
-    cin >> n >> m >> p;
-    rep(i, 2, n) cin >> d[i];
-    rep(i, 1, m) {
-        cin >> h[i] >> t[i];
-    }
-#else
-    n = 1000; m = 20000; p = 20;
-    rep(i, 2, n) d[i] = rand() % 10000 + 1;
-    rep(i, 1, m) {
-        h[i] = rand() % n + 1;
-        t[i] = rand() % 10000000000 + 1;
-    }
-#endif
-    rep(i, 1, n) cd[i] = cd[i-1] + d[i];
-    rep(i, 1, n) trace(i, d[i], cd[i]);
-    rep(i, 1, m) {
-        trace(i, h[i], t[i], cd[h[i]]);
-        req[i] = 1ll * t[i] - cd[h[i]];
-    }
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
 
-    sort(req + 1, req + m + 1);
-    rep(i, 1, m) trace(i, req[i]);
-    rep(i, 1, m) cr[i] = cr[i-1] + req[i];
+    cin >> a >> b >> h >> w >> n;
+    fo(i, n) cin >> e[i];
+    sort(e, e + n);
+    reverse(e, e + n);
 
-    ll ans = solve();
+    int ans = oo;
+    rep(cnt, 0, min(n, 2 * 18 + 1)) {
+        ans = min(ans, min(tryIt(cnt, a, b), tryIt(cnt, b, a)));
+    }
+    if(ans >= oo) ans = -1;
 
-    cout << ans << '\n';
-    
+    cout << ans << endl;
+
 	return 0;
 }
 
