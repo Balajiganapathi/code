@@ -76,10 +76,10 @@ template<typename H, typename ...T> void _dt(string u, H&& v, T&&... r) {
 
 template<typename T> 
 ostream &operator <<(ostream &o, vector<T> v) { // print a vector
-    o << "{";
+    o << "[";
     fo(i, si(v) - 1) o << v[i] << ", ";
     if(si(v)) o << v.back();
-    o << "}";
+    o << "]";
     return o;
 }
 
@@ -165,18 +165,31 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx = -1;
+constexpr int mx_n = 13;
+int dp[mx_n][mx_n];
+
+int solve(int n1, int n2) {
+    if(n1 == 0 && n2 == 0) return 1;
+    if(n1 == 1 || n2 == 1) return 0;
+    int &ret = dp[n1][n2];
+    if(ret != -1) return ret;
+    ret = 0;
+
+    rep(d1, 1, n1) rep(d2, 1, n2) if(__gcd(d1, d2) > 1) {
+        ret |= solve(n1 - d1, n2 - d2);
+        if(ret) return ret;
+    }
+
+    return ret;
+}
+
 
 int main() {
-    vi v;
-    fo(i, 15) {
-        v.push_back(1 << (rand() % 6));
+    ini(dp, -1);
+    fo(i, mx_n) fo(j, mx_n) {
+        if(min(i, j) != 1 && i <= j && __gcd(i, j) == 1 && solve(i, j) ==  1) trace(i, j);
+        solve(i, j);
     }
-    fo(i, 15 - si(v)) {
-        v.push_back(0);
-    }
-    random_shuffle(all(v));
-    trace(v);
     
     
 	return 0;
