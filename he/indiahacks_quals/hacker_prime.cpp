@@ -76,8 +76,10 @@ template<typename H, typename ...T> void _dt(string u, H&& v, T&&... r) {
 
 template<typename T> 
 ostream &operator <<(ostream &o, vector<T> v) { // print a vector
+    o << "[";
     fo(i, si(v) - 1) o << v[i] << ", ";
     if(si(v)) o << v.back();
+    o << "]";
     return o;
 }
 
@@ -163,18 +165,39 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx = -1;
+constexpr int mx_x = 1000006, mx_n = 100005;
+int n, a[mx_n], q, x;
+int cnt[mx_x], ok[mx_x];
+
+void init() {
+    re(i, 2, mx_x) if(cnt[i] == 0) {
+        for(int j = i; j < mx_x; j += i) {
+            for(int tmp = j; tmp % i == 0; tmp /= i) ++cnt[j];
+        }
+    }
+
+    fo(i, mx_x) if(cnt[i] == 2) ok[i] = 1;
+    sort(a, a + n);
+    n = unique(a, a + n) - a;
+    fo(i, n) if(a[i] > 1) {
+        int x = a[i];
+        for(int j = x; j < mx_x; j += x) {
+            for(int tmp = j; tmp % x == 0; ) {
+                tmp /= x;
+                if(cnt[tmp] == 2) ok[j] = 1;
+            }
+        }
+    }
+}
 
 int main() {
-    int n = 1000;
-    string labels;
-    fo(j, n) labels += char('a' + rand() % 26);
-
-    vi par;
-    fo(i, n - 1) par.push_back(rand() % (i+1));
-
-    cout << labels << endl;
-    cout << par << endl;
+    cin >> n >> q;
+    fo(i, n) cin >> a[i];
+    init();
+    while(q--) {
+        cin >> x;
+        cout << (ok[x]? "YES": "NO") << endl;
+    }
     
     
 	return 0;

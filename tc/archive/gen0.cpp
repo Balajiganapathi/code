@@ -166,16 +166,22 @@ constexpr auto mod = 1000000007;
 constexpr int mx = -1;
 
 int main() {
-    int n = 1000;
-    string labels;
-    fo(j, n) labels += char('a' + rand() % 26);
+    vector<string> v;
 
-    vi par;
-    fo(i, n - 1) par.push_back(rand() % (i+1));
+    int k = 50;
+    fo(i, 50) {
+        string cur;
+        fo(j, k) cur += char('a' + rand() % 26);
+        v.push_back(cur);
+    }
 
-    cout << labels << endl;
-    cout << par << endl;
+    cout << v << endl;
     
+    vi len;
+    fo(i, 50) {
+        len.push_back(rand() % k + 1);
+    }
+    cout << len << endl;
     
 	return 0;
 }

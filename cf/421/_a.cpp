@@ -76,8 +76,10 @@ template<typename H, typename ...T> void _dt(string u, H&& v, T&&... r) {
 
 template<typename T> 
 ostream &operator <<(ostream &o, vector<T> v) { // print a vector
+    o << "[";
     fo(i, si(v) - 1) o << v[i] << ", ";
     if(si(v)) o << v.back();
+    o << "]";
     return o;
 }
 
@@ -164,18 +166,68 @@ constexpr auto mod = 1000000007;
 
 /* code */
 constexpr int mx = -1;
+string str;
+int cstart, clen;
+
+char get(int i) {
+    if(i < si(str)) return str[i];
+    int cidx = (i - cstart) % clen;
+    return str[cidx + cstart];
+}
+
+void gen(int a, int b) {
+    map<string, int> pos;
+    fo(i, a) str += char('a' + i);
+
+    while(1) {
+        fo(i, b) str += str.back();
+        //trace(str);
+        string last;
+        fo(i, a) {
+            last += str[si(str) - 1 - i];
+            //trace(i, si(str) - 1 - i, str[si(str) - 1 - i]);
+        }
+        sort(all(last));
+        last.resize(unique(all(last)) - last.begin());
+        trace(str, last);
+        if(pos.count(last)) {
+            cstart = pos[last];
+            clen = si(str) - cstart;
+            return;
+        }
+
+        pos[last] = si(str);
+        set<char> has(all(last));
+        char ci = 'a';
+        for(int c = a; c > 0; ) {
+            if(!has.count(ci)) {
+                --c;
+                str += ci;
+            }
+            ++ci;
+        }
+    }
+}
 
 int main() {
-    int n = 1000;
-    string labels;
-    fo(j, n) labels += char('a' + rand() % 26);
+    int a, b, l, r;
+    cin >> a >> b >> l >> r;
 
-    vi par;
-    fo(i, n - 1) par.push_back(rand() % (i+1));
+    int tot = a + b;
+    --l; --r;
 
-    cout << labels << endl;
-    cout << par << endl;
-    
+    gen(a, b);
+
+    set<char> ans;
+    int c = 0;
+    rep(i, l, r) {
+        ++c;
+        if(c > si(str)) break;
+        ans.insert(get(i));
+    }
+
+    trace(str, cstart, clen);
+    cout << si(ans) << endl;
     
 	return 0;
 }

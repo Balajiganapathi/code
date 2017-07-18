@@ -76,8 +76,10 @@ template<typename H, typename ...T> void _dt(string u, H&& v, T&&... r) {
 
 template<typename T> 
 ostream &operator <<(ostream &o, vector<T> v) { // print a vector
+    o << "[";
     fo(i, si(v) - 1) o << v[i] << ", ";
     if(si(v)) o << v.back();
+    o << "]";
     return o;
 }
 
@@ -163,18 +165,103 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx = -1;
+constexpr int mx_n = 100005;
+
+int bit[55][4][mx_n];
+
+int num[256];
+
+string s;
+int sidx[mx_n];
+int n;
+int idx[11][11];
+
+void update(int bit[mx_n], int idx ,int val){
+    ++idx;
+    while (idx < mx_n){
+        bit[idx] += val;
+        idx += (idx & -idx);
+    }
+}
+
+int read(int bit[mx_n], int idx){
+    if(idx < 0) return 0;
+    ++idx;
+    int sum = 0;
+    while (idx > 0){
+        sum += bit[idx];
+        idx -= (idx & -idx);
+    }
+    return sum;
+}
+
+void pre() {
+    int id = 0;
+    rep(len, 1, 10) {
+        fo(i, len) idx[len][i] = id++;
+    }
+}
+
+int get(int bit[mx_n], int l, int r) {
+    //trace(l, r, read(bit, r), read(bit, l - 1));
+    return read(bit, r) - read(bit, l - 1);
+}
 
 int main() {
-    int n = 1000;
-    string labels;
-    fo(j, n) labels += char('a' + rand() % 26);
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
 
-    vi par;
-    fo(i, n - 1) par.push_back(rand() % (i+1));
+    pre();
+    static char dna[] = "ACGT";
+    fo(i, 4) num[dna[i]] = i;
+    cin >> s;
+    n = si(s);
+    fo(i, n) {
+        sidx[i] = num[s[i]];
+        rep(len, 1, 10) {
+            int bi = idx[len][i%len];
+            trace(bi, sidx[i], i);
+            update(bit[bi][sidx[i]], i, 1);
+        }
+    }
 
-    cout << labels << endl;
-    cout << par << endl;
+    int q;
+    cin >> q;
+    while(q--) {
+        int t;
+        cin >> t;
+        if(t == 1) {
+            int x, ci;
+            char c;
+            cin >> x >> c;
+            ci = num[c];
+            --x;
+            trace(x, c, ci);
+            rep(len, 1, 10) {
+                int bi = idx[len][x%len];
+                update(bit[bi][sidx[x]], x, -1); 
+                update(bit[bi][ci], x, +1); 
+            }
+            s[x] = c;
+            sidx[x] = ci;
+        } else {
+            int l, r;
+            string e;
+            cin >> l >> r >> e;
+            int len = si(e);
+            int ans = 0;
+            --l; --r;
+            trace(l, r, e);
+            fo(i, len) {
+                int md = (l + i) % len;
+                int bi = idx[len][md];
+                ans += get(bit[bi][num[e[i]]], l, r);
+                //trace(i, num[e[i]], bi, get(bit[bi][num[e[i]]], l, r));
+            }
+
+            cout << ans << '\n';
+        }
+    }
     
     
 	return 0;

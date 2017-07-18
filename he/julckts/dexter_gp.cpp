@@ -76,8 +76,10 @@ template<typename H, typename ...T> void _dt(string u, H&& v, T&&... r) {
 
 template<typename T> 
 ostream &operator <<(ostream &o, vector<T> v) { // print a vector
+    o << "[";
     fo(i, si(v) - 1) o << v[i] << ", ";
     if(si(v)) o << v.back();
+    o << "]";
     return o;
 }
 
@@ -164,17 +166,50 @@ constexpr auto mod = 1000000007;
 
 /* code */
 constexpr int mx = -1;
+int solve (int a, int b, int m) {
+    int n = (int) sqrt (m + .0) + 1;
 
+    while(n * n <= m) ++n;
+    int an = 1;
+    for (int i=0; i<n; ++i)
+        an = (1ll * an * a) % m;
+
+    map<int,int> vals;
+    for (int i=1, cur=an; i<=n; ++i) {
+        if (!vals.count(cur))
+            vals[cur] = i;
+        cur = (1ll * cur * an) % m;
+    }
+
+    for (int i=0, cur=b; i<=n; ++i) {
+        if (vals.count(cur)) {
+            int ans = vals[cur] * n - i;
+            if (ans < m)
+                return ans;
+        }
+        cur = (1ll * cur * a) % m;
+    }
+    return -1;
+}
 int main() {
-    int n = 1000;
-    string labels;
-    fo(j, n) labels += char('a' + rand() % 26);
+    int t;
+#ifdef TEST
+    t = 100;
+#else
+    cin >> t;
+#endif
+    while(t--) {
+        int r, S, p;
+        cin >> r >> S >> p;
+        int b = (1ll * S * (r - 1) + 1) % p;
+        int ans = solve(r, b, p);
+        cout << ans << endl;
+        if(ans != -1) {
+            int sum = 1ll * (modpow(r, ans, p) + p - 1) % p * modpow(r - 1, p - 2, p) % p;
+            trace(S, sum);
+        }
 
-    vi par;
-    fo(i, n - 1) par.push_back(rand() % (i+1));
-
-    cout << labels << endl;
-    cout << par << endl;
+    }
     
     
 	return 0;

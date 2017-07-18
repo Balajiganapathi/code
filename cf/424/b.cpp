@@ -76,8 +76,10 @@ template<typename H, typename ...T> void _dt(string u, H&& v, T&&... r) {
 
 template<typename T> 
 ostream &operator <<(ostream &o, vector<T> v) { // print a vector
+    o << "[";
     fo(i, si(v) - 1) o << v[i] << ", ";
     if(si(v)) o << v.back();
+    o << "]";
     return o;
 }
 
@@ -163,18 +165,63 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx = -1;
+constexpr int mx_n = 100105;
+int bit[mx_n];
+int n;
+vi at[mx_n];
+
+void update(int idx ,int val){
+    ++idx;
+    while (idx < mx_n){
+        bit[idx] += val;
+        idx += (idx & -idx);
+    }
+}
+
+int read(int idx){
+    if(idx < 0) return 0;
+    ++idx;
+    int sum = 0;
+    while (idx > 0){
+        sum += bit[idx];
+        idx -= (idx & -idx);
+    }
+    return sum;
+}
+
+
+int get(int a, int b) {
+    if(a <= b) {
+        return read(b) - read(a-1);
+    } else {
+        return read(n) - read(a-1) + read(b);
+    }
+}
 
 int main() {
-    int n = 1000;
-    string labels;
-    fo(j, n) labels += char('a' + rand() % 26);
+    int x;
+    cin >> n;
+    fo(i, n) {
+        cin >> x;
+        at[x].push_back(i);
+    }
+    fo(i, n) update(i, 1);
 
-    vi par;
-    fo(i, n - 1) par.push_back(rand() % (i+1));
+    ll ans = 0;
+    int cur = 0;
+    fo(i, mx_n) {
+        if(at[i].empty()) continue;
+        int start = lower_bound(all(at[i]), cur) - at[i].begin();
+        if(start == si(at[i])) start = 0;
+        fo(j, si(at[i])) {
+            int nxt = at[i][(start+j) % si(at[i])];
+            ans += get(cur, nxt);
+            cur = nxt;
+            update(cur, -1);
+        }
+    }
 
-    cout << labels << endl;
-    cout << par << endl;
+    cout << ans << endl;
     
     
 	return 0;

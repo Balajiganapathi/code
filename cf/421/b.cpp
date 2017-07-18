@@ -2,7 +2,7 @@
 
 //#define LOCAL
 #ifdef LOCAL
-#   define TRACE
+//#   define TRACE
 #   define TEST
 #else
 #   define NDEBUG
@@ -76,8 +76,10 @@ template<typename H, typename ...T> void _dt(string u, H&& v, T&&... r) {
 
 template<typename T> 
 ostream &operator <<(ostream &o, vector<T> v) { // print a vector
+    o << "[";
     fo(i, si(v) - 1) o << v[i] << ", ";
     if(si(v)) o << v.back();
+    o << "]";
     return o;
 }
 
@@ -163,18 +165,87 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx = -1;
+constexpr int mx_n = 1000006;
+int n, p[mx_n];
+vi at[mx_n];
+int dir[mx_n];
+int change;
+ll cur;
+
+void add(int k, int i) {
+    at[k].emplace_back(i);
+}
+
+inline int get(int i, int k) {
+    int ci = i + k;
+    if(ci >= n) ci -= n;
+    return abs(p[i] - ci);
+}
+
+void cdir(int i, int k, int d) {
+    change -= dir[i];
+    cur -= dir[i];
+    cur -= get(i, k - 1);
+    dir[i] = d;
+    change += dir[i];
+    cur += get(i, k);
+}
+
+ll brute(int k) {
+    ll ret = 0;
+    fo(i, n) ret += get(i, k);
+    return ret;
+}
 
 int main() {
-    int n = 1000;
-    string labels;
-    fo(j, n) labels += char('a' + rand() % 26);
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+#ifndef TEST
+    cin >> n;
+    fo(i, n) {
+        cin >> p[i];
+        --p[i];
+    }
+#else
+    n = 1000000;
+    fo(i, n) p[i] = i;
+    random_shuffle(p, p + n);
+#endif
 
-    vi par;
-    fo(i, n - 1) par.push_back(rand() % (i+1));
+    cur = 0;
 
-    cout << labels << endl;
-    cout << par << endl;
+    fo(i, n) {
+        cur += get(i, 0);
+        add(1, i);
+        add((n - i) % n, i);
+        add((n - i + 1) % n, i);
+        add((p[i] - i + n) % n, i);
+        add((p[i] + 1 - i + n) % n, i);
+    }
+    fo(i, n) {
+        sort(all(at[i]));
+        at[i].resize(unique(all(at[i])) - at[i].begin());
+    }
+
+    ll ans = cur;
+    int ak = 0;
+    change = 0;
+    trace(cur);
+    re(k, 1, n) {
+        cur += change;
+        for(int i: at[k]) {
+            if(get(i, k-1) < get(i,k)) cdir(i, k, 1);
+            else cdir(i, k, -1);
+        }
+        if(cur < ans) {
+            ans = cur;
+            ak = k;
+        }
+        //trace(k, cur, brute(k));
+        //assert(cur == brute(k));
+    }
+
+    cout << ans << " " << ak << endl;
     
     
 	return 0;

@@ -76,8 +76,10 @@ template<typename H, typename ...T> void _dt(string u, H&& v, T&&... r) {
 
 template<typename T> 
 ostream &operator <<(ostream &o, vector<T> v) { // print a vector
+    o << "[";
     fo(i, si(v) - 1) o << v[i] << ", ";
     if(si(v)) o << v.back();
+    o << "]";
     return o;
 }
 
@@ -163,18 +165,52 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx = -1;
+constexpr int mx_n = 4 * 1000006;
+string ans;
+int n;
+string t[mx_n];
+int k[mx_n];
+vi pos[mx_n];
+int par[mx_n];
+
+int find(int x) {
+    if(par[x] == x) return x;
+    return par[x] = find(par[x]);
+}
+
+int merge(int x, int y) {
+    par[x] = find(y);
+}
 
 int main() {
-    int n = 1000;
-    string labels;
-    fo(j, n) labels += char('a' + rand() % 26);
+    int len = 0;
+    cin >> n;
+    fo(i, n) {
+        cin >> t[i] >> k[i];
+        int p;
+        fo(j, k[i]) {
+            cin >> p;
+            --p;
+            pos[i].push_back(p);
+            len = max(len, p + si(t[i]));
+        }
+    }
+    fo(i, len+1) par[i] = i;
+    ans = string(len, 'a');
 
-    vi par;
-    fo(i, n - 1) par.push_back(rand() % (i+1));
+    fo(i, n) {
+        for(int s: pos[i]) {
+            int e = s + si(t[i]);
+            for(int j = find(s); j < e; j = find(j+1)) {
+                ans[j] = t[i][j-s];
+                merge(j, e);
+            }
+            merge(s, e);
+        }
+    }
 
-    cout << labels << endl;
-    cout << par << endl;
+    cout << ans << endl;
+
     
     
 	return 0;

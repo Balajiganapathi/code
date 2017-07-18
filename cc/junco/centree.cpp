@@ -76,8 +76,10 @@ template<typename H, typename ...T> void _dt(string u, H&& v, T&&... r) {
 
 template<typename T> 
 ostream &operator <<(ostream &o, vector<T> v) { // print a vector
+    o << "[";
     fo(i, si(v) - 1) o << v[i] << ", ";
     if(si(v)) o << v.back();
+    o << "]";
     return o;
 }
 
@@ -163,18 +165,160 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx = -1;
+constexpr int mx_n = 102;
+
+vi adj[mx_n];
+int n, b;
+int dist[mx_n][mx_n];
+int siz[mx_n], par[mx_n];
+
+void dfs(int x, int p) {
+    siz[x] = 1;
+    par[x] = p;
+    for(int y: adj[x]) if(y != p) {
+        dfs(y, x);
+        siz[x] += siz[y];
+    }
+}
+
+bool iscentroid(int x) {
+    int rem = n - 1;
+    for(int y: adj[x]) if(y != par[x]) {
+        if(siz[y] > n / 2) return false;
+        rem -= siz[y];
+    }
+
+    return rem <= n / 2;
+}
+
+vi getCenters() {
+    vi ret;
+    int cd = oo;
+    fo(i, n) {
+        int cur = 0;
+        fo(j, n) cur = max(cur, dist[i][j]);
+        if(cur < cd) {
+            cd = cur;
+            ret.clear();
+        }
+        if(cur == cd) ret.push_back(i);
+    }
+
+    return ret;
+}
+
+
+int beauty() {
+    fo(i, n) {
+        fo(j, n) {
+            dist[i][j] = (i == j? 0: oo);
+        }
+    }
+
+    fo(i, n) {
+        for(int x: adj[i]) dist[i][x] = dist[x][i] = 1;
+    }
+
+    fo(k, n) {
+        fo(i, n) fo(j, n) dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j]);
+    }
+
+    vi centroids, centers;
+    dfs(0, -1);
+    fo(i, n) {
+        if(iscentroid(i)) centroids.push_back(i);
+    }
+    centers = getCenters();
+
+    int ans = 0;
+    for(int i: centroids) for(int j: centers) {
+        ans = max(ans, dist[i][j]);
+    }
+
+    return ans;
+}
+
+vector<pi> bans, ans;
+int pars[mx_n];
+
+bool isok() {
+    fo(i, mx_n) adj[i].clear();
+    re(i, 1, n) {
+        adj[i].push_back(pars[i]);
+        adj[pars[i]].push_back(i);
+    }
+
+    return beauty() == b;
+}
+
+bool isok(const vector<pi> &e) {
+    fo(i, mx_n) adj[i].clear();
+    for(auto cur: e) {
+        adj[cur.fi].push_back(cur.se);
+        adj[cur.se].push_back(cur.fi);
+    }
+
+    return beauty() == b;
+}
+
+void gen(int i) {
+    if(i == n) {
+        if(isok()) {
+            re(i, 1, n) bans.emplace_back(i, pars[i]);
+        }
+        return;
+    }
+    for(pars[i] = 0; pars[i] < i; ++pars[i]) {
+        gen(i+1);
+        if(si(bans)) return;
+    }
+}
+vector<pi> brute() {
+    bans.clear();
+    gen(1);
+    return bans;
+}
+
+void solve() {
+    ans.clear();
+    if(n <= 2) {
+        brute();
+        ans = bans;
+        return;
+    }
+    trace(n, b);
+    if(2 * b > n / 2) return;
+    trace(n, b);
+    rep(i, 1, 2 * b) {
+        ans.emplace_back(i - 1, i);
+    }
+    re(i, 2 * b + 1, n) ans.emplace_back(0, i);
+}
 
 int main() {
-    int n = 1000;
-    string labels;
-    fo(j, n) labels += char('a' + rand() % 26);
-
-    vi par;
-    fo(i, n - 1) par.push_back(rand() % (i+1));
-
-    cout << labels << endl;
-    cout << par << endl;
+    int t;
+    cin >> t;
+    while(t--) {
+        fo(i, mx_n) adj[i].clear();
+        cin >> n >> b;
+#ifdef TEST
+        brute();
+        trace(bans);
+#endif
+        solve();
+        if(si(ans)) {
+            cout << "YES" << endl;
+            for(auto e: ans) cout << e.fi + 1 << " " << e.se + 1 << endl;
+#ifdef TEST
+            assert(isok(ans));
+#endif
+        } else {
+#ifdef TEST
+            assert(bans.empty());
+#endif
+            cout << "NO" << endl;
+        }
+    }
     
     
 	return 0;

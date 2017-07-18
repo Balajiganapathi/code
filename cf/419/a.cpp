@@ -76,8 +76,10 @@ template<typename H, typename ...T> void _dt(string u, H&& v, T&&... r) {
 
 template<typename T> 
 ostream &operator <<(ostream &o, vector<T> v) { // print a vector
+    o << "[";
     fo(i, si(v) - 1) o << v[i] << ", ";
     if(si(v)) o << v.back();
+    o << "]";
     return o;
 }
 
@@ -163,18 +165,62 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx = -1;
+constexpr int mx_n = 102;
+int g[mx_n][mx_n], n, m;
+int cur[mx_n][mx_n];
+vector<pi> moves;
+
+vector<pi> solve(int r0) {
+    vector<pi> ans, imp(1, mp(-1, -1));
+    ini(cur, 0);
+
+    fo(i, r0) ans.emplace_back(0, 0);
+    fo(j, m) cur[0][j] += r0;
+
+    fo(j, m) {
+        int times = g[0][j] - cur[0][j];
+        if(times < 0) return imp;
+        fo(iter, times) ans.emplace_back(1, j);
+        fo(i, n) cur[i][j] += times;
+    }
+
+    fo(i, n) {
+        int times = g[i][0] - cur[i][0];
+        if(times < 0) return imp;
+        fo(iter, times) ans.emplace_back(0, i);
+        fo(j, m) cur[i][j] += times;
+    }
+
+    fo(i, n) fo(j, m) if(cur[i][j] != g[i][j]) return imp;
+
+    return ans;
+}
 
 int main() {
-    int n = 1000;
-    string labels;
-    fo(j, n) labels += char('a' + rand() % 26);
+    cin >> n >> m;
+    fo(i, n) fo(j, m) cin >> g[i][j];
 
-    vi par;
-    fo(i, n - 1) par.push_back(rand() % (i+1));
+    int ans = oo;
+    rep(r0, 0, 500) {
+        auto cur = solve(r0);
+        if(si(cur) == 1 && cur[0].fi == -1) continue;
+        if(si(cur) < ans) {
+            ans = si(cur);
+            moves = cur;
+        }
+    }
 
-    cout << labels << endl;
-    cout << par << endl;
+    if(ans == oo) {
+        cout << -1 << endl;
+    } else {
+        cout << ans << endl;
+        fo(i, ans) {
+            if(moves[i].fi == 0) cout << "row ";
+            else cout << "col ";
+            cout << moves[i].se + 1 << '\n';
+        }
+    }
+    
     
     
 	return 0;

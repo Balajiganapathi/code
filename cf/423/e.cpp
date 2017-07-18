@@ -76,8 +76,10 @@ template<typename H, typename ...T> void _dt(string u, H&& v, T&&... r) {
 
 template<typename T> 
 ostream &operator <<(ostream &o, vector<T> v) { // print a vector
+    o << "[";
     fo(i, si(v) - 1) o << v[i] << ", ";
     if(si(v)) o << v.back();
+    o << "]";
     return o;
 }
 
@@ -163,18 +165,104 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx = -1;
+constexpr int mx_n = 5 * 100005;
+
+string s;
+int pr[mx_n], n;
+
+using base = complex<double>;
+int rev[mx_n];
+base wlen_pw[mx_n];
+ 
+void calc_rev(int, int);
+void fft (base a[], int n, bool invert) {
+    int log_n;
+    for(log_n = 0; (1 << log_n) < n; ++log_n);
+    calc_rev(n, log_n);
+	for (int i=0; i<n; ++i)
+		if (i < rev[i])
+			swap (a[i], a[rev[i]]);
+ 
+	for (int len=2; len<=n; len<<=1) {
+		double ang = 2*PI/len * (invert?-1:+1);
+		int len2 = len>>1;
+ 
+		base wlen (cos(ang), sin(ang));
+		wlen_pw[0] = base (1, 0);
+		for (int i=1; i<len2; ++i)
+			wlen_pw[i] = wlen_pw[i-1] * wlen;
+ 
+		for (int i=0; i<n; i+=len) {
+			base t,
+				*pu = a+i,
+				*pv = a+i+len2, 
+				*pu_end = a+i+len2,
+				*pw = wlen_pw;
+			for (; pu!=pu_end; ++pu, ++pv, ++pw) {
+				t = *pv * *pw;
+				*pv = *pu - t;
+				*pu += t;
+			}
+		}
+	}
+ 
+	if (invert)
+		for (int i=0; i<n; ++i)
+			a[i] /= n;
+}
+ 
+void calc_rev (int n, int log_n) {
+	for (int i=0; i<n; ++i) {
+		rev[i] = 0;
+		for (int j=0; j<log_n; ++j)
+			if (i & (1<<j))
+				rev[i] |= 1<<(log_n-1-j);
+	}
+}
+
+void multiply (const vector<int> & a, const vector<int> & b, vector<int> & res) {
+	vector<base> fa (a.begin(), a.end()),  fb (b.begin(), b.end());
+	size_t n = 1;
+	while (n < max (a.size(), b.size()))  n <<= 1;
+	n <<= 1;
+	fa.resize (n),  fb.resize (n);
+ 
+	fft (fa.data(), n, false),  fft (fb.data(), n, false);
+	for (size_t i=0; i<n; ++i)
+		fa[i] *= fb[i];
+	fft (fa.data(), n, true);
+ 
+	res.resize (n);
+	for (size_t i=0; i<n; ++i)
+		res[i] = int (fa[i].real() + 0.5);
+}
 
 int main() {
-    int n = 1000;
-    string labels;
-    fo(j, n) labels += char('a' + rand() % 26);
+    int t;
+    cin >> t;
+    while(t--) {
+        cin >> n >> s;
 
-    vi par;
-    fo(i, n - 1) par.push_back(rand() % (i+1));
+        vi p1(n+1), p2(n+1), p1p2;
+        fo(i, n) {
+            if(s[i] == 'V') p1[i] = 1;
+            else if(s[i] == 'K') p2[n-i] = 1;
+        }
+        multiply(p1, p2, p1p2);
+        trace(p1, p2, p1p2);
 
-    cout << labels << endl;
-    cout << par << endl;
+        vi ans;
+        rep(l, 0, n-1) {
+            if(fabs(p1p2[l]) < eps) ans.push_back(n-l);
+        }
+        reverse(all(ans));
+
+
+        cout << si(ans) << '\n';
+        for(int x: ans) cout << x << " ";
+        cout << '\n';
+    }
+
     
     
 	return 0;

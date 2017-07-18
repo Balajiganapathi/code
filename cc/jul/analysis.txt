@@ -1,0 +1,309 @@
+Flat profile:
+
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls  ms/call  ms/call  name    
+ 76.76      2.54     2.54    20360     0.12     0.14  Polynomial<Coeff>::operator*(Polynomial<Coeff> const&) const
+  9.97      2.87     0.33      280     1.18     1.43  Polynomial<modint<1000000007> >::square() const
+  4.23      3.01     0.14   844900     0.00     0.00  Polynomial<Coeff>::operator+(Polynomial<Coeff> const&) const
+  2.42      3.09     0.08   906120     0.00     0.00  std::vector<Coeff, std::allocator<Coeff> >::operator=(std::vector<Coeff, std::allocator<Coeff> > const&)
+  1.21      3.13     0.04   494260     0.00     0.00  std::vector<Coeff, std::allocator<Coeff> >::_M_default_append(unsigned long)
+  1.21      3.17     0.04      140     0.29    20.79  Polynomial<Coeff>::substitute(Polynomial<Coeff> const&) const
+  0.91      3.20     0.03   946920     0.00     0.00  std::vector<modint<1000000007>, std::allocator<modint<1000000007> > >::_M_default_append(unsigned long)
+  0.91      3.23     0.03   906090     0.00     0.00  Polynomial<modint<1000000007> >::operator+(Polynomial<modint<1000000007> > const&) const
+  0.91      3.26     0.03   865260     0.00     0.00  Polynomial<Coeff>::modX(int) const
+  0.60      3.28     0.02    20370     0.00     0.00  Polynomial<Coeff>::pow(int) const
+  0.30      3.29     0.01  1812610     0.00     0.00  std::vector<modint<1000000007>, std::allocator<modint<1000000007> > >::operator=(std::vector<modint<1000000007>, std::allocator<modint<1000000007> > > const&)
+  0.30      3.30     0.01   865260     0.00     0.00  Polynomial<Coeff>::divX(int) const
+  0.30      3.31     0.01   422450     0.00     0.00  Polynomial<Coeff>::selfMulX(int)
+  0.00      3.31     0.00    21270     0.00     0.00  __tcf_0
+  0.00      3.31     0.00    20360     0.00     0.00  Polynomial<Coeff>::operator+=(Polynomial<Coeff> const&)
+  0.00      3.31     0.00      300     0.00     0.00  _gp(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)
+  0.00      3.31     0.00      280     0.00     0.00  void std::vector<Coeff, std::allocator<Coeff> >::_M_emplace_back_aux<Coeff const&>(Coeff const&)
+  0.00      3.31     0.00      141     0.00     0.00  std::_Hashtable<int, std::pair<int const, Polynomial<Coeff> >, std::allocator<std::pair<int const, Polynomial<Coeff> > >, std::__detail::_Select1st, std::equal_to<int>, std::hash<int>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, false, true> >::clear()
+  0.00      3.31     0.00      140     0.00     0.00  void _dt<int&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&)
+  0.00      3.31     0.00      140     0.00     0.00  void _dt<int&, int&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&, int&)
+  0.00      3.31     0.00      140     0.00     0.00  toCoeff(Polynomial<modint<1000000007> > const&)
+  0.00      3.31     0.00      140     0.00     0.00  Polynomial<Coeff>::split() const
+  0.00      3.31     0.00       10     0.00     0.00  void _dt<Polynomial<modint<1000000007> >&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, Polynomial<modint<1000000007> >&)
+  0.00      3.31     0.00       10     0.00     0.00  void _dt<int, Polynomial<modint<1000000007> >&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&&, Polynomial<modint<1000000007> >&)
+  0.00      3.31     0.00        1     0.00     0.00  _GLOBAL__sub_I__Z3_gpNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE
+
+ %         the percentage of the total running time of the
+time       program used by this function.
+
+cumulative a running sum of the number of seconds accounted
+ seconds   for by this function and those listed above it.
+
+ self      the number of seconds accounted for by this
+seconds    function alone.  This is the major sort for this
+           listing.
+
+calls      the number of times this function was invoked, if
+           this function is profiled, else blank.
+
+ self      the average number of milliseconds spent in this
+ms/call    function per call, if this function is profiled,
+	   else blank.
+
+ total     the average number of milliseconds spent in this
+ms/call    function and its descendents per call, if this
+	   function is profiled, else blank.
+
+name       the name of the function.  This is the minor sort
+           for this listing. The index shows the location of
+	   the function in the gprof listing. If the index is
+	   in parenthesis it shows where it would appear in
+	   the gprof listing if it were to be printed.
+
+Copyright (C) 2012-2015 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+		     Call graph (explanation follows)
+
+
+granularity: each sample hit covers 2 byte(s) for 0.30% of 3.31 seconds
+
+index % time    self  children    called     name
+                                                 <spontaneous>
+[1]    100.0    0.00    3.31                 solve() [1]
+                0.04    2.87     140/140         Polynomial<Coeff>::substitute(Polynomial<Coeff> const&) const [2]
+                0.33    0.07     280/280         Polynomial<modint<1000000007> >::square() const [4]
+                0.00    0.00     140/906120      std::vector<Coeff, std::allocator<Coeff> >::operator=(std::vector<Coeff, std::allocator<Coeff> > const&) [6]
+                0.00    0.00      10/20370       Polynomial<Coeff>::pow(int) const [12]
+                0.00    0.00     430/1812610     std::vector<modint<1000000007>, std::allocator<modint<1000000007> > >::operator=(std::vector<modint<1000000007>, std::allocator<modint<1000000007> > > const&) [13]
+                0.00    0.00     280/280         void std::vector<Coeff, std::allocator<Coeff> >::_M_emplace_back_aux<Coeff const&>(Coeff const&) [25]
+                0.00    0.00     160/21270       __tcf_0 [22]
+                0.00    0.00     140/141         std::_Hashtable<int, std::pair<int const, Polynomial<Coeff> >, std::allocator<std::pair<int const, Polynomial<Coeff> > >, std::__detail::_Select1st, std::equal_to<int>, std::hash<int>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, false, true> >::clear() [26]
+                0.00    0.00     140/140         toCoeff(Polynomial<modint<1000000007> > const&) [29]
+                0.00    0.00     140/140         void _dt<int&, int&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&, int&) [28]
+                0.00    0.00     140/140         Polynomial<Coeff>::split() const [30]
+                0.00    0.00      10/10          void _dt<int, Polynomial<modint<1000000007> >&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&&, Polynomial<modint<1000000007> >&) [32]
+-----------------------------------------------
+                               40720             Polynomial<Coeff>::substitute(Polynomial<Coeff> const&) const [2]
+                0.04    2.87     140/140         solve() [1]
+[2]     87.9    0.04    2.87     140+40720   Polynomial<Coeff>::substitute(Polynomial<Coeff> const&) const [2]
+                2.54    0.30   20360/20360       Polynomial<Coeff>::operator*(Polynomial<Coeff> const&) const [3]
+                0.02    0.00   20360/20370       Polynomial<Coeff>::pow(int) const [12]
+                0.01    0.00   61080/906120      std::vector<Coeff, std::allocator<Coeff> >::operator=(std::vector<Coeff, std::allocator<Coeff> > const&) [6]
+                0.00    0.00   20360/865260      Polynomial<Coeff>::modX(int) const [11]
+                0.00    0.00   20360/865260      Polynomial<Coeff>::divX(int) const [14]
+                0.00    0.00   20360/20360       Polynomial<Coeff>::operator+=(Polynomial<Coeff> const&) [23]
+                               40720             Polynomial<Coeff>::substitute(Polynomial<Coeff> const&) const [2]
+-----------------------------------------------
+                             1267350             Polynomial<Coeff>::operator*(Polynomial<Coeff> const&) const [3]
+                2.54    0.30   20360/20360       Polynomial<Coeff>::substitute(Polynomial<Coeff> const&) const [2]
+[3]     85.9    2.54    0.30   20360+1267350 Polynomial<Coeff>::operator*(Polynomial<Coeff> const&) const [3]
+                0.14    0.00  844900/844900      Polynomial<Coeff>::operator+(Polynomial<Coeff> const&) const [5]
+                0.07    0.00  844900/906120      std::vector<Coeff, std::allocator<Coeff> >::operator=(std::vector<Coeff, std::allocator<Coeff> > const&) [6]
+                0.01    0.03  422450/422450      Polynomial<Coeff>::selfMulX(int) [7]
+                0.03    0.00  844900/865260      Polynomial<Coeff>::modX(int) const [11]
+                0.01    0.00  844900/865260      Polynomial<Coeff>::divX(int) const [14]
+                0.01    0.00   71810/494260      std::vector<Coeff, std::allocator<Coeff> >::_M_default_append(unsigned long) [8]
+                             1267350             Polynomial<Coeff>::operator*(Polynomial<Coeff> const&) const [3]
+-----------------------------------------------
+                             2718270             Polynomial<modint<1000000007> >::square() const [4]
+                0.33    0.07     280/280         solve() [1]
+[4]     12.1    0.33    0.07     280+2718270 Polynomial<modint<1000000007> >::square() const [4]
+                0.03    0.00  946920/946920      std::vector<modint<1000000007>, std::allocator<modint<1000000007> > >::_M_default_append(unsigned long) [9]
+                0.03    0.00  906090/906090      Polynomial<modint<1000000007> >::operator+(Polynomial<modint<1000000007> > const&) const [10]
+                0.01    0.00 1812180/1812610     std::vector<modint<1000000007>, std::allocator<modint<1000000007> > >::operator=(std::vector<modint<1000000007>, std::allocator<modint<1000000007> > > const&) [13]
+                             2718270             Polynomial<modint<1000000007> >::square() const [4]
+-----------------------------------------------
+                0.14    0.00  844900/844900      Polynomial<Coeff>::operator*(Polynomial<Coeff> const&) const [3]
+[5]      4.2    0.14    0.00  844900         Polynomial<Coeff>::operator+(Polynomial<Coeff> const&) const [5]
+-----------------------------------------------
+                0.00    0.00     140/906120      solve() [1]
+                0.01    0.00   61080/906120      Polynomial<Coeff>::substitute(Polynomial<Coeff> const&) const [2]
+                0.07    0.00  844900/906120      Polynomial<Coeff>::operator*(Polynomial<Coeff> const&) const [3]
+[6]      2.4    0.08    0.00  906120         std::vector<Coeff, std::allocator<Coeff> >::operator=(std::vector<Coeff, std::allocator<Coeff> > const&) [6]
+-----------------------------------------------
+                0.01    0.03  422450/422450      Polynomial<Coeff>::operator*(Polynomial<Coeff> const&) const [3]
+[7]      1.3    0.01    0.03  422450         Polynomial<Coeff>::selfMulX(int) [7]
+                0.03    0.00  422450/494260      std::vector<Coeff, std::allocator<Coeff> >::_M_default_append(unsigned long) [8]
+-----------------------------------------------
+                0.01    0.00   71810/494260      Polynomial<Coeff>::operator*(Polynomial<Coeff> const&) const [3]
+                0.03    0.00  422450/494260      Polynomial<Coeff>::selfMulX(int) [7]
+[8]      1.2    0.04    0.00  494260         std::vector<Coeff, std::allocator<Coeff> >::_M_default_append(unsigned long) [8]
+-----------------------------------------------
+                0.03    0.00  946920/946920      Polynomial<modint<1000000007> >::square() const [4]
+[9]      0.9    0.03    0.00  946920         std::vector<modint<1000000007>, std::allocator<modint<1000000007> > >::_M_default_append(unsigned long) [9]
+-----------------------------------------------
+                0.03    0.00  906090/906090      Polynomial<modint<1000000007> >::square() const [4]
+[10]     0.9    0.03    0.00  906090         Polynomial<modint<1000000007> >::operator+(Polynomial<modint<1000000007> > const&) const [10]
+-----------------------------------------------
+                0.00    0.00   20360/865260      Polynomial<Coeff>::substitute(Polynomial<Coeff> const&) const [2]
+                0.03    0.00  844900/865260      Polynomial<Coeff>::operator*(Polynomial<Coeff> const&) const [3]
+[11]     0.9    0.03    0.00  865260         Polynomial<Coeff>::modX(int) const [11]
+-----------------------------------------------
+                0.00    0.00      10/20370       solve() [1]
+                0.02    0.00   20360/20370       Polynomial<Coeff>::substitute(Polynomial<Coeff> const&) const [2]
+[12]     0.6    0.02    0.00   20370         Polynomial<Coeff>::pow(int) const [12]
+                0.00    0.00   20360/21270       __tcf_0 [22]
+-----------------------------------------------
+                0.00    0.00     430/1812610     solve() [1]
+                0.01    0.00 1812180/1812610     Polynomial<modint<1000000007> >::square() const [4]
+[13]     0.3    0.01    0.00 1812610         std::vector<modint<1000000007>, std::allocator<modint<1000000007> > >::operator=(std::vector<modint<1000000007>, std::allocator<modint<1000000007> > > const&) [13]
+-----------------------------------------------
+                0.00    0.00   20360/865260      Polynomial<Coeff>::substitute(Polynomial<Coeff> const&) const [2]
+                0.01    0.00  844900/865260      Polynomial<Coeff>::operator*(Polynomial<Coeff> const&) const [3]
+[14]     0.3    0.01    0.00  865260         Polynomial<Coeff>::divX(int) const [14]
+-----------------------------------------------
+                0.00    0.00      20/21270       void _dt<Polynomial<modint<1000000007> >&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, Polynomial<modint<1000000007> >&) [31]
+                0.00    0.00      30/21270       void _dt<int, Polynomial<modint<1000000007> >&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&&, Polynomial<modint<1000000007> >&) [32]
+                0.00    0.00     160/21270       solve() [1]
+                0.00    0.00     280/21270       void _dt<int&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&) [27]
+                0.00    0.00     420/21270       void _dt<int&, int&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&, int&) [28]
+                0.00    0.00   20360/21270       Polynomial<Coeff>::pow(int) const [12]
+[22]     0.0    0.00    0.00   21270         __tcf_0 [22]
+-----------------------------------------------
+                0.00    0.00   20360/20360       Polynomial<Coeff>::substitute(Polynomial<Coeff> const&) const [2]
+[23]     0.0    0.00    0.00   20360         Polynomial<Coeff>::operator+=(Polynomial<Coeff> const&) [23]
+-----------------------------------------------
+                0.00    0.00      10/300         void _dt<Polynomial<modint<1000000007> >&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, Polynomial<modint<1000000007> >&) [31]
+                0.00    0.00      10/300         void _dt<int, Polynomial<modint<1000000007> >&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&&, Polynomial<modint<1000000007> >&) [32]
+                0.00    0.00     140/300         void _dt<int&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&) [27]
+                0.00    0.00     140/300         void _dt<int&, int&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&, int&) [28]
+[24]     0.0    0.00    0.00     300         _gp(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [24]
+-----------------------------------------------
+                0.00    0.00     280/280         solve() [1]
+[25]     0.0    0.00    0.00     280         void std::vector<Coeff, std::allocator<Coeff> >::_M_emplace_back_aux<Coeff const&>(Coeff const&) [25]
+-----------------------------------------------
+                0.00    0.00       1/141         std::unordered_map<int, Polynomial<Coeff>, std::hash<int>, std::equal_to<int>, std::allocator<std::pair<int const, Polynomial<Coeff> > > >::~unordered_map() [50]
+                0.00    0.00     140/141         solve() [1]
+[26]     0.0    0.00    0.00     141         std::_Hashtable<int, std::pair<int const, Polynomial<Coeff> >, std::allocator<std::pair<int const, Polynomial<Coeff> > >, std::__detail::_Select1st, std::equal_to<int>, std::hash<int>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, false, true> >::clear() [26]
+-----------------------------------------------
+                0.00    0.00     140/140         void _dt<int&, int&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&, int&) [28]
+[27]     0.0    0.00    0.00     140         void _dt<int&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&) [27]
+                0.00    0.00     280/21270       __tcf_0 [22]
+                0.00    0.00     140/300         _gp(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [24]
+-----------------------------------------------
+                0.00    0.00     140/140         solve() [1]
+[28]     0.0    0.00    0.00     140         void _dt<int&, int&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&, int&) [28]
+                0.00    0.00     420/21270       __tcf_0 [22]
+                0.00    0.00     140/300         _gp(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [24]
+                0.00    0.00     140/140         void _dt<int&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&) [27]
+-----------------------------------------------
+                0.00    0.00     140/140         solve() [1]
+[29]     0.0    0.00    0.00     140         toCoeff(Polynomial<modint<1000000007> > const&) [29]
+-----------------------------------------------
+                0.00    0.00     140/140         solve() [1]
+[30]     0.0    0.00    0.00     140         Polynomial<Coeff>::split() const [30]
+-----------------------------------------------
+                0.00    0.00      10/10          void _dt<int, Polynomial<modint<1000000007> >&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&&, Polynomial<modint<1000000007> >&) [32]
+[31]     0.0    0.00    0.00      10         void _dt<Polynomial<modint<1000000007> >&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, Polynomial<modint<1000000007> >&) [31]
+                0.00    0.00      20/21270       __tcf_0 [22]
+                0.00    0.00      10/300         _gp(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [24]
+-----------------------------------------------
+                0.00    0.00      10/10          solve() [1]
+[32]     0.0    0.00    0.00      10         void _dt<int, Polynomial<modint<1000000007> >&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&&, Polynomial<modint<1000000007> >&) [32]
+                0.00    0.00      30/21270       __tcf_0 [22]
+                0.00    0.00      10/300         _gp(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [24]
+                0.00    0.00      10/10          void _dt<Polynomial<modint<1000000007> >&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, Polynomial<modint<1000000007> >&) [31]
+-----------------------------------------------
+                0.00    0.00       1/1           __libc_csu_init [58]
+[33]     0.0    0.00    0.00       1         _GLOBAL__sub_I__Z3_gpNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE [33]
+-----------------------------------------------
+
+ This table describes the call tree of the program, and was sorted by
+ the total amount of time spent in each function and its children.
+
+ Each entry in this table consists of several lines.  The line with the
+ index number at the left hand margin lists the current function.
+ The lines above it list the functions that called this function,
+ and the lines below it list the functions this one called.
+ This line lists:
+     index	A unique number given to each element of the table.
+		Index numbers are sorted numerically.
+		The index number is printed next to every function name so
+		it is easier to look up where the function is in the table.
+
+     % time	This is the percentage of the `total' time that was spent
+		in this function and its children.  Note that due to
+		different viewpoints, functions excluded by options, etc,
+		these numbers will NOT add up to 100%.
+
+     self	This is the total amount of time spent in this function.
+
+     children	This is the total amount of time propagated into this
+		function by its children.
+
+     called	This is the number of times the function was called.
+		If the function called itself recursively, the number
+		only includes non-recursive calls, and is followed by
+		a `+' and the number of recursive calls.
+
+     name	The name of the current function.  The index number is
+		printed after it.  If the function is a member of a
+		cycle, the cycle number is printed between the
+		function's name and the index number.
+
+
+ For the function's parents, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the function into this parent.
+
+     children	This is the amount of time that was propagated from
+		the function's children into this parent.
+
+     called	This is the number of times this parent called the
+		function `/' the total number of times the function
+		was called.  Recursive calls to the function are not
+		included in the number after the `/'.
+
+     name	This is the name of the parent.  The parent's index
+		number is printed after it.  If the parent is a
+		member of a cycle, the cycle number is printed between
+		the name and the index number.
+
+ If the parents of the function cannot be determined, the word
+ `<spontaneous>' is printed in the `name' field, and all the other
+ fields are blank.
+
+ For the function's children, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the child into the function.
+
+     children	This is the amount of time that was propagated from the
+		child's children to the function.
+
+     called	This is the number of times the function called
+		this child `/' the total number of times the child
+		was called.  Recursive calls by the child are not
+		listed in the number after the `/'.
+
+     name	This is the name of the child.  The child's index
+		number is printed after it.  If the child is a
+		member of a cycle, the cycle number is printed
+		between the name and the index number.
+
+ If there are any cycles (circles) in the call graph, there is an
+ entry for the cycle-as-a-whole.  This entry shows who called the
+ cycle (as parents) and the members of the cycle (as children.)
+ The `+' recursive calls entry shows the number of function calls that
+ were internal to the cycle, and the calls entry for each member shows,
+ for that member, how many times it was called from other members of
+ the cycle.
+
+Copyright (C) 2012-2015 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+
+Index by function name
+
+  [33] _GLOBAL__sub_I__Z3_gpNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE [2] Polynomial<Coeff>::substitute(Polynomial<Coeff> const&) const [26] std::_Hashtable<int, std::pair<int const, Polynomial<Coeff> >, std::allocator<std::pair<int const, Polynomial<Coeff> > >, std::__detail::_Select1st, std::equal_to<int>, std::hash<int>, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<false, false, true> >::clear()
+  [31] void _dt<Polynomial<modint<1000000007> >&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, Polynomial<modint<1000000007> >&) [12] Polynomial<Coeff>::pow(int) const [8] std::vector<Coeff, std::allocator<Coeff> >::_M_default_append(unsigned long)
+  [27] void _dt<int&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&) [14] Polynomial<Coeff>::divX(int) const [25] void std::vector<Coeff, std::allocator<Coeff> >::_M_emplace_back_aux<Coeff const&>(Coeff const&)
+  [28] void _dt<int&, int&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&, int&) [11] Polynomial<Coeff>::modX(int) const [6] std::vector<Coeff, std::allocator<Coeff> >::operator=(std::vector<Coeff, std::allocator<Coeff> > const&)
+  [32] void _dt<int, Polynomial<modint<1000000007> >&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int&&, Polynomial<modint<1000000007> >&) [30] Polynomial<Coeff>::split() const [9] std::vector<modint<1000000007>, std::allocator<modint<1000000007> > >::_M_default_append(unsigned long)
+  [24] _gp(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) [3] Polynomial<Coeff>::operator*(Polynomial<Coeff> const&) const [13] std::vector<modint<1000000007>, std::allocator<modint<1000000007> > >::operator=(std::vector<modint<1000000007>, std::allocator<modint<1000000007> > > const&)
+  [29] toCoeff(Polynomial<modint<1000000007> > const&) [5] Polynomial<Coeff>::operator+(Polynomial<Coeff> const&) const [22] __tcf_0
+   [7] Polynomial<Coeff>::selfMulX(int) [4] Polynomial<modint<1000000007> >::square() const
+  [23] Polynomial<Coeff>::operator+=(Polynomial<Coeff> const&) [10] Polynomial<modint<1000000007> >::operator+(Polynomial<modint<1000000007> > const&) const

@@ -76,8 +76,10 @@ template<typename H, typename ...T> void _dt(string u, H&& v, T&&... r) {
 
 template<typename T> 
 ostream &operator <<(ostream &o, vector<T> v) { // print a vector
+    o << "[";
     fo(i, si(v) - 1) o << v[i] << ", ";
     if(si(v)) o << v.back();
+    o << "]";
     return o;
 }
 
@@ -163,18 +165,40 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx = -1;
+constexpr int mx_n = 5 * 100005;
+
+string s;
+int pr[mx_n], n;
+
+bool eq(char a, char b) {
+    if(a != '?' && b != '?') return a == b;
+    return true;
+}
 
 int main() {
-    int n = 1000;
-    string labels;
-    fo(j, n) labels += char('a' + rand() % 26);
+    int t;
+    cin >> t;
+    while(t--) {
+        cin >> n >> s;
+        pr[0] = 0;
 
-    vi par;
-    fo(i, n - 1) par.push_back(rand() % (i+1));
+        int cur = 0;
+        re(i, 1, n) {
+            while(!eq(s[cur], s[i])) {
+                if(cur == 0) break;
+                cur = pr[cur-1];
+            }
+            pr[i] = ++cur;
+            trace(i, pr[i]);
+        }
 
-    cout << labels << endl;
-    cout << par << endl;
+        set<int> ans;
+        fo(i, n) ans.insert(n - pr[i]);
+        cout << si(ans) << '\n';
+        for(int x: ans) cout << x << " ";
+        cout << '\n';
+    }
+
     
     
 	return 0;

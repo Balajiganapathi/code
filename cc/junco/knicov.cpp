@@ -4,6 +4,7 @@
 #ifdef LOCAL
 #   define TRACE
 #   define TEST
+#   define CHECK
 #else
 #   define NDEBUG
 //#   define FAST
@@ -76,8 +77,10 @@ template<typename H, typename ...T> void _dt(string u, H&& v, T&&... r) {
 
 template<typename T> 
 ostream &operator <<(ostream &o, vector<T> v) { // print a vector
+    o << "[";
     fo(i, si(v) - 1) o << v[i] << ", ";
     if(si(v)) o << v.back();
+    o << "]";
     return o;
 }
 
@@ -155,26 +158,174 @@ T1 modpow(T1 _a, T2 p, T3 mod) {
 #define y1 _ysfdzy1
 
 /* constants */
-constexpr int dx[] = {-1, 0, 1, 0, 1, 1, -1, -1};
-constexpr int dy[] = {0, -1, 0, 1, 1, -1, 1, -1};
+constexpr int di[] = {-2, -2, -1, -1, 1, 1, 2, 2};
+constexpr int dj[] = {-1, 1, -2, 2, -2, 2, -1, 1};
 constexpr auto PI  = 3.14159265358979323846L;
 constexpr auto oo  = numeric_limits<int>::max() / 2 - 2;
 constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx = -1;
+constexpr int mx_n = 55, mx_mask = (1 << 12) + 100;
+int dp[mx_mask][mx_n];
+int n, m;
+
+void resolve(int cells[2][3], int mask) {
+    fo(i, 2 * n) {
+        cells[i/n][i%n] = mask % 2;
+        mask /= 2;
+    }
+}
+
+int getmask(int cells[2][3]) {
+    int mask = 0;
+    for(int j = 1; j >= 0; --j) for(int i = n - 1; i >= 0; --i) {
+        mask = mask * 4 + cells[j][i];
+    }
+
+    assert(mask < mx_mask);
+    return mask;
+}
+
+void initial(int cells[2][3], int col[3]) {
+    fo(i, n) col[i] = 0;
+    fo(j, 2) {
+        fo(i, n) if(cells[j][i] & 1) {
+            fo(d, 8) {
+                int ni = i + di[d], nj = j + dj[d];
+                if(nj == 2 && ni >= 0 && ni < n) {
+                    col[ni] |= 2;
+                }
+            }
+        }
+    }
+}
+
+bool isok(int col[3]) {
+    fo(i, n) if(col[i] == 0) return false;
+    return true;
+}
+
+
+bool fill_back(int cells[2][3], int ncells[2][3], int ncol[3]) {
+    fo(j, 2) fo(i, n) ncells[j][i] = cells[j][i];
+    fo(i, n) if(ncol[i] == 1) {
+        fo(d, 8) {
+            int ni = i + di[d], nj = 2 + dj[d];
+            if(nj >= 0 && nj < 2 && ni >= 0 && ni < n) {
+                if(cells[nj][ni] & 1) return false;
+                ncells[nj][ni] |= 2;
+            }
+        }
+    }
+    if(!isok(ncells[0])) return false;
+    fo(i, n) ncells[0][i] = ncells[1][i];
+    fo(i, n) ncells[1][i] = ncol[i];
+
+    return true;
+}
+
+int solve(int mask, int j) {
+    int cells[2][3];
+    resolve(cells, mask);
+    assert(getmask(cells) == mask);
+    trace(mask, j);
+#ifdef TRACE
+    fo(i, n) {
+        fo(j, 2) {
+            cerr << cells[j][i];
+        }
+        cerr << endl;
+    }
+#endif
+    int &ret = dp[mask][j];
+    if(ret != -1) return ret;
+
+    if(j == m) {
+        trace(mask);
+        if(!isok(cells[0])) ret = oo;
+        else if(!isok(cells[1])) ret = oo;
+        else ret = 0;
+    } else {
+
+        ret = oo;
+
+        int col[3];
+        initial(cells, col);
+        fo(cur, (1 << n)) {
+            int ncol[3], ncells[2][3];
+            fo(i, n) ncol[i] = col[i];
+            fo(i, n) if(is1(cur, i)) {
+                ncol[i] |= 1;
+            }
+            if(fill_back(cells, ncells, ncol)) {
+                ret = min(ret, __builtin_popcount(cur) + solve(getmask(ncells), j + 1));
+            }
+        }
+    }
+
+    trace(mask, j, ret);
+    return ret;
+}
+
+int solve() {
+    int cells[2][3];
+    fo(j, 2) fo(i, n) cells[j][i] = 2;
+    return solve(getmask(cells), 0);
+}
+
+int brute() {
+    assert(n * m <= 26);
+    int cells[mx_n][mx_n];
+    int ans = oo;
+    fo(mask, (1 << n * m)) {
+        bool ok = true;
+        if(__builtin_popcount(mask) > ans) continue;
+        ini(cells, 0);
+        fo(j, m) {
+            fo(i, n) if(is1(mask, (i * m + j))) {
+                cells[i][j] |= 1;
+                fo(d, 8) {
+                    int ni = i + di[d], nj = j + dj[d];
+                    if(0 <= ni && ni < n && 0 <= nj && nj < m) cells[ni][nj] |= 2;
+                }
+                if(j >= 3 && cells[i][j-3] == 0) {ok = false; break;}
+            }
+            if(!ok) break;
+        }
+        if(ok) fo(i, n) fo(j, m) if(cells[i][j] == 0) ok = false;
+        if(ok) ans = min(ans, __builtin_popcount(mask));
+    }
+
+    return ans;
+}
 
 int main() {
-    int n = 1000;
-    string labels;
-    fo(j, n) labels += char('a' + rand() % 26);
-
-    vi par;
-    fo(i, n - 1) par.push_back(rand() % (i+1));
-
-    cout << labels << endl;
-    cout << par << endl;
+    int t;
+#ifdef TEST
+    t = 100;
+#else
+    cin >> t;
+#endif
+    while(t--) {
+#ifdef TEST
+        n = rand() % 3 + 1;
+        int lm = 26 / n;
+        m = rand() % lm + 1;
+#else 
+        cin >> n >> m;
+#endif
+        ini(dp, -1);
+        int ans = solve();
+        cout << ans << endl;
+#ifdef CHECK
+        int bans = brute();
+        if(ans != bans) {
+            trace(n, m, bans, ans);
+            assert(ans == bans);
+        }
+#endif
+    }
     
     
 	return 0;

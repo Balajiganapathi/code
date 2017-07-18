@@ -17,6 +17,7 @@ using namespace std;
 using vi  = vector<int>;
 using pi  = pair<int, int>;
 using ll  = long long int;
+using ld  = long double;
 
 /* shortcut macros */
 #define mp              make_pair
@@ -76,8 +77,10 @@ template<typename H, typename ...T> void _dt(string u, H&& v, T&&... r) {
 
 template<typename T> 
 ostream &operator <<(ostream &o, vector<T> v) { // print a vector
+    o << "[";
     fo(i, si(v) - 1) o << v[i] << ", ";
     if(si(v)) o << v.back();
+    o << "]";
     return o;
 }
 
@@ -163,18 +166,124 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx = -1;
+constexpr int mx_n = 16;
+constexpr int mx_deg = 2 * (1 << mx_n) + 1;
+int a[mx_n], n;
+
+int ans_d;
+ld coef[mx_deg];
+
+int generator (int p) {
+	vector<int> fact;
+	int phi = p-1,  n = phi;
+	for (int i=2; i*i<=n; ++i)
+		if (n % i == 0) {
+			fact.push_back (i);
+			while (n % i == 0)
+				n /= i;
+		}
+	if (n > 1)
+		fact.push_back (n);
+ 
+	for (int res=2; res<=p; ++res) {
+		bool ok = true;
+		for (size_t i=0; i<fact.size() && ok; ++i)
+			ok &= modpow (res, phi / fact[i], p) != 1;
+		if (ok)  return res;
+	}
+	return -1;
+}
+
+#define dec adfasdfa
+int g = 5;
+int sq = (int) sqrt (mod + .0) + 1;
+vector < pair<int,int> > dec (sq);
+
+int gsqrt(int a) {
+	if (a == 0) {
+		return 0;
+	}
+ 
+	for (int i=1; i<=sq; ++i)
+		dec[i-1] = make_pair (modpow (g, int (i * sq * 1ll * 2 % (mod - 1)), mod), i);
+	sort (dec.begin(), dec.end());
+	int any_ans = -1;
+	for (int i=0; i<sq; ++i) {
+		int my = int (modpow (g, int (i * 1ll * 2 % (mod - 1)), mod) * 1ll * a % mod);
+		vector < pair<int,int> >::iterator it =
+			lower_bound (dec.begin(), dec.end(), make_pair (my, 0));
+		if (it != dec.end() && it->first == my) {
+			any_ans = it->second * sq - i;
+			break;
+		}
+	}
+    trace(any_ans);
+
+	if (any_ans == -1) {
+		return 0;
+	}
+ 
+	int delta = (mod-1) / __gcd (2, mod-1);
+    return (modpow (g, any_ans % delta, mod));
+ 
+}
+
+void solve() {
+    fo(i, mx_deg) coef[i] = 0;
+    ans_d = 0;
+    
+    int tot = (1 << (n-1));
+    vector<ld> terms;
+    fo(i, n) terms.push_back(sqrt(a[i]));
+    vector<ld> roots;
+
+    //trace(terms);
+
+    fo(mask, (1 << (n-1))) {
+        int d = tot - __builtin_popcount(mask);
+        ld cur = terms[0];
+        re(i, 1, n) {
+            if(is1(mask, (i-1))) cur += terms[i];
+            else cur += -terms[i];
+            //while(cur < 0) cur += mod;
+            //if(cur >= mod) cur -= mod;
+        }
+        //roots.push_back(fmod(cur * cur, mod));
+        cur = fmod(cur, mod);
+        roots.push_back(fmod(cur * cur, mod));
+    }
+
+    trace(tot, roots);
+
+    fo(mask, (1 << tot)) {
+        int bits = __builtin_popcount(mask);
+        int d = 2 * (tot - bits);
+        ld mul = (bits % 2 == 0? 1: -1);
+        fo(i, tot) if(is1(mask, i)) {
+            mul = fmod(mul * roots[i], mod);
+        }
+        ans_d = max(ans_d, d);
+        coef[d] += mul;
+    }
+}
+
+int convert(ld x) {
+    if(x < -eps) return (mod - convert(-x)) % mod;
+    return int(fmod(x, mod) + eps);
+}
 
 int main() {
-    int n = 1000;
-    string labels;
-    fo(j, n) labels += char('a' + rand() % 26);
-
-    vi par;
-    fo(i, n - 1) par.push_back(rand() % (i+1));
-
-    cout << labels << endl;
-    cout << par << endl;
+    int t;
+    cin >> t;
+    while(t--) {
+        cin >> n;
+        fo(i, n) cin >> a[i];
+        solve();
+        cout << ans_d << endl;
+        rep(i, 0, ans_d) trace(i, coef[i], convert(coef[i]));
+        rep(i, 0, ans_d) cout << convert(coef[i]) % mod << " ";
+        cout << endl;
+    }
     
     
 	return 0;

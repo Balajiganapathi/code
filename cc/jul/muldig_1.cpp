@@ -76,8 +76,10 @@ template<typename H, typename ...T> void _dt(string u, H&& v, T&&... r) {
 
 template<typename T> 
 ostream &operator <<(ostream &o, vector<T> v) { // print a vector
+    o << "[";
     fo(i, si(v) - 1) o << v[i] << ", ";
     if(si(v)) o << v.back();
+    o << "]";
     return o;
 }
 
@@ -164,18 +166,157 @@ constexpr auto mod = 1000000007;
 
 /* code */
 constexpr int mx = -1;
+vector<tuple<int, int, int>> ans;
+
+int b;
+void f(int c0, int c1, int c2) {
+    ans.emplace_back(c0, c1, c2);
+}
+
+void op_copy(int c0, int c1) {
+    f(0, c0, c1);
+}
+
+void op_inc(int c0, int c1) {
+    f(0, c0, c1);
+}
+
+void op_dec(int c0, int c1) {
+    op_inc(c0, c1);
+    fo(i, b - 2) op_inc(c1, c1);
+}
+
+void op_bool(int c0, int c1) {
+    f(c0, 0, c1);
+}
+
+void op_inc_if(int b, int c0, int c1) {
+    f(b, c0, c1);
+}
+
+void op_inv(int c0, int c1) {
+    op_dec(c0, c1);
+    f(c1, 0, c1);
+}
+
+void op_is0(int c0, int c1) {
+    op_inv(c0, c1);
+}
+
+void op_is1(int c0, int c1) {
+    op_dec(c0, c1);
+    op_is0(c1, c1);
+}
+
+void op_isb1(int c0, int c1) {
+    op_copy(c0, c1);
+    op_inc(c1);
+    op_is0(c1, c1);
+}
+
+void op_make0(int c0) {
+    f(b - 1, c0, c0);
+    op_dec(c0, c0);
+}
+
+void op_or(int a, int b, int c2) {
+    assert(a != c2 && b != c2);
+    op_make0(c2);
+    op_inc_if(a, c2, c2);
+    op_inc_if(b, c2, c2);
+    op_bool(c2, c2);
+}
+
+void op_and(int a, int b, int c2, int ia, int ib) {
+    set<int> s;
+    s.insert(a); s.insert(b); s.insert(c2); s.insert(ia); s.insert(ib);
+    assert(si(s) == 5 || (si(s) == 4 && a == b));
+    op_inv(a, ia);
+    op_inv(b, ib);
+    op_or(ia, ib, c2);
+    op_inv(c2, c2);
+}
+
+void op_cmp(int a, int b, int c2, int isa1, int isb0, int isb1, int tf, int ta, int tb) {
+    op_is1(a, isa1);
+    op_is0(b, isb0);
+    op_is1(b, isb1);
+    op_or(isb1, isb0, ta);
+    op_copy(ta, isb1);
+    op_and(isa1, isb1, tf, ta, tb);
+    op_copy(tf, isb1);
+
+    f(a, b, tf);
+    op_bool(tf, tf);
+
+    op_inv(isa1, isa1);
+    op_and(isa1, tf, isb0, ta, tb);
+    op_copy(isb0, isa1);
+
+    op_or(isa1, isb1, c2);
+}
+
+int ptr;
+int get_next() {
+    return ptr++;
+}
+int offset;
+array<int, 2> ad;
+array<int, 2> bd;
+array<int, 4> ansd;
+int cd[4];
+
+void fill_grid(int d1, int d2, const vi &grid) {
+    fo(i, b) fo(j, b) {
+    }
+}
+
+void check_carry(int a, int b, int c) {
+}
+
+// b += a + pc, c = carry(a, b)
+void partial_add(int a, int b, int pc, int nc) {
+    op_make0(nc);
+    check_carry(b, a, nc);
+    op_inc_if(a, b, b);
+    check_carry(b, pc, nc);
+    op_inc_if(pc, b, b);
+}
+
+void inc_bit(int b, int from) {
+    op_make0(ansd[from]);
+    for(int i = from; i < 4; ++i) {
+        partial_add(b, ansd[i], cd[i-1], cd[i]);
+    }
+}
+
+void init() {
+    offset = b + 2 + 2 + 4;
+    ptr = offset;
+    ad = {b + 1, b};
+    bd = {b + 3, b + 2};
+    ansd = {b + 4 + 3, b + 4 + 2, b + 4 + 1, b + 4 + 0};
+    fo(i, 4) cd[0] = get_next();
+}
+
+void solve() {
+    init();
+    vi grid;
+    fo(i, b) fo(j, b) grid.push_back(get_next());
+
+    fo(i, 2) fo(j, 2) {
+        int from = i + j;
+        fill_grid(ad[i], bd[j], grid);
+        for(int x: grid) inc_bit(x, from);
+    }
+}
 
 int main() {
-    int n = 1000;
-    string labels;
-    fo(j, n) labels += char('a' + rand() % 26);
+    cin >> b;
+    solve();
 
-    vi par;
-    fo(i, n - 1) par.push_back(rand() % (i+1));
-
-    cout << labels << endl;
-    cout << par << endl;
-    
+    cout << si(ans) << '\n';
+    for(auto cur: ans) cout << gt(cur, 0) << " " << gt(cur, 1) << " " << gt(cur, 2) << '\n';
     
 	return 0;
 }

@@ -76,8 +76,10 @@ template<typename H, typename ...T> void _dt(string u, H&& v, T&&... r) {
 
 template<typename T> 
 ostream &operator <<(ostream &o, vector<T> v) { // print a vector
+    o << "[";
     fo(i, si(v) - 1) o << v[i] << ", ";
     if(si(v)) o << v.back();
+    o << "]";
     return o;
 }
 
@@ -165,16 +167,79 @@ constexpr auto mod = 1000000007;
 /* code */
 constexpr int mx = -1;
 
+vector<vi> ans;
+
+void add(vi v) {
+    assert(si(v) == 3 || si(v) == 4);
+    ans.push_back(v);
+}
+void add(int off, vi v) {
+    for(int &x: v) x += off - 1;
+    add(v);
+}
+
+void gen(int s, int c) {
+    assert(3 <= c && c <= 5);
+    vi v;
+    if(c < 5) {
+        fo(i, c) v.push_back(s + i);
+        add(v);
+        add(v);
+    } else {
+        add(s, {5, 4, 2});
+        add(s, {3, 1, 5});
+        add(s, {4, 5, 2, 3});
+        add(s, {4, 3, 2, 1});
+        add(s, {4, 2, 1});
+        add(s, {3, 1, 5});
+    }
+}
+
+void solve(int n, int m) {
+    assert(n % m == 0);
+    for(int i = 0; i < n; i += m) gen(i, m);
+}
+
+void solve(int n, int c, int dummy) {
+    trace(n, c);
+    assert(c < 10);
+    assert(n >= 3);
+    if(n % 3 == 0) {
+        solve(n, 3);
+    } else if(n % 4 == 0) {
+        solve(n, 4);
+    } else if(n % 5 == 0) {
+        solve(n, 5);
+    } else if((n-3) % 4 == 0) {
+        gen(n - 3, 3);
+        solve(n - 3, c + 1, 0);
+    } else {
+        gen(n - 5, 5);
+        solve(n - 5, c + 1, 0);
+    }
+}
+
 int main() {
-    int n = 1000;
-    string labels;
-    fo(j, n) labels += char('a' + rand() % 26);
+    /*
+    rep(n, 3, 300) {
+        ans.clear();
+        solve(n, 0, 0);
+        trace(n, si(ans));
+        assert(si(ans) <= n * n);
+        assert(si(ans) > 0);
+    }
+    return 0;
+    */
+    int n;
+    cin >> n;
+    solve(n, 0, 0);
 
-    vi par;
-    fo(i, n - 1) par.push_back(rand() % (i+1));
-
-    cout << labels << endl;
-    cout << par << endl;
+    cout << si(ans) << endl;
+    for(vi &v: ans) {
+        cout << si(v);
+        for(int x: v) cout << " " << x + 1;
+        cout << '\n';
+    }
     
     
 	return 0;

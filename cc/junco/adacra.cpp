@@ -76,8 +76,10 @@ template<typename H, typename ...T> void _dt(string u, H&& v, T&&... r) {
 
 template<typename T> 
 ostream &operator <<(ostream &o, vector<T> v) { // print a vector
+    o << "[";
     fo(i, si(v) - 1) o << v[i] << ", ";
     if(si(v)) o << v.back();
+    o << "]";
     return o;
 }
 
@@ -163,18 +165,44 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx = -1;
+constexpr int mx_n = 55;
+
+int n, pre[mx_n], a[mx_n];
+string inp;
+int dp[mx_n][mx_n][1];
+
+int solve(int i, int j, int f) {
+    if(j < i) return 0;
+    int &ret = dp[i][j][f];
+    if(ret != -1) return ret;
+    ret = oo;
+
+    if(a[i]^f) ret = solve(i + 1, j, f);
+    else if(a[j]^f) ret = solve(i, j - 1, f);
+    else ret = 1 + solve(i + 1, j - 1, 1 - f);
+
+    //trace(i, j, f, ret);
+
+    return ret;
+}
 
 int main() {
-    int n = 1000;
-    string labels;
-    fo(j, n) labels += char('a' + rand() % 26);
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while(t--) {
+        cin >> inp;
+        n = si(inp);
 
-    vi par;
-    fo(i, n - 1) par.push_back(rand() % (i+1));
-
-    cout << labels << endl;
-    cout << par << endl;
+        int ans = oo;
+        fo(b, 2) {
+            fo(i, n) a[i] = (inp[i] == 'D'? b: (1-b));
+            ini(dp, -1);
+            ans = min(ans, solve(0, n - 1, 0));
+        }
+        cout << ans << endl;
+    }
     
     
 	return 0;

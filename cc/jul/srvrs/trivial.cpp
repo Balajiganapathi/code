@@ -76,8 +76,10 @@ template<typename H, typename ...T> void _dt(string u, H&& v, T&&... r) {
 
 template<typename T> 
 ostream &operator <<(ostream &o, vector<T> v) { // print a vector
+    o << "[";
     fo(i, si(v) - 1) o << v[i] << ", ";
     if(si(v)) o << v.back();
+    o << "]";
     return o;
 }
 
@@ -163,18 +165,43 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx = -1;
+constexpr int mx_n = 500005;
+
+int n, q;
+class CPU {
+public:
+    int s, c;
+    int x, y, p;
+    CPU() {}
+    CPU(int s, int c, int x, int y, int p): s(s), c(c), x(x), y(y), p(p) {}
+} cpus[mx_n];
+
+int idx;
+CPU solve(int x, int y) {
+    return cpus[idx++];
+}
 
 int main() {
-    int n = 1000;
-    string labels;
-    fo(j, n) labels += char('a' + rand() % 26);
+    int _n;
+    cin >> _n >> q;
+    fo(i, _n) {
+        int x, y, k, p;
+        cin >> x >> y >> k;
+        fo(j, k) {
+            cin >> p;
+            cpus[n++] = CPU(i + 1, j + 1, x, y, p);
+        }
+    }
 
-    vi par;
-    fo(i, n - 1) par.push_back(rand() % (i+1));
+    while(q--) {
+        int x, y;
+        cout << "?" << endl;
+        cin >> x >> y;
+        auto cur = solve(x, y);
+        cout << "! " << cur.s << " " << cur.c << endl;
+    }
+    cout << "end" << endl;
 
-    cout << labels << endl;
-    cout << par << endl;
     
     
 	return 0;

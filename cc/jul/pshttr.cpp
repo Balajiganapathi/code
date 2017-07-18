@@ -76,8 +76,10 @@ template<typename H, typename ...T> void _dt(string u, H&& v, T&&... r) {
 
 template<typename T> 
 ostream &operator <<(ostream &o, vector<T> v) { // print a vector
+    o << "[";
     fo(i, si(v) - 1) o << v[i] << ", ";
     if(si(v)) o << v.back();
+    o << "]";
     return o;
 }
 
@@ -163,18 +165,92 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx = -1;
+constexpr int mx_n = 4 * 100005;
+int n, m;
+vi adj[mx_n];
+map<int, pair<vector<pi>, vector<tuple<int, int, int>>>> weight;
+int ans[mx_n];
+int s[mx_n], e[mx_n], tim, depth[mx_n];
+int bit[mx_n];
+
+void dfs(int i, int p, int d) {
+    s[i] = tim++;
+    depth[i] = d;
+    for(int x: adj[i]) if(p != x) dfs(x, i, d + 1);
+    e[i] = tim++;
+}
+
+void update(int idx ,int val){
+    ++idx;
+    while (idx < mx_n){
+        bit[idx] ^= val;
+        idx += (idx & -idx);
+    }
+}
+
+int read(int idx){
+    ++idx;
+    int sum = 0;
+    while (idx > 0){
+        sum ^= bit[idx];
+        idx -= (idx & -idx);
+    }
+    return sum;
+}
+
+void add(int u, int v, int k) {
+    if(depth[u] > depth[v]) swap(u, v);
+    trace(u, v, s[v], e[v], k);
+    update(s[v], k);
+    update(e[v], k);
+}
+
+int solve(int u, int v) {
+    return read(s[u]) ^ read(s[v]);
+}
+
+void init() {
+    ini(bit, 0);
+    tim = 0;
+    dfs(1, 1, 0);
+}
 
 int main() {
-    int n = 1000;
-    string labels;
-    fo(j, n) labels += char('a' + rand() % 26);
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    int u, v, k;
+    cin >> t;
+    while(t--) {
+        weight.clear();
+        cin >> n;
+        fo(i, n - 1) {
+            cin >> u >> v >> k;
+            adj[u].push_back(v);
+            adj[v].push_back(u);
+            weight[k].fi.emplace_back(u, v);
+        }
 
-    vi par;
-    fo(i, n - 1) par.push_back(rand() % (i+1));
+        cin >> m;
+        fo(i, m) {
+            cin >> u >> v >> k;
+            weight[k].se.emplace_back(u, v, i);
+        }
 
-    cout << labels << endl;
-    cout << par << endl;
+        init();
+        for(auto cur: weight) {
+            trace(cur);
+            for(auto edge: cur.se.fi) add(edge.fi, edge.se, cur.fi);
+            for(auto query: cur.se.se) {
+                tie(u, v, k) = query;
+                ans[k] = solve(u, v);
+            }
+        }
+
+        rep(i, 1, n) adj[i].clear();
+
+        fo(i, m) cout << ans[i] << '\n';
+    }
     
     
 	return 0;

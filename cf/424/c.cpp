@@ -2,8 +2,8 @@
 
 //#define LOCAL
 #ifdef LOCAL
-#   define TRACE
-#   define TEST
+//#   define TRACE
+//#   define TEST
 #else
 #   define NDEBUG
 //#   define FAST
@@ -76,8 +76,10 @@ template<typename H, typename ...T> void _dt(string u, H&& v, T&&... r) {
 
 template<typename T> 
 ostream &operator <<(ostream &o, vector<T> v) { // print a vector
+    o << "[";
     fo(i, si(v) - 1) o << v[i] << ", ";
     if(si(v)) o << v.back();
+    o << "]";
     return o;
 }
 
@@ -163,19 +165,115 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx = -1;
+constexpr int mx_n = 102;
+int n, a[mx_n];
+ll k;
+
+int brute() {
+    int ans = 0;
+    rep(d, 1, 1000000) {
+        ll cur = 0;
+        fo(i, n) {
+            cur += (d - a[i] % d) % d;
+        }
+        //trace(d, cur, cur <= k);
+        if(cur <= k) ans = d;
+    }
+
+    return ans;
+}
+
+ll csum[mx_n];
+ll calc(ll d) {
+    if(d > a[n-1]) return (d * n - csum[n-1]);
+    ll ans = 0;
+    for(int i = n - 1; i >= 0; --i) {
+        ans += (d - a[i] % d) % d;
+    }
+    return ans;
+}
 
 int main() {
-    int n = 1000;
-    string labels;
-    fo(j, n) labels += char('a' + rand() % 26);
-
-    vi par;
-    fo(i, n - 1) par.push_back(rand() % (i+1));
-
-    cout << labels << endl;
-    cout << par << endl;
+#ifdef TEST
+    n = 100; k = 1000000;
+    n = 1; k = 100000000000L;
+    fo(i, n) {
+        //int x = 1000000000, y = 900000000;
+        int x = 100, y = 90;
+        a[i] = rand() % (y-x+1) + x;
+    }
+#else
+    cin >> n >> k;
+    fo(i, n) {
+        cin >> a[i];
+    }
+#endif
     
+    /*
+    rep(x, 1, 100) {
+        rep(i, 1, x+1) {
+            cout << (x % i) << " ";
+        }
+        cout << endl;
+    }
+    */
+
+    sort(a, a + n);
+    fo(i, n) {
+        csum[i] = (i == 0? 0: csum[i-1]) + a[i];
+    }
+    ll ans = 1;
+    vi trials;
+    fo(i, n) {
+        for(int d = 1; (d-1) * (d-1) <= a[i]; ++d) {
+            trials.push_back(a[i] / d + 1);
+        }
+    }
+
+    for(int d = 1; (d-1) * (d-1) <= a[n-1]; ++d) trials.push_back(d);
+
+    sort(all(trials));
+    trials.resize(unique(all(trials)) - trials.begin());
+    reverse(all(trials));
+    trace(si(trials));
+    //trace(t);
+
+    ll lo = 1;
+    ll hi = 2 * (k + a[n-1]);
+    for(int d: trials) {
+        lo = d;
+        if(calc(d) <= k) break;
+        hi = d;
+    }
+
+
+    trace(lo, hi);
+#ifdef LOCAL
+    /*
+    ll lst = calc(lo);
+    rep(ch, lo, hi) {
+        ll cur = calc(ch);
+        assert(lst <= cur);
+        lst = cur;
+    }
+    */
+#endif
+
+    while(lo < hi) {
+        ll m = (lo + hi + 1) / 2;
+        if(calc(m) <= k) lo = m;
+        else hi = m - 1;
+    }
+    trace(lo, calc(lo), k);
+    
+    if(calc(lo) <= k) ans = max(ans, lo);
+
+    assert(calc(ans) <= k);
+    cout << ans << endl;
+#ifdef LOCAL
+    int bans = brute();
+    trace(bans, calc(bans), calc(bans + 1));
+#endif
     
 	return 0;
 }
