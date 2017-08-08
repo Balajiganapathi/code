@@ -76,8 +76,10 @@ template<typename H, typename ...T> void _dt(string u, H&& v, T&&... r) {
 
 template<typename T> 
 ostream &operator <<(ostream &o, vector<T> v) { // print a vector
+    o << "[";
     fo(i, si(v) - 1) o << v[i] << ", ";
     if(si(v)) o << v.back();
+    o << "]";
     return o;
 }
 
@@ -163,11 +165,88 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx = -1;
+constexpr int mx_n = 35003, mx_k = 55;
+constexpr int mx_seg = 4 * mx_n;
+int n, k, num[mx_n];
+
+int dp[mx_n][mx_k];
+int last[mx_n];
+int seg[mx_seg], acc[mx_seg];
+
+void init(int i, int a, int b, int k) {
+    acc[i] = 0;
+    if(a == b) {
+        seg[i] = dp[a][k];
+        return;
+    }
+    int m = (a + b) / 2;
+    int l = 2 * i + 1, r = 2 * i + 2;
+    init(l, a, m, k);
+    init(r, m + 1, b, k);
+    seg[i] = max(seg[l], seg[r]);
+}
+
+void update(int i, int a, int b, int qa, int qb) {
+    if(b < qa || a > qb) return;
+    if(qa <= a && b <= qb) {
+        ++acc[i];
+        ++seg[i];
+        return;
+    }
+
+    int m = (a + b) / 2;
+    int l = 2 * i + 1, r = 2 * i + 2;
+
+    if(acc[i]) {
+        acc[l] += acc[i]; seg[l] += acc[i];
+        acc[r] += acc[i]; seg[r] += acc[i];
+        acc[i] = 0;
+    }
+
+    update(l, a, m, qa, qb);
+    update(r, m + 1, b, qa, qb);
+    seg[i] = max(seg[l], seg[r]);
+}
+
+int get(int i, int a, int b, int qa, int qb) {
+    if(b < qa || a > qb) return -oo;
+    if(qa <= a && b <= qb) return seg[i];
+    int m = (a + b) / 2;
+    int l = 2 * i + 1, r = 2 * i + 2;
+
+    if(acc[i]) {
+        acc[l] += acc[i]; seg[l] += acc[i];
+        acc[r] += acc[i]; seg[r] += acc[i];
+        acc[i] = 0;
+    }
+
+    return max(get(l, a, m, qa, qb), get(r, m + 1, b, qa, qb));
+}
 
 int main() {
-    vi wolf;
+    cin >> n >> k;
+    rep(i, 1, n) cin >> num[i];
+
+    rep(i, 1, n) dp[0][i] = -oo;
+    dp[0][0] = 0;
+
+    rep(ki, 1, k) {
+        init(0, 0, n, ki-1);
+        ini(last, 0);
+        dp[0][ki] = -oo;
+        rep(i, 1, n) {
+            dp[i][ki] = -oo;
+            int l = last[num[i]];
+            update(0, 0, n, l, i - 1);
+            dp[i][ki] = get(0, 0, n, 0, i - 1);
+            trace(ki, i, num[i], l, dp[i][ki]);
+            if(dp[i][ki] < 0) dp[i][ki] = -oo;
+            last[num[i]] = i;
+        }
+    }
+
     
+    cout << dp[n][k] << endl;
     
 	return 0;
 }

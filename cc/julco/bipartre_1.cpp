@@ -76,8 +76,10 @@ template<typename H, typename ...T> void _dt(string u, H&& v, T&&... r) {
 
 template<typename T> 
 ostream &operator <<(ostream &o, vector<T> v) { // print a vector
+    o << "[";
     fo(i, si(v) - 1) o << v[i] << ", ";
     if(si(v)) o << v.back();
+    o << "]";
     return o;
 }
 
@@ -163,10 +165,152 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx = -1;
+constexpr int mx_n = 5003;
+int n, m;
+
+// Number of vertices in given graph
+constexpr int V = 2 * mx_n + 10;
+ 
+bool visited[V];
+int rGraph[V][V];
+int parent[V];
+int q[V];
+int graph[V][V];
+vi adj[V];
+int pflow[V];
+
+
+void init() {
+    ini(graph, 0);
+    ini(rGraph, 0);
+    fo(i, V) adj[i].clear();
+}
+void addEdge(int u, int v, int cap) {
+    rGraph[u][v] = graph[u][v] = cap;
+    adj[u].push_back(v);
+    adj[v].push_back(u);
+}
+
+/* Returns true if there is a path from source 's' to sink 't' in
+  residual graph. Also fills parent[] to store the path */
+bool bfs(int s, int t) {
+    // Create a visited array and mark all vertices as not visited
+    memset(visited, 0, sizeof(visited));
+ 
+    // Create a queue, enqueue source vertex and mark source vertex
+    // as visited
+    int qidx = 0;
+    q[qidx++] = s;;
+    visited[s] = true;
+    parent[s] = -1;
+    pflow[s] = INT_MAX;
+ 
+    // Standard BFS Loop
+    while (qidx > 0) {
+        int u = q[--qidx];
+ 
+        for(int v: adj[u]) {
+            if (!visited[v] && rGraph[u][v] > 0) {
+                q[qidx++] = v;
+                parent[v] = u;
+                visited[v] = true;
+                pflow[v] = min(rGraph[u][v], pflow[u]);
+            }
+        }
+    }
+ 
+    // If we reached sink in BFS starting from source, then return
+    // true, else false
+    return (visited[t] == true);
+}
+ 
+// Returns tne maximum flow from s to t in the given graph
+int fordFulkerson(int s, int t) {
+    int u, v;
+ 
+    int max_flow = 0;  // There is no flow initially
+ 
+    // Augment the flow while tere is path from source to sink
+    while (bfs(s, t)) {
+        // Find minimum residual capacity of the edges along the
+        // path filled by BFS. Or we can say find the maximum flow
+        // through the path found.
+        int path_flow = pflow[t];;
+ 
+        // update residual capacities of the edges and reverse edges
+        // along the path
+        for (v=t; v != s; v=parent[v])
+        {
+            u = parent[v];
+            rGraph[u][v] -= path_flow;
+            rGraph[v][u] += path_flow;
+        }
+ 
+        // Add path flow to overall flow
+        max_flow += path_flow;
+        //trace(max_flow, path_flow);
+    }
+ 
+    // Return the overall flow
+    return max_flow;
+}
+
 
 int main() {
-    vi wolf;
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int q;
+#ifdef TEST
+    q = 4;
+#else
+    cin  >> q;
+#endif
+    while(q--) {
+#ifdef TEST
+        n = 5000;
+        m = 5000;
+#else
+        cin >> n >> m;
+#endif
+        trace(n, m);
+        int s = n + m, t = n + m + 1;
+
+        init();
+        re(i, 1, n) {
+            int p;
+#ifdef TEST
+            p = rand() % i;
+#else
+            cin >> p; --p;
+#endif
+            addEdge(p + m, i + m, mx_n);
+        }
+        fo(i, n) addEdge(i + m, t, 1);
+        fo(i, m) {
+            int c, p;
+#ifdef TEST
+            c = 2;
+#else
+            cin >> c;
+#endif
+            fo(j, c) {
+#ifdef TEST
+                p = rand() % n;
+#else
+                cin  >> p;
+#endif
+                --p;
+                addEdge(i, p + m, 1);
+            }
+            addEdge(s, i, 1);
+        }
+
+
+        int ans = fordFulkerson(s, t);
+        cout << ans << '\n';
+
+    }
+
     
     
 	return 0;

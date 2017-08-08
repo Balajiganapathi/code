@@ -76,8 +76,10 @@ template<typename H, typename ...T> void _dt(string u, H&& v, T&&... r) {
 
 template<typename T> 
 ostream &operator <<(ostream &o, vector<T> v) { // print a vector
+    o << "[";
     fo(i, si(v) - 1) o << v[i] << ", ";
     if(si(v)) o << v.back();
+    o << "]";
     return o;
 }
 
@@ -163,11 +165,60 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx = -1;
+constexpr int mx_n = 300005;
+int seg[4 * mx_n];
+int n, h[mx_n];
+
+void build(int i, int a, int b) {
+    if(a ==  b) {
+        seg[i] = a;
+        return;
+    }
+    int m = (a + b) / 2;
+    int l = 2 * i + 1, r = 2 * i + 2;
+    build(l, a, m);
+    build(r, m + 1, b);
+    seg[i] = seg[l];
+    if(h[seg[i]] < h[seg[r]]) seg[i] = seg[r];
+}
+
+int get(int i, int a, int b, int qa, int qb) {
+    if(qa <= a && b <= qb) return seg[i];
+    if(qb < a || qa > b) return -1;
+
+    int m = (a + b) / 2;
+    int l = 2 * i + 1, r = 2 * i + 2;
+
+    int ml = get(l, a, m, qa, qb);
+    int mr = get(r, m + 1, b, qa, qb);
+    int ret = ml;
+    if(ret == -1 || (mr != -1 && h[ret] < h[mr])) ret = mr;
+
+    return ret;
+}
+
+ll ans[mx_n];
 
 int main() {
-    vi wolf;
+    cin >> n;
+    fo(i, n) cin >> h[i];
+    build(0, 0, n - 1);
     
+    queue<tuple<int, int, int>> q;
+    q.emplace(0, n - 1, 0);
+    while(!q.empty()) {
+        int a, b, l;
+        tie(a, b, l) = q.front(); q.pop();
+        int idx = get(0, 0, n - 1, a, b);
+        ans[l] += h[idx];
+        if(a < idx) q.emplace(a, idx - 1, l + 1);
+        if(b > idx) q.emplace(idx + 1, b, l + 1);
+    }
+
+    fo(i, mx_n) {
+        if(ans[i] == 0) break;
+        cout << ans[i] << '\n';
+    }
     
 	return 0;
 }

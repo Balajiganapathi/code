@@ -76,8 +76,10 @@ template<typename H, typename ...T> void _dt(string u, H&& v, T&&... r) {
 
 template<typename T> 
 ostream &operator <<(ostream &o, vector<T> v) { // print a vector
+    o << "[";
     fo(i, si(v) - 1) o << v[i] << ", ";
     if(si(v)) o << v.back();
+    o << "]";
     return o;
 }
 
@@ -163,10 +165,58 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx = -1;
+constexpr int mx_a = 32000;
+vi primes;
+int notprime[mx_a];
+
+void init() {
+    notprime[0] = notprime[1] = 0;
+    for(int i = 2; i * i < mx_a; ++i) if(!notprime[i]) {
+        for(int j = i * i; j < mx_a; j += i) notprime[j] = 1;
+    }
+
+    re(i, 2, mx_a) if(!notprime[i]) primes.push_back(i);
+}
+
+map<int, int> fac(int n) {
+    map<int, int> ret;
+    for(int i = 0; n > 1 && i < si(primes) && primes[i] * primes[i] <= n; ++i) {
+        int c = 0;
+        for(; n % primes[i] == 0; n /= primes[i]) ++c;
+        if(c) ret[primes[i]] = c;
+    }
+    if(n > 1) ret[n] = 1;
+    return ret;
+}
+
+bool ok(int a, int b) {
+    int xx = 2 * b - a;
+    int yy = 2 * a - b;
+    return xx >= 0 && yy >= 0 && xx % 3 == 0 && yy % 3 == 0;
+}
+
+bool pos(int a, int b) {
+    map<int, int> div1 = fac(a), div2 = fac(b);
+    vi check;
+    for(auto x: div1) check.push_back(x.fi);
+    for(auto x: div2) check.push_back(x.fi);
+
+    for(int x: check) if(!ok(div1[x], div2[x])) return false;
+
+    return true;
+}
 
 int main() {
-    vi wolf;
+    init();
+    int  t;
+    cin >> t;
+    while(t--) {
+        int a, b, g;
+        cin >> a >> b;
+        g = __gcd(a, b);
+        if(pos(a, b)) cout << "Yes\n";
+        else cout << "No\n";
+    }
     
     
 	return 0;

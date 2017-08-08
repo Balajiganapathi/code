@@ -76,8 +76,10 @@ template<typename H, typename ...T> void _dt(string u, H&& v, T&&... r) {
 
 template<typename T> 
 ostream &operator <<(ostream &o, vector<T> v) { // print a vector
+    o << "[";
     fo(i, si(v) - 1) o << v[i] << ", ";
     if(si(v)) o << v.back();
+    o << "]";
     return o;
 }
 
@@ -163,10 +165,29 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx = -1;
+constexpr int mx_n = 1003;
+int live[mx_n];
 
 int main() {
-    vi wolf;
+    int n, k, x;
+    cin >> n >> k >> x;
+    int cnt = n;
+    rep(i, 1, n) live[i] = 1;
+    for(; cnt > (x % k); ) {
+        int tot = x % k + 1;
+        for(; tot > 0; x = (x == n? 1: x+1) ) {
+            if(live[x]) {
+                --tot;
+                if(tot != 0) {
+                    live[x] = 0;
+                    --cnt;
+                }
+            }
+        }
+        trace(x);
+    }
+
+    cout << x << endl;
     
     
 	return 0;

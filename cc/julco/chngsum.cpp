@@ -3,7 +3,8 @@
 //#define LOCAL
 #ifdef LOCAL
 #   define TRACE
-#   define TEST
+//#   define TEST
+//#   define CHECK
 #else
 #   define NDEBUG
 //#   define FAST
@@ -76,8 +77,10 @@ template<typename H, typename ...T> void _dt(string u, H&& v, T&&... r) {
 
 template<typename T> 
 ostream &operator <<(ostream &o, vector<T> v) { // print a vector
+    o << "[";
     fo(i, si(v) - 1) o << v[i] << ", ";
     if(si(v)) o << v.back();
+    o << "]";
     return o;
 }
 
@@ -163,10 +166,69 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx = -1;
+constexpr int mx_n = 1000006;
+int n, l[mx_n];
+int lmax[mx_n], lmin[mx_n];
+
+void calc(int lm[mx_n]) {
+    stack<int> s;
+    int cur = 0;
+    fo(i, n) {
+        while(!s.empty() && l[s.top()] < l[i]) {
+            int x = s.top();
+            s.pop();
+            int till = -1;
+            if(!s.empty()) till = s.top();
+            cur = (1ll * cur + mod - 1ll * (mod+l[x]) % mod * (x-till) % mod) % mod;
+        }
+        int till = -1;
+        if(!s.empty()) till = s.top();
+        cur = (cur + 1ll * (mod+l[i]) % mod * (i-till)) % mod;
+        s.emplace(i);
+        lm[i] = cur;
+        trace(i, l[i], lm[i]);
+    }
+}
 
 int main() {
-    vi wolf;
+#ifdef CHECK
+    n = 200;
+    fo(i, n) l[i] = rand() % 1000000000 + 1;
+    //trace(n); fo(i, n) trace(i, l[i]);
+#else
+    cin >> n;
+    fo(i, n) cin >> l[i];
+#endif
+    calc(lmax);
+    reverse(l, l + n);
+    fo(i, n) l[i] *= -1;
+    calc(lmin);
+    reverse(lmin, lmin + n);
+    reverse(l, l + n);
+    fo(i, n) l[i] *= -1;
+
+    int ans = 0;
+
+    int cur = lmax[0];
+    re(i, 1, n) {
+        ans = (ans + 1ll * cur * (mod-lmin[i])) % mod;
+        //trace(i, cur, lmin[i]);
+        cur += lmax[i];
+        if(cur >= mod) cur -= mod;
+    }
+
+    cout << ans << endl;
+#ifdef TEST
+    int bans = 0;
+    //trace(n); fo(i, n) trace(i, l[i]);
+    re(i, 0, n) re(j, i, n) re(k, j + 1, n) re(lll, k, n) {
+        int a = -oo, b = oo;
+        rep(x, i, j) a = max(a, l[x]);
+        rep(x, k, lll) b = min(b, l[x]);
+        bans = (bans + 1ll * a * b) % mod;
+    }
+    trace(bans);
+#endif 
     
     
 	return 0;

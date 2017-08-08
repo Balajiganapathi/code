@@ -76,8 +76,10 @@ template<typename H, typename ...T> void _dt(string u, H&& v, T&&... r) {
 
 template<typename T> 
 ostream &operator <<(ostream &o, vector<T> v) { // print a vector
+    o << "[";
     fo(i, si(v) - 1) o << v[i] << ", ";
     if(si(v)) o << v.back();
+    o << "]";
     return o;
 }
 
@@ -163,10 +165,61 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx = -1;
+constexpr int mx_n = 1000006;
+int x[mx_n], y[mx_n];
+int n, par[mx_n], comps, rnk[mx_n];
+void init_uf() {
+    fo(i, n) par[i] = i, rnk[i] = 0;
+    comps = n;
+}
+
+int find(int x) {
+    if(x == par[x]) return x;
+    else return par[x] = find(par[x]);
+}
+
+void merge(int u, int v) {
+    //trace(u, v);
+    u = find(u); v = find(v);
+    if(u == v) return;
+    --comps;
+
+    if(rnk[u] == rnk[v]) ++rnk[u];
+
+    if(rnk[u] > rnk[v]) par[v] = u;
+    else par[u] = v;
+}
 
 int main() {
-    vi wolf;
+    int t;
+    cin >> t;
+    while(t--) {
+        cin >> n;
+        vi special;
+        fo(i, n) {
+            int xx, yy;
+            cin >> xx >> yy;
+            x[i] = xx + yy; y[i] = xx - yy;
+        }
+        special.push_back(max_element(x, x + n) - x);
+        special.push_back(min_element(x, x + n) - x);
+        special.push_back(max_element(y, y + n) - y);
+        special.push_back(min_element(y, y + n) - y);
+
+        int lo = 0, hi = 2000000000;
+        while(lo < hi) {
+            int m = lo + (hi - lo + 1) / 2;
+            init_uf();
+            for(int j: special) fo(i, n) {
+                if(abs(x[i] - x[j]) >= m || abs(y[i] - y[j]) >= m) merge(i, j);
+            }
+            //trace(lo, hi, comps);
+            if(comps == 1) lo = m;
+            else hi = m-1;
+        }
+
+        cout << lo << endl;
+    }
     
     
 	return 0;

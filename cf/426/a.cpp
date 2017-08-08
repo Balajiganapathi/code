@@ -76,8 +76,10 @@ template<typename H, typename ...T> void _dt(string u, H&& v, T&&... r) {
 
 template<typename T> 
 ostream &operator <<(ostream &o, vector<T> v) { // print a vector
+    o << "[";
     fo(i, si(v) - 1) o << v[i] << ", ";
     if(si(v)) o << v.back();
+    o << "]";
     return o;
 }
 
@@ -163,10 +165,37 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx = -1;
+
+ll cube(ll x) {
+    return x * x * x;
+}
+
+bool iscbrt(ll x) {
+    ll r = floor(cbrt(1.0L * x));
+    rep(d, -1, 1) if(cube(r+d) == x) return true;
+    return false;
+}
+
+bool pos(int a, int b) {
+    ll sa = 1ll * a * a, sb = 1ll * b * b;
+    trace(sa, sb, a, b);
+    if(sa % b != 0 || sb % a != 0) return false;
+    sa /= b; sb /= a;
+    trace(sa, sb);
+    return iscbrt(sa) && iscbrt(sb);
+}
 
 int main() {
-    vi wolf;
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int  t;
+    cin >> t;
+    while(t--) {
+        int a, b;
+        cin >> a >> b;
+        if(pos(a, b)) cout << "Yes\n";
+        else cout << "No\n";
+    }
     
     
 	return 0;

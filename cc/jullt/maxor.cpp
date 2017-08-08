@@ -76,8 +76,10 @@ template<typename H, typename ...T> void _dt(string u, H&& v, T&&... r) {
 
 template<typename T> 
 ostream &operator <<(ostream &o, vector<T> v) { // print a vector
+    o << "[";
     fo(i, si(v) - 1) o << v[i] << ", ";
     if(si(v)) o << v.back();
+    o << "]";
     return o;
 }
 
@@ -163,10 +165,57 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx = -1;
+constexpr int mx_n = 1000006, mx_b = 20;
+int n, a[mx_n];
+
+class Trie {
+public:
+    int nxt[2], cnt;
+    Trie() { cnt = nxt[0] = nxt[1] = 0; }
+} nodes[2 * mx_n];
+int ncnt;
+
+void put(int x) {
+    int cur = 1;
+    for(int i = mx_b - 1; i >= 0; --i) {
+        ++nodes[cur].cnt;
+        int b = ((x >> i) & 1);
+        int &nxt = nodes[cur].nxt[b];
+        if(nxt == 0) nxt = ++ncnt;
+        assert(ncnt < mx_n);
+        cur = nxt;
+    }
+    ++nodes[cur].cnt;
+}
+
+int get(int cur, int x, int i) {
+    if(cur == 0) return 0;
+    if(i < 0) return nodes[cur].cnt;
+    int b = ((x >> i) & 1);
+    if(b == 0) return get(nodes[cur].nxt[0], x, i - 1);
+    else return get(nodes[cur].nxt[0], x, i - 1) +  get(nodes[cur].nxt[1], x, i - 1);
+}
 
 int main() {
-    vi wolf;
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while(t--) {
+        cin >> n;
+        fo(i, n) cin >> a[i];
+        ncnt = 1;
+        sort(a, a + n);
+        ll ans = 0;
+        fo(i, n) {
+            int cur = get(1, a[i], mx_b-1);
+            trace(i, a[i], cur);
+            ans += cur;
+            put(a[i]);
+        }
+        cout << ans << endl;
+        fo(i, ncnt+1) nodes[i].cnt = nodes[i].nxt[0] = nodes[i].nxt[1] = 0;
+    }
     
     
 	return 0;

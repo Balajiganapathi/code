@@ -3,7 +3,7 @@
 //#define LOCAL
 #ifdef LOCAL
 #   define TRACE
-#   define TEST
+//#   define TEST
 #else
 #   define NDEBUG
 //#   define FAST
@@ -76,8 +76,10 @@ template<typename H, typename ...T> void _dt(string u, H&& v, T&&... r) {
 
 template<typename T> 
 ostream &operator <<(ostream &o, vector<T> v) { // print a vector
+    o << "[";
     fo(i, si(v) - 1) o << v[i] << ", ";
     if(si(v)) o << v.back();
+    o << "]";
     return o;
 }
 
@@ -163,10 +165,144 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx = -1;
+constexpr int mx_n = 5003;
+int n, m;
+
+// Number of vertices in given graph
+constexpr int V = 2 * mx_n + 10;
+ 
+typedef int LL;
+
+struct Edge {
+  int u, v;
+  LL cap, flow;
+  Edge() {}
+  Edge(int u, int v, LL cap): u(u), v(v), cap(cap), flow(0) {}
+};
+
+struct Dinic {
+  int N;
+  vector<Edge> E;
+  vector<vector<int>> g;
+  vector<int> d, pt;
+  
+  Dinic(int N): N(N), E(0), g(N), d(N), pt(N) {}
+
+  void AddEdge(int u, int v, LL cap) {
+    if (u != v) {
+      E.emplace_back(Edge(u, v, cap));
+      g[u].emplace_back(E.size() - 1);
+      E.emplace_back(Edge(v, u, 0));
+      g[v].emplace_back(E.size() - 1);
+    }
+  }
+
+  bool BFS(int S, int T) {
+    queue<int> q({S});
+    fill(d.begin(), d.end(), N + 1);
+    d[S] = 0;
+    while(!q.empty()) {
+      int u = q.front(); q.pop();
+      if (u == T) break;
+      for (int k: g[u]) {
+        Edge &e = E[k];
+        if (e.flow < e.cap && d[e.v] > d[e.u] + 1) {
+          d[e.v] = d[e.u] + 1;
+          q.emplace(e.v);
+        }
+      }
+    }
+    return d[T] != N + 1;
+  }
+
+  LL DFS(int u, int T, LL flow = -1) {
+    if (u == T || flow == 0) return flow;
+    for (int &i = pt[u]; i < g[u].size(); ++i) {
+      Edge &e = E[g[u][i]];
+      Edge &oe = E[g[u][i]^1];
+      if (d[e.v] == d[e.u] + 1) {
+        LL amt = e.cap - e.flow;
+        if (flow != -1 && amt > flow) amt = flow;
+        if (LL pushed = DFS(e.v, T, amt)) {
+          e.flow += pushed;
+          oe.flow -= pushed;
+          return pushed;
+        }
+      }
+    }
+    return 0;
+  }
+
+  LL MaxFlow(int S, int T) {
+    LL total = 0;
+    while (BFS(S, T)) {
+      fill(pt.begin(), pt.end(), 0);
+      while (LL flow = DFS(S, T))
+        total += flow;
+    }
+    return total;
+  }
+};
+
+// BEGIN CUT
+// The following code solves SPOJ problem #4110: Fast Maximum Flow (FASTFLOW)
+
 
 int main() {
-    vi wolf;
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int q;
+#ifdef TEST
+    q = 4;
+#else
+    cin  >> q;
+#endif
+    while(q--) {
+#ifdef TEST
+        n = 5000;
+        m = 5000;
+#else
+        cin >> n >> m;
+#endif
+        trace(n, m);
+        int s = n + m, t = n + m + 1;
+
+        Dinic dinic(t+1);
+        re(i, 1, n) {
+            int p;
+#ifdef TEST
+            p = rand() % i;
+#else
+            cin >> p; --p;
+#endif
+            dinic.AddEdge(p + m, i + m, mx_n);
+        }
+        fo(i, n) dinic.AddEdge(i + m, t, 1);
+        fo(i, m) {
+            int c, p;
+#ifdef TEST
+            c = 2;
+#else
+            cin >> c;
+#endif
+            fo(j, c) {
+#ifdef TEST
+                p = rand() % n;
+#else
+                cin  >> p;
+#endif
+                --p;
+                dinic.AddEdge(i, p + m, 1);
+            }
+            dinic.AddEdge(s, i, 1);
+        }
+
+
+        int ans = dinic.MaxFlow(s, t);
+        cout << ans << '\n';
+
+    }
+
     
     
 	return 0;
