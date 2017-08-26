@@ -76,8 +76,10 @@ template<typename H, typename ...T> void _dt(string u, H&& v, T&&... r) {
 
 template<typename T> 
 ostream &operator <<(ostream &o, vector<T> v) { // print a vector
+    o << "[";
     fo(i, si(v) - 1) o << v[i] << ", ";
     if(si(v)) o << v.back();
+    o << "]";
     return o;
 }
 
@@ -163,14 +165,73 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx = -1;
+constexpr int mx_n = 305;
+
+int dp[mx_n][mx_n], C[mx_n][mx_n];
+int k, cnt[mx_n], gaps[mx_n], fact[mx_n];
+int a[mx_n], n;
+
+int sqfree(int x) {
+    for(; x % 4 == 0; x /= 4);
+    for(int i = 3, si; (si = i * i) <= x; i += 2) {
+        for(; x % si == 0; x /= si);
+    }
+
+    return x;
+}
+
+void pre() {
+    fo(i, mx_n) {
+        C[i][0] = C[i][i] = 1;
+        rep(j, 1, i - 1) {
+            C[i][j] = C[i-1][j] + C[i-1][j-1];
+            if(C[i][j] >= mod) C[i][j] -= mod;
+        }
+    }
+
+    fact[0] = 1;
+    re(i, 1, mx_n) fact[i] = 1ll * i * fact[i-1] % mod;
+    //fo(i, mx_n) fo(j, mx_n) P[i][j] = 1ll * C[i][j] * fact[j] % mod;
+}
+
+int solve(int i, int b) {
+    if(i == k) return (b == 0? 1: 0);
+    int &ret = dp[i][b];
+    if(ret != -1) return ret;
+    ret = 0;
+
+    int g = gaps[i] - b;
+    for(int fi = 1; fi <= cnt[i]; ++fi) {
+        int oi = cnt[i] - fi;
+        for(int bi = 0; bi <= min(b, fi); ++bi) {
+            int gi = fi - bi;
+            int nb = (b - bi) + oi;
+            ret = (ret + 1ll * C[b][bi] * C[g][gi] % mod * C[cnt[i] - 1][fi - 1] % mod * solve(i + 1, nb)) % mod;
+        }
+    }
+    ret = 1ll * ret * fact[cnt[i]] % mod;
+
+    return ret;
+}
 
 int main() {
-    int n = 50;
-    vi t;
-    fo(i, n) t.push_back(rand() % 1000 + 1);
-    
-    cout << t << endl;
+    pre();
+    cin >> n;
+    map<int, int> sfree_cnt;
+    rep(i, 1, n) {
+        cin >> a[i];
+        ++sfree_cnt[sqfree(a[i])];
+    }
+    for(auto entry: sfree_cnt) cnt[k++] = entry.se;
+    trace(sfree_cnt);
+
+    gaps[0] = 1;
+    rep(i, 1, k) gaps[i] = gaps[i-1] + cnt[i-1];
+
+    ini(dp, -1);
+    cout << solve(0, 0) << endl;
+
+
     
 	return 0;
 }

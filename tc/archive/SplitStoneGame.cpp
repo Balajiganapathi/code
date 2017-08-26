@@ -145,19 +145,32 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx = -1;
+constexpr int mx_n = 55;
+int dp[mx_n][mx_n];
 
-class ILike5 {
+class SplitStoneGame {
 public:
-	int transformTheSequence( vector <int> X ) {
-		int ret = 0;
-        int has5 = false;
-        for(int x: X) {
-            if(x % 2 == 0) ++ret;
-            if(x % 10 == 5) has5 = true;
-        }
+    int solve(int ones, int twos) {
+        if(ones + twos <= 2 || twos == 0) return 0;
+        int &ret = dp[ones][twos];
+        if(ret != -1) return ret;
+        ret = 0;
+        if(ones >= 2 && !solve(ones - 2, twos - 1 + 2)) ret = 1;
+        if(ones >= 1 && twos >= 2 && !solve(ones - 1, twos - 1 + 1)) ret = 1;
+        if(twos >= 3 && !solve(ones, twos - 1)) ret = 1;
 
-        if(!has5 && ret == 0) ++ret;
+        return ret;
+    }
+
+	string winOrLose( vector <int> number ) {
+		string ret;
+        int n = si(number);
+        int ones = count(all(number), 1);
+        int twos = n - ones;
+        ini(dp, -1);
+
+        string results[] = {"LOSE", "WIN"};
+        ret = results[solve(ones, twos)];
 		
 		return ret;
 	}
@@ -201,7 +214,7 @@ namespace moj_harness {
 		}
 	}
 	
-	int verify_case(int casenum, const int &expected, const int &received, std::clock_t elapsed) { 
+	int verify_case(int casenum, const string &expected, const string &received, std::clock_t elapsed) { 
 		std::cerr << "Example " << casenum << "... "; 
 		
 		string verdict;
@@ -231,8 +244,8 @@ namespace moj_harness {
 		std::cerr << std::endl;
 		
 		if (verdict == "FAILED") {
-			std::cerr << "    Expected: " << expected << std::endl; 
-			std::cerr << "    Received: " << received << std::endl; 
+			std::cerr << "    Expected: \"" << expected << "\"" << std::endl; 
+			std::cerr << "    Received: \"" << received << "\"" << std::endl; 
 		}
 		
 		return verdict == "PASSED";
@@ -241,70 +254,70 @@ namespace moj_harness {
 	int run_test_case(int casenum__) {
 		switch (casenum__) {
 		case 0: {
-			int X[]                   = {5, 2, 8, 12};
-			int expected__            = 3;
+			int number[]              = {1, 1, 1};
+			string expected__         = "LOSE";
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			string received__         = SplitStoneGame().winOrLose(vector <int>(number, number + (sizeof number / sizeof number[0])));
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}
 		case 1: {
-			int X[]                   = {1555};
-			int expected__            = 0;
+			int number[]              = {2, 2};
+			string expected__         = "LOSE";
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			string received__         = SplitStoneGame().winOrLose(vector <int>(number, number + (sizeof number / sizeof number[0])));
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}
 		case 2: {
-			int X[]                   = {0, 10, 100, 1000, 10000};
-			int expected__            = 5;
+			int number[]              = {1, 1, 2};
+			string expected__         = "WIN";
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			string received__         = SplitStoneGame().winOrLose(vector <int>(number, number + (sizeof number / sizeof number[0])));
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}
 		case 3: {
-			int X[]                   = {1, 2, 2, 3, 3, 3, 4, 4, 4, 4};
-			int expected__            = 6;
+			int number[]              = {1, 2, 3, 4, 3, 2, 2, 4, 3, 1, 4, 4, 1, 2, 4, 4, 1, 4, 3, 1, 4, 2, 1};
+			string expected__         = "WIN";
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			string received__         = SplitStoneGame().winOrLose(vector <int>(number, number + (sizeof number / sizeof number[0])));
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}
 		case 4: {
-			int X[]                   = {7890, 4861, 65773, 3769, 4638, 46000, 548254, 36185, 115};
-			int expected__            = 4;
+			int number[]              = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 3, 1, 9, 1, 3, 1, 1, 1, 1, 1};
+			string expected__         = "LOSE";
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			string received__         = SplitStoneGame().winOrLose(vector <int>(number, number + (sizeof number / sizeof number[0])));
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}
 
 		// custom cases
 
 /*      case 5: {
-			int X[]                   = ;
-			int expected__            = ;
+			int number[]              = ;
+			string expected__         = ;
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			string received__         = SplitStoneGame().winOrLose(vector <int>(number, number + (sizeof number / sizeof number[0])));
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}*/
 /*      case 6: {
-			int X[]                   = ;
-			int expected__            = ;
+			int number[]              = ;
+			string expected__         = ;
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			string received__         = SplitStoneGame().winOrLose(vector <int>(number, number + (sizeof number / sizeof number[0])));
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}*/
 /*      case 7: {
-			int X[]                   = ;
-			int expected__            = ;
+			int number[]              = ;
+			string expected__         = ;
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			string received__         = SplitStoneGame().winOrLose(vector <int>(number, number + (sizeof number / sizeof number[0])));
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}*/
 		default:

@@ -147,17 +147,10 @@ constexpr auto mod = 1000000007;
 /* code */
 constexpr int mx = -1;
 
-class ILike5 {
+class LongMansionDiv1 {
 public:
-	int transformTheSequence( vector <int> X ) {
-		int ret = 0;
-        int has5 = false;
-        for(int x: X) {
-            if(x % 2 == 0) ++ret;
-            if(x % 10 == 5) has5 = true;
-        }
-
-        if(!has5 && ret == 0) ++ret;
+	long long minimalTime( vector <int> t, int sX, int sY, int eX, int eY ) {
+		long long ret;
 		
 		return ret;
 	}
@@ -201,7 +194,7 @@ namespace moj_harness {
 		}
 	}
 	
-	int verify_case(int casenum, const int &expected, const int &received, std::clock_t elapsed) { 
+	int verify_case(int casenum, const long long &expected, const long long &received, std::clock_t elapsed) { 
 		std::cerr << "Example " << casenum << "... "; 
 		
 		string verdict;
@@ -241,70 +234,102 @@ namespace moj_harness {
 	int run_test_case(int casenum__) {
 		switch (casenum__) {
 		case 0: {
-			int X[]                   = {5, 2, 8, 12};
-			int expected__            = 3;
+			int t[]                   = {5, 3, 10};
+			int sX                    = 2;
+			int sY                    = 0;
+			int eX                    = 2;
+			int eY                    = 2;
+			long long expected__      = 29;
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			long long received__      = LongMansionDiv1().minimalTime(vector <int>(t, t + (sizeof t / sizeof t[0])), sX, sY, eX, eY);
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}
 		case 1: {
-			int X[]                   = {1555};
-			int expected__            = 0;
+			int t[]                   = {5, 3, 10};
+			int sX                    = 0;
+			int sY                    = 2;
+			int eX                    = 0;
+			int eY                    = 0;
+			long long expected__      = 15;
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			long long received__      = LongMansionDiv1().minimalTime(vector <int>(t, t + (sizeof t / sizeof t[0])), sX, sY, eX, eY);
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}
 		case 2: {
-			int X[]                   = {0, 10, 100, 1000, 10000};
-			int expected__            = 5;
+			int t[]                   = {137, 200, 184, 243, 252, 113, 162};
+			int sX                    = 0;
+			int sY                    = 2;
+			int eX                    = 4;
+			int eY                    = 2;
+			long long expected__      = 1016;
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			long long received__      = LongMansionDiv1().minimalTime(vector <int>(t, t + (sizeof t / sizeof t[0])), sX, sY, eX, eY);
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}
 		case 3: {
-			int X[]                   = {1, 2, 2, 3, 3, 3, 4, 4, 4, 4};
-			int expected__            = 6;
+			int t[]                   = {995, 996, 1000, 997, 999, 1000, 997, 996, 1000, 996, 1000, 997, 999, 996, 1000, 998, 999, 995, 995, 998, 995, 998, 995, 997, 998, 996, 998, 996, 997, 1000, 998, 997, 995, 1000, 996, 997, 1000, 997, 997, 999, 998, 995, 999, 999, 1000, 1000, 998, 997, 995, 999};
+			int sX                    = 18;
+			int sY                    = 433156521;
+			int eX                    = 28;
+			int eY                    = 138238863;
+			long long expected__      = 293443080673LL;
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			long long received__      = LongMansionDiv1().minimalTime(vector <int>(t, t + (sizeof t / sizeof t[0])), sX, sY, eX, eY);
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}
 		case 4: {
-			int X[]                   = {7890, 4861, 65773, 3769, 4638, 46000, 548254, 36185, 115};
-			int expected__            = 4;
+			int t[]                   = {1};
+			int sX                    = 0;
+			int sY                    = 0;
+			int eX                    = 0;
+			int eY                    = 0;
+			long long expected__      = 1;
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			long long received__      = LongMansionDiv1().minimalTime(vector <int>(t, t + (sizeof t / sizeof t[0])), sX, sY, eX, eY);
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}
 
 		// custom cases
 
 /*      case 5: {
-			int X[]                   = ;
-			int expected__            = ;
+			int t[]                   = ;
+			int sX                    = ;
+			int sY                    = ;
+			int eX                    = ;
+			int eY                    = ;
+			long long expected__      = ;
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			long long received__      = LongMansionDiv1().minimalTime(vector <int>(t, t + (sizeof t / sizeof t[0])), sX, sY, eX, eY);
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}*/
 /*      case 6: {
-			int X[]                   = ;
-			int expected__            = ;
+			int t[]                   = ;
+			int sX                    = ;
+			int sY                    = ;
+			int eX                    = ;
+			int eY                    = ;
+			long long expected__      = ;
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			long long received__      = LongMansionDiv1().minimalTime(vector <int>(t, t + (sizeof t / sizeof t[0])), sX, sY, eX, eY);
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}*/
 /*      case 7: {
-			int X[]                   = ;
-			int expected__            = ;
+			int t[]                   = ;
+			int sX                    = ;
+			int sY                    = ;
+			int eX                    = ;
+			int eY                    = ;
+			long long expected__      = ;
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			long long received__      = LongMansionDiv1().minimalTime(vector <int>(t, t + (sizeof t / sizeof t[0])), sX, sY, eX, eY);
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}*/
 		default:

@@ -147,19 +147,21 @@ constexpr auto mod = 1000000007;
 /* code */
 constexpr int mx = -1;
 
-class ILike5 {
+class RelativeHeights {
 public:
-	int transformTheSequence( vector <int> X ) {
-		int ret = 0;
-        int has5 = false;
-        for(int x: X) {
-            if(x % 2 == 0) ++ret;
-            if(x % 10 == 5) has5 = true;
+	int countWays( vector <int> h ) {
+        set<vi> pos;
+        fo(i, si(h)) {
+            vector<pi> nh;
+            fo(j, si(h)) if(i != j) nh.emplace_back(h[j], -1);
+            fo(j, si(nh)) nh[j].se = j;
+            sort(all(nh));
+            vi idx(si(nh));
+            fo(i, si(nh)) idx[nh[i].se] = i;
+            pos.insert(idx);
         }
 
-        if(!has5 && ret == 0) ++ret;
-		
-		return ret;
+        return si(pos);
 	}
 };
 
@@ -241,70 +243,70 @@ namespace moj_harness {
 	int run_test_case(int casenum__) {
 		switch (casenum__) {
 		case 0: {
-			int X[]                   = {5, 2, 8, 12};
-			int expected__            = 3;
+			int h[]                   = {1,3,6,10,15,21};
+			int expected__            = 1;
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			int received__            = RelativeHeights().countWays(vector <int>(h, h + (sizeof h / sizeof h[0])));
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}
 		case 1: {
-			int X[]                   = {1555};
-			int expected__            = 0;
+			int h[]                   = {4,2,1,3};
+			int expected__            = 3;
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			int received__            = RelativeHeights().countWays(vector <int>(h, h + (sizeof h / sizeof h[0])));
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}
 		case 2: {
-			int X[]                   = {0, 10, 100, 1000, 10000};
-			int expected__            = 5;
-
-			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
-			return verify_case(casenum__, expected__, received__, clock()-start__);
-		}
-		case 3: {
-			int X[]                   = {1, 2, 2, 3, 3, 3, 4, 4, 4, 4};
+			int h[]                   = {6,2,352,43,5,44};
 			int expected__            = 6;
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			int received__            = RelativeHeights().countWays(vector <int>(h, h + (sizeof h / sizeof h[0])));
+			return verify_case(casenum__, expected__, received__, clock()-start__);
+		}
+		case 3: {
+			int h[]                   = {4,5,6,1,2,3};
+			int expected__            = 2;
+
+			std::clock_t start__      = std::clock();
+			int received__            = RelativeHeights().countWays(vector <int>(h, h + (sizeof h / sizeof h[0])));
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}
 		case 4: {
-			int X[]                   = {7890, 4861, 65773, 3769, 4638, 46000, 548254, 36185, 115};
-			int expected__            = 4;
+			int h[]                   = {10,9,7,5,3,1,8,6,4,2};
+			int expected__            = 9;
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			int received__            = RelativeHeights().countWays(vector <int>(h, h + (sizeof h / sizeof h[0])));
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}
 
 		// custom cases
 
 /*      case 5: {
-			int X[]                   = ;
+			int h[]                   = ;
 			int expected__            = ;
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			int received__            = RelativeHeights().countWays(vector <int>(h, h + (sizeof h / sizeof h[0])));
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}*/
 /*      case 6: {
-			int X[]                   = ;
+			int h[]                   = ;
 			int expected__            = ;
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			int received__            = RelativeHeights().countWays(vector <int>(h, h + (sizeof h / sizeof h[0])));
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}*/
 /*      case 7: {
-			int X[]                   = ;
+			int h[]                   = ;
 			int expected__            = ;
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			int received__            = RelativeHeights().countWays(vector <int>(h, h + (sizeof h / sizeof h[0])));
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}*/
 		default:

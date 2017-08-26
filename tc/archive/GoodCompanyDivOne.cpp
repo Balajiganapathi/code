@@ -145,19 +145,133 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx = -1;
+constexpr int mx_n = 33;
+typedef vector<int> VI;
+typedef vector<VI> VVI;
+typedef long long L;
+typedef vector<L> VL;
+typedef vector<VL> VVL;
+typedef pair<int, int> PII;
+typedef vector<PII> VPII;
+const L INF = numeric_limits<L>::max() / 4;
 
-class ILike5 {
+struct MinCostMaxFlow {
+    int N;
+    VVL cap, flow, cost;
+    VI found;
+    VL dist, pi, width;
+    VPII dad;
+    MinCostMaxFlow(int N) :
+        N(N), cap(N, VL(N)), flow(N, VL(N)), cost(N, VL(N)),
+        found(N), dist(N), pi(N), width(N), dad(N) {}
+    void AddEdge(int from, int to, L cap, L cost) {
+        //trace(from, to, cap, cost);
+        this->cap[from][to] = cap;
+        this->cost[from][to] = cost;
+    }
+    void Relax(int s, int k, L cap, L cost, int dir) {
+        L val = dist[s] + pi[s] - pi[k] + cost;
+        if (cap && val < dist[k]) {
+            dist[k] = val;
+            dad[k] = make_pair(s, dir);
+            width[k] = min(cap, width[s]);
+        }
+    }
+    L Dijkstra(int s, int t) {
+        fill(found.begin(), found.end(), false);
+        fill(dist.begin(), dist.end(), INF);
+        fill(width.begin(), width.end(), 0);
+        dist[s] = 0;
+        width[s] = INF;
+        while (s != -1) {
+            int best = -1;
+            found[s] = true;
+            for (int k = 0; k < N; k++) {
+                if (found[k]) continue;
+                Relax(s, k, cap[s][k] - flow[s][k], cost[s][k], 1);
+                Relax(s, k, flow[k][s], -cost[k][s], -1);
+                if (best == -1 || dist[k] < dist[best]) best = k;
+            }
+            s = best;
+        }
+        for (int k = 0; k < N; k++)
+            pi[k] = min(pi[k] + dist[k], INF);
+        return width[t];
+    }
+    pair<L, L> GetMaxFlow(int s, int t) {
+        L totflow = 0, totcost = 0;
+        while (L amt = Dijkstra(s, t)) {
+            totflow += amt;
+            for (int x = t; x != s; x = dad[x].first) {
+                if (dad[x].second == 1) {
+                    flow[dad[x].first][x] += amt;
+                    totcost += amt * cost[dad[x].first][x];
+                } else {
+                    flow[x][dad[x].first] -= amt;
+                    totcost -= amt * cost[x][dad[x].first];
+                }
+            }
+        }
+        return make_pair(totflow, totcost);
+    }
+};
+
+
+
+
+int dp[mx_n][mx_n];
+class GoodCompanyDivOne {
 public:
-	int transformTheSequence( vector <int> X ) {
-		int ret = 0;
-        int has5 = false;
-        for(int x: X) {
-            if(x % 2 == 0) ++ret;
-            if(x % 10 == 5) has5 = true;
+    vi tr;
+    vi ch[mx_n];
+    int n, m;
+
+    int solve(int i, int p) {
+        int &ret = dp[i][p];
+        if(ret != -1) return ret;
+        ret = 0;
+
+        ret += tr[p];
+
+        int cc = si(ch[i]);
+        int s = 1 + cc + m;
+        int t = s + 1;
+        MinCostMaxFlow mcmf(t+1);
+
+        if(cc+1 > m) return ret = oo;
+        fo(j, si(ch[i])) {
+            mcmf.AddEdge(s, j, 1, 0);
+            fo(k, m) {
+                mcmf.AddEdge(j, k + cc + 1, 1, solve(ch[i][j], k));
+            }
         }
 
-        if(!has5 && ret == 0) ++ret;
+        mcmf.AddEdge(s, cc+1, 1, 0);
+        fo(k, m) if(k != p) mcmf.AddEdge(cc+1, k + cc+1, 1, tr[k]);
+        fo(k, m) mcmf.AddEdge(k+cc+1, t, 1, 0);
+
+        auto res = mcmf.GetMaxFlow(s, t);
+        if(res.fi < cc+1) return ret = oo;
+        ret += res.se;
+
+        if(si(ch[i]) == 0) ret += tr[(p == 0? 1: 0)];
+
+        if(ret >= oo) ret = oo;
+
+        return ret;
+    }
+
+	int minimumCost( vector <int> superior, vector <int> training ) {
+		int ret = oo;
+        n = si(superior);
+        m = si(training); tr = training;
+        sort(all(tr));
+        fo(i, n) if(superior[i] != -1) ch[superior[i]].push_back(i);
+
+        ini(dp, -1);
+        fo(i, m) ret = min(ret, solve(0, i));
+        if(ret >= oo) ret = -1;
+
 		
 		return ret;
 	}
@@ -241,70 +355,69 @@ namespace moj_harness {
 	int run_test_case(int casenum__) {
 		switch (casenum__) {
 		case 0: {
-			int X[]                   = {5, 2, 8, 12};
+			int superior[]            = {-1};
+			int training[]            = {1, 2};
 			int expected__            = 3;
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			int received__            = GoodCompanyDivOne().minimumCost(vector <int>(superior, superior + (sizeof superior / sizeof superior[0])), vector <int>(training, training + (sizeof training / sizeof training[0])));
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}
 		case 1: {
-			int X[]                   = {1555};
-			int expected__            = 0;
+			int superior[]            = {-1, 0, 0};
+			int training[]            = {1, 2, 3};
+			int expected__            = 10;
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			int received__            = GoodCompanyDivOne().minimumCost(vector <int>(superior, superior + (sizeof superior / sizeof superior[0])), vector <int>(training, training + (sizeof training / sizeof training[0])));
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}
 		case 2: {
-			int X[]                   = {0, 10, 100, 1000, 10000};
-			int expected__            = 5;
+			int superior[]            = {-1, 0, 0, 0};
+			int training[]            = {1, 2, 3};
+			int expected__            = -1;
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			int received__            = GoodCompanyDivOne().minimumCost(vector <int>(superior, superior + (sizeof superior / sizeof superior[0])), vector <int>(training, training + (sizeof training / sizeof training[0])));
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}
 		case 3: {
-			int X[]                   = {1, 2, 2, 3, 3, 3, 4, 4, 4, 4};
-			int expected__            = 6;
+			int superior[]            = {-1, 0, 0, 2, 2, 2, 1, 1, 6, 0, 5, 4, 11, 10, 3, 6, 11, 7, 0, 2, 13, 14, 2, 10, 9, 11, 22, 10, 3};
+			int training[]            = {4, 2, 6, 6, 8, 3, 3, 1, 1, 5, 8, 6, 8, 2, 4};
+			int expected__            = 71;
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
-			return verify_case(casenum__, expected__, received__, clock()-start__);
-		}
-		case 4: {
-			int X[]                   = {7890, 4861, 65773, 3769, 4638, 46000, 548254, 36185, 115};
-			int expected__            = 4;
-
-			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			int received__            = GoodCompanyDivOne().minimumCost(vector <int>(superior, superior + (sizeof superior / sizeof superior[0])), vector <int>(training, training + (sizeof training / sizeof training[0])));
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}
 
 		// custom cases
 
-/*      case 5: {
-			int X[]                   = ;
+/*      case 4: {
+			int superior[]            = ;
+			int training[]            = ;
 			int expected__            = ;
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			int received__            = GoodCompanyDivOne().minimumCost(vector <int>(superior, superior + (sizeof superior / sizeof superior[0])), vector <int>(training, training + (sizeof training / sizeof training[0])));
+			return verify_case(casenum__, expected__, received__, clock()-start__);
+		}*/
+/*      case 5: {
+			int superior[]            = ;
+			int training[]            = ;
+			int expected__            = ;
+
+			std::clock_t start__      = std::clock();
+			int received__            = GoodCompanyDivOne().minimumCost(vector <int>(superior, superior + (sizeof superior / sizeof superior[0])), vector <int>(training, training + (sizeof training / sizeof training[0])));
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}*/
 /*      case 6: {
-			int X[]                   = ;
+			int superior[]            = ;
+			int training[]            = ;
 			int expected__            = ;
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
-			return verify_case(casenum__, expected__, received__, clock()-start__);
-		}*/
-/*      case 7: {
-			int X[]                   = ;
-			int expected__            = ;
-
-			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			int received__            = GoodCompanyDivOne().minimumCost(vector <int>(superior, superior + (sizeof superior / sizeof superior[0])), vector <int>(training, training + (sizeof training / sizeof training[0])));
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}*/
 		default:

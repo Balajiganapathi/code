@@ -76,8 +76,10 @@ template<typename H, typename ...T> void _dt(string u, H&& v, T&&... r) {
 
 template<typename T> 
 ostream &operator <<(ostream &o, vector<T> v) { // print a vector
+    o << "[";
     fo(i, si(v) - 1) o << v[i] << ", ";
     if(si(v)) o << v.back();
+    o << "]";
     return o;
 }
 
@@ -163,15 +165,30 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx = -1;
+constexpr int mx_a = 1000006, mx_n = 200005;
+int n, a[mx_n];
+int ca[mx_a], cnt[mx_a], ans[mx_a];
 
 int main() {
-    int n = 50;
-    vi t;
-    fo(i, n) t.push_back(rand() % 1000 + 1);
+    cin >> n;
+    fo(i, n) {
+        cin >> a[i];
+        ++ca[a[i]];
+    }
     
-    cout << t << endl;
+    for(int i = mx_a - 1; i >= 1; --i) {
+        for(int j = i; j < mx_a; j += i) cnt[i] += ca[j];
+    }
+
+    int sum = 0;
+    for(int i = mx_a - 1; i >= 2; --i) if(cnt[i]) {
+        ans[i] = 1ll * cnt[i] * modpow(2, cnt[i] - 1, mod) % mod;
+        for(int j = i + i; j < mx_a; j += i) ans[i] = (ans[i] + mod - ans[j]) % mod;
+        sum = (sum + 1ll * i * ans[i]) % mod;
+    }
+    cout << sum << endl;
     
+
 	return 0;
 }
 

@@ -76,8 +76,10 @@ template<typename H, typename ...T> void _dt(string u, H&& v, T&&... r) {
 
 template<typename T> 
 ostream &operator <<(ostream &o, vector<T> v) { // print a vector
+    o << "[";
     fo(i, si(v) - 1) o << v[i] << ", ";
     if(si(v)) o << v.back();
+    o << "]";
     return o;
 }
 
@@ -163,14 +165,51 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx = -1;
+constexpr int mx_n = 1003;
+int b[mx_n][mx_n], a[mx_n], n;
+int q, p;
+
+void solve() {
+
+    a[0] = 0;
+    int l = -1;
+    re(i, 1, n) {
+        if(b[0][i] == 0) {
+            a[i] = 0;
+            continue;
+        }
+        if(l == -1) {
+            a[i] = -b[0][i];
+            l = i;
+            continue;
+        }
+        if(abs(-b[0][i] - a[l]) != b[l][i]) a[i] = b[0][i];
+        else a[i] = -b[0][i];
+        trace(i, l, a[i]);
+        assert(b[l][i] == abs(a[i] - a[l]));
+    }
+
+    fo(i, n) cout << a[i] << " ";
+    cout << '\n';
+}
 
 int main() {
-    int n = 50;
-    vi t;
-    fo(i, n) t.push_back(rand() % 1000 + 1);
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    cin >> n >> q;
+    fo(i, n) fo(j, n) cin >> b[i][j];
     
-    cout << t << endl;
+    solve();
+    while(q--) {
+        cin >> p;
+        --p;
+        fo(i, n) {
+            cin >> b[p][i];
+            b[i][p] = b[p][i];
+        }
+        solve();
+    }
     
 	return 0;
 }

@@ -76,8 +76,10 @@ template<typename H, typename ...T> void _dt(string u, H&& v, T&&... r) {
 
 template<typename T> 
 ostream &operator <<(ostream &o, vector<T> v) { // print a vector
+    o << "[";
     fo(i, si(v) - 1) o << v[i] << ", ";
     if(si(v)) o << v.back();
+    o << "]";
     return o;
 }
 
@@ -165,12 +167,53 @@ constexpr auto mod = 1000000007;
 /* code */
 constexpr int mx = -1;
 
+void putmin(int &n, int &c) {
+    int m = min(n, c);
+    n -= m; c -= m;
+}
+
 int main() {
-    int n = 50;
-    vi t;
-    fo(i, n) t.push_back(rand() % 1000 + 1);
+    int c4 = 0, c2 = 0, n, k, a;
+    cin >> n  >> k;
+    bool ok = true;
+    int odd = 0;
+    int others = 0;
+    int n1, n2, n3, n4;
+    n1 = n2 = n3 = n4 = 0;
+    fo(i, k) {
+        cin >> a;
+
+        n4 += a / 4;
+        if(a % 4 == 3) ++n3;
+        else if(a % 4 == 2) ++n2;
+        else if(a % 4 == 1) ++n1;
+    }
+
+    c4 = n, c2 = 2 * n;
+    trace(n1, n2, n3, n4, c2, c4);
+    n2 += 2 * n4; n4 = 0;
+    n2 += n3; n1 += n3; n3 = 0;
+    trace(n1, n2, n3, n4, c2, c4);
+    putmin(n2, c2);
+    trace(n1, n2, n3, n4, c2, c4);
+    putmin(n1, c2);
+    trace(n1, n2, n3, n4, c2, c4);
+    int m = min(n2, c4);
+    n2 -= m; c4 -= m;
+    trace(n1, n2, n3, n4, c2, c4);
+    c2 += m + 2 * c4;
+    n1 += 2 * n2; n2 = 0;
+    putmin(n1, c2);
+    trace(n1, n2, n3, n4, c2, c4);
+
+    trace(n1, n2, n3, n4, c2, c4);
+    if(n1 + n2 + n3 + n4 > 0) ok = false;
+
+    // At this point, you can't help but wonder how does Dany come by an airplane? 
+    // Where will they get the fuel? Won't the dragons be jealous of the airplane?
+
+    cout << (ok? "YES": "NO") << endl;
     
-    cout << t << endl;
     
 	return 0;
 }

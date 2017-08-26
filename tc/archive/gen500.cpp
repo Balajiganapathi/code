@@ -166,11 +166,16 @@ constexpr auto mod = 1000000007;
 constexpr int mx = -1;
 
 int main() {
-    int n = 50;
-    vi t;
-    fo(i, n) t.push_back(rand() % 1000 + 1);
+    int n = 1000;
+    vi par, pl;
+    fo(i, n - 1) {
+        par.push_back(rand() % (i+1));
+    }
+    fo(i, n) pl.push_back(rand() % 2000001 - 1000000);
+    cout << par << endl;
+    cout << pl << endl;
+
     
-    cout << t << endl;
     
 	return 0;
 }

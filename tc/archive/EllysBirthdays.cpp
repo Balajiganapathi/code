@@ -145,21 +145,41 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx = -1;
+constexpr int mx_f = 5000, mx_n = 22;
+using ld = long double;
+ld dp[2][400][mx_n];
 
-class ILike5 {
+class EllysBirthdays {
 public:
-	int transformTheSequence( vector <int> X ) {
-		int ret = 0;
-        int has5 = false;
-        for(int x: X) {
-            if(x % 2 == 0) ++ret;
-            if(x % 10 == 5) has5 = true;
+    int n;
+    ld solve(int d, int f, int x) {
+        if(f < 0 || d < 0 || x >= n) return 0;
+        if(d == 0) return (f > 0? 0: 1);
+        return dp[f&1][d][x];
+    }
+
+    bool ok(int f) {
+        rep(d, 1, 365) fo(x, n) {
+            dp[f&1][d][x] = solve(d-1, f, 0) + 1.0 * solve(d, f - 1, x + 1) * f / 365.0 / (x+1);
+
+        }
+        //trace(n, f, dp[f&1][365][0]);
+        return dp[f&1][365][0] * 2 < 1 - eps;
+    }
+
+    int solve(int _n) {
+        int ret;
+        for(ret = 0; !ok(ret); ++ret);
+        return ret;
+    }
+
+	int numFriends( int N ) {
+        for(n = 1; n <= 20; ++n) {
+            ini(dp, 0);
+            trace(n, solve(n));
         }
 
-        if(!has5 && ret == 0) ++ret;
-		
-		return ret;
+        return -1;
 	}
 };
 
@@ -241,70 +261,62 @@ namespace moj_harness {
 	int run_test_case(int casenum__) {
 		switch (casenum__) {
 		case 0: {
-			int X[]                   = {5, 2, 8, 12};
-			int expected__            = 3;
+			int N                     = 2;
+			int expected__            = 23;
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			int received__            = EllysBirthdays().numFriends(N);
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}
 		case 1: {
-			int X[]                   = {1555};
-			int expected__            = 0;
+			int N                     = 3;
+			int expected__            = 88;
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			int received__            = EllysBirthdays().numFriends(N);
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}
 		case 2: {
-			int X[]                   = {0, 10, 100, 1000, 10000};
-			int expected__            = 5;
+			int N                     = 8;
+			int expected__            = 798;
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			int received__            = EllysBirthdays().numFriends(N);
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}
 		case 3: {
-			int X[]                   = {1, 2, 2, 3, 3, 3, 4, 4, 4, 4};
-			int expected__            = 6;
+			int N                     = 15;
+			int expected__            = 2263;
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
-			return verify_case(casenum__, expected__, received__, clock()-start__);
-		}
-		case 4: {
-			int X[]                   = {7890, 4861, 65773, 3769, 4638, 46000, 548254, 36185, 115};
-			int expected__            = 4;
-
-			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			int received__            = EllysBirthdays().numFriends(N);
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}
 
 		// custom cases
 
-/*      case 5: {
-			int X[]                   = ;
+/*      case 4: {
+			int N                     = ;
 			int expected__            = ;
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			int received__            = EllysBirthdays().numFriends(N);
+			return verify_case(casenum__, expected__, received__, clock()-start__);
+		}*/
+/*      case 5: {
+			int N                     = ;
+			int expected__            = ;
+
+			std::clock_t start__      = std::clock();
+			int received__            = EllysBirthdays().numFriends(N);
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}*/
 /*      case 6: {
-			int X[]                   = ;
+			int N                     = ;
 			int expected__            = ;
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
-			return verify_case(casenum__, expected__, received__, clock()-start__);
-		}*/
-/*      case 7: {
-			int X[]                   = ;
-			int expected__            = ;
-
-			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			int received__            = EllysBirthdays().numFriends(N);
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}*/
 		default:

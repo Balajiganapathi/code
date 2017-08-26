@@ -143,95 +143,16 @@ constexpr auto PI  = 3.14159265358979323846L;
 constexpr auto oo  = numeric_limits<int>::max() / 2 - 2;
 constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
-#define MAXN 65536
-#define MAXLG 17
-
 
 /* code */
-constexpr int mx_n = 2003;
-int dp[mx_n][2];
-char A[MAXN];
-
-struct entry
-{
-    int nr[2];
-    int p;
-} L[MAXN];
-
-int P[MAXLG][MAXN];
-
-void build() {
-    int N,i;
-    int stp, cnt;
-    for(N=strlen(A), i = 0; i < N; i++)
-        P[0][i] = A[i] - 'a';
-
-    for(stp=1, cnt = 1; cnt < N; stp++, cnt *= 2)
-    {
-        for(i=0; i < N; i++)
-        {
-            L[i].nr[0]=P[stp- 1][i];
-            L[i].nr[1]=i +cnt <N? P[stp -1][i+ cnt]:-1;
-            L[i].p= i;
-        }
-        sort(L, L+N, cmp);
-        for(i=0; i < N; i++)
-            P[stp][L[i].p] =i> 0 && L[i].nr[0]==L[i-1].nr[0] && L[i].nr[1] == L[i- 1].nr[1] ? P[stp][L[i-1].p] : i;
-    }
-
-    int cmp(struct entry a, struct entry b)
-    {
-        return a.nr[0]==b.nr[0] ?(a.nr[1]<b.nr[1] ?1: 0): (a.nr[0]<b.nr[0] ?1: 0);
-    }
-}
-
-
-bool ispalin(int i, int j) {
-    int n = N / 2;
-    int a = n+(n-1-i), b = n+(n-1-j);
-    for(int l = MAXLG - 1; l >= 0; --l) if(i + (1 << l) -1 <= j) {
-    }
-}
-
-
+constexpr int mx = -1;
 
 class ConsecutivePalindromes {
 public:
-    string s;
-    int solve(int i, int p) {
-        if(i >= si(s)) return p;
-        int &ret = dp[i][p];
-        if(ret != -1) return ret;
-        ret = 0;
-
-        // skip i
-
-        ret += solve(i+1, p);
-        if(ret >= mod) ret -= mod;
-
-        if(!p) {
-            for(int j = i+1; j < si(s); ++j) {
-                if(ispalin(i, j)) ret += solve(j + 2, 1);
-            }
-        } else {
-            ret += solve(i+1, p);
-            if(ret >= mod) ret -= mod;
-        }
-
-        return ret;
-    }
-
 	int countStrings( string S ) {
-        s = S;
-        N = 2 * si(s) + 1;
-        fo(i, si(s)) A[i] = s[i];
-        A[si(s)] = '$';
-        rep(i, si(s)) A[N+1+i] = s[si(s) - 1 - i]; 
-        A[N] = 0;
-        build();
-        ini(dp, -1);
-
-        return solve(0, 0);
+		int ret;
+		
+		return ret;
 	}
 };
 

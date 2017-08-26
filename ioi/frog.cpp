@@ -76,8 +76,10 @@ template<typename H, typename ...T> void _dt(string u, H&& v, T&&... r) {
 
 template<typename T> 
 ostream &operator <<(ostream &o, vector<T> v) { // print a vector
+    o << "[";
     fo(i, si(v) - 1) o << v[i] << ", ";
     if(si(v)) o << v.back();
+    o << "]";
     return o;
 }
 
@@ -163,14 +165,66 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx = -1;
+constexpr int mx_n = 5003;
+using index_t = tuple<int, int, int, int>;
+int n, r, c;
+pi pts[mx_n];
+
+int calcReq(int x, int y, int dx, int dy) {
+    int ret = oo;
+    if(dx) ret = min(ret, (r-x)/dx+1);
+    if(dy) {
+        if(dy >= 0) ret = min(ret, (c-y)/dy+1);
+        else ret = min(ret, (y-1)/abs(dy)+1);
+    }
+    trace(x, y, dx, dy, ret);
+
+    return ret;
+}
+
+bitset<mx_n> dp[mx_n];
 
 int main() {
-    int n = 50;
-    vi t;
-    fo(i, n) t.push_back(rand() % 1000 + 1);
+    cin >> r >> c >> n;
+    fo(i, n) cin >> pts[i].fi >> pts[i].se;
+    sort(pts, pts + n);
+
+    for(int i = n - 1; i >= 0; --i) {
+        int k = i+2;
+        re(j, i+1, n) {
+            dp[i][j] = 0;
+            int dx = pts[j].fi - pts[i].fi;
+            int dy = pts[j].se - pts[i].se;
+            pi np(pts[j].fi + dx, pts[j].se + dy);
+            //k = lower_bound(pts, pts + n, np) - pts;
+            //if(k < n && pts[k] == np) dp[i][j] = dp[j][k];
+
+            for(; k < n; ++k) {
+                int cx = pts[k].fi - pts[j].fi;
+                int cy = pts[k].se - pts[j].se;
+
+                if(cx > dx || (cx == dx && cy > dy)) break;
+                if(cx == dx && cy == dy) dp[i][j] = dp[j][k];
+            }
+
+            if(np.fi > r || np.se > c || np.se <= 0) dp[i][j] = 1;
+            if(dp[i][j]) trace(i, j, k, pts[i], pts[j]);
+        }
+    }
+
+    int ans = 0;
+    fo(i, n) re(j, i + 1, n) if(dp[i][j]) {
+        int dx = pts[j].fi - pts[i].fi;
+        int dy = pts[j].se - pts[i].se;
+        pi np(pts[i].fi - dx, pts[i].se - dy);
+        if(np.fi <= 0 || np.se <= 0 || np.se > c) {
+            int cur = calcReq(pts[i].fi, pts[i].se, dx, dy);
+            trace(i, j, pts[i], pts[j], cur);
+            if(cur > 2) ans = max(ans, cur);
+        }
+    }
     
-    cout << t << endl;
+    cout << ans << endl;
     
 	return 0;
 }

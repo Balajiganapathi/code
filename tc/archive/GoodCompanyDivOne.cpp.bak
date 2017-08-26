@@ -147,17 +147,10 @@ constexpr auto mod = 1000000007;
 /* code */
 constexpr int mx = -1;
 
-class ILike5 {
+class GoodCompanyDivOne {
 public:
-	int transformTheSequence( vector <int> X ) {
-		int ret = 0;
-        int has5 = false;
-        for(int x: X) {
-            if(x % 2 == 0) ++ret;
-            if(x % 10 == 5) has5 = true;
-        }
-
-        if(!has5 && ret == 0) ++ret;
+	int minimumCost( vector <int> superior, vector <int> training ) {
+		int ret;
 		
 		return ret;
 	}
@@ -241,70 +234,69 @@ namespace moj_harness {
 	int run_test_case(int casenum__) {
 		switch (casenum__) {
 		case 0: {
-			int X[]                   = {5, 2, 8, 12};
+			int superior[]            = {-1};
+			int training[]            = {1, 2};
 			int expected__            = 3;
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			int received__            = GoodCompanyDivOne().minimumCost(vector <int>(superior, superior + (sizeof superior / sizeof superior[0])), vector <int>(training, training + (sizeof training / sizeof training[0])));
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}
 		case 1: {
-			int X[]                   = {1555};
-			int expected__            = 0;
+			int superior[]            = {-1, 0, 0};
+			int training[]            = {1, 2, 3};
+			int expected__            = 10;
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			int received__            = GoodCompanyDivOne().minimumCost(vector <int>(superior, superior + (sizeof superior / sizeof superior[0])), vector <int>(training, training + (sizeof training / sizeof training[0])));
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}
 		case 2: {
-			int X[]                   = {0, 10, 100, 1000, 10000};
-			int expected__            = 5;
+			int superior[]            = {-1, 0, 0, 0};
+			int training[]            = {1, 2, 3};
+			int expected__            = -1;
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			int received__            = GoodCompanyDivOne().minimumCost(vector <int>(superior, superior + (sizeof superior / sizeof superior[0])), vector <int>(training, training + (sizeof training / sizeof training[0])));
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}
 		case 3: {
-			int X[]                   = {1, 2, 2, 3, 3, 3, 4, 4, 4, 4};
-			int expected__            = 6;
+			int superior[]            = {-1, 0, 0, 2, 2, 2, 1, 1, 6, 0, 5, 4, 11, 10, 3, 6, 11, 7, 0, 2, 13, 14, 2, 10, 9, 11, 22, 10, 3};
+			int training[]            = {4, 2, 6, 6, 8, 3, 3, 1, 1, 5, 8, 6, 8, 2, 4};
+			int expected__            = 71;
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
-			return verify_case(casenum__, expected__, received__, clock()-start__);
-		}
-		case 4: {
-			int X[]                   = {7890, 4861, 65773, 3769, 4638, 46000, 548254, 36185, 115};
-			int expected__            = 4;
-
-			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			int received__            = GoodCompanyDivOne().minimumCost(vector <int>(superior, superior + (sizeof superior / sizeof superior[0])), vector <int>(training, training + (sizeof training / sizeof training[0])));
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}
 
 		// custom cases
 
-/*      case 5: {
-			int X[]                   = ;
+/*      case 4: {
+			int superior[]            = ;
+			int training[]            = ;
 			int expected__            = ;
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			int received__            = GoodCompanyDivOne().minimumCost(vector <int>(superior, superior + (sizeof superior / sizeof superior[0])), vector <int>(training, training + (sizeof training / sizeof training[0])));
+			return verify_case(casenum__, expected__, received__, clock()-start__);
+		}*/
+/*      case 5: {
+			int superior[]            = ;
+			int training[]            = ;
+			int expected__            = ;
+
+			std::clock_t start__      = std::clock();
+			int received__            = GoodCompanyDivOne().minimumCost(vector <int>(superior, superior + (sizeof superior / sizeof superior[0])), vector <int>(training, training + (sizeof training / sizeof training[0])));
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}*/
 /*      case 6: {
-			int X[]                   = ;
+			int superior[]            = ;
+			int training[]            = ;
 			int expected__            = ;
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
-			return verify_case(casenum__, expected__, received__, clock()-start__);
-		}*/
-/*      case 7: {
-			int X[]                   = ;
-			int expected__            = ;
-
-			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			int received__            = GoodCompanyDivOne().minimumCost(vector <int>(superior, superior + (sizeof superior / sizeof superior[0])), vector <int>(training, training + (sizeof training / sizeof training[0])));
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}*/
 		default:

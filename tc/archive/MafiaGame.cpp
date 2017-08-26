@@ -35,7 +35,6 @@ using ll  = long long int;
 #define si(x)           (int((x).size()))
 #define is1(mask,i)     (((mask) >> i) & 1)
 
-// BEGIN CUT HERE
 /* trace macro */
 #ifdef TRACE
 #   define trace(v...)  {cerr << __func__ << ":" << __LINE__ << ": " ;_dt(#v, v);}
@@ -43,6 +42,7 @@ using ll  = long long int;
 #   define trace(...)
 #endif
 
+// BEGIN CUT HERE
 #ifdef TRACE
 pi _gp(string s) {
     pi r(0, si(s) - 1);
@@ -147,23 +147,89 @@ constexpr auto mod = 1000000007;
 /* code */
 constexpr int mx = -1;
 
-class ILike5 {
+class MafiaGame {
 public:
-	int transformTheSequence( vector <int> X ) {
-		int ret = 0;
-        int has5 = false;
-        for(int x: X) {
-            if(x % 2 == 0) ++ret;
-            if(x % 10 == 5) has5 = true;
+    vi d;
+    int n;
+
+    tuple<vi, double> simulate(vi cur, int x) {
+        double p = 1;
+        vi nxt, votes(n);
+        vi pre(n, 0);
+        for(int x: cur) pre[x] = 1;
+        int und = n - si(d);
+        for(int x: d) {
+            if(pre[x]) ++votes[x];
+            else ++und;
         }
 
-        if(!has5 && ret == 0) ++ret;
+        vector<vi> cvotes(n+1);
+        for(int i: cur) cvotes[votes[i]].push_back(i);
+
+        trace(und, cvotes);
+        fo(v, n + 1) if(!cvotes[v].empty()) {
+            if(und == 0) break;
+            if(und < si(cvotes[v])) {
+                auto it = find(all(cvotes[v]), x);
+                if(it != cvotes[v].end()) {
+                    p *= 1.0 * und / si(cvotes[v]);
+                    swap(*it, *cvotes[v].begin());
+                }
+                move(cvotes[v].begin(), cvotes[v].begin() + und, back_inserter(cvotes[v+1]));
+                cvotes[v].clear();
+                und = 0;
+            } else {
+                und -= si(cvotes[v]);
+                move(all(cvotes[v]), back_inserter(cvotes[v+1]));
+                cvotes[v].clear();
+            }
+        }
+
+        for(int i = n; i >= 0; --i) if(!cvotes[i].empty()) {
+            nxt = move(cvotes[i]);
+            break;
+        }
+
+        if(find(all(nxt), x) == nxt.end()) return mt(nxt, 0.0);
+        return mt(nxt, p);
+    }
+
+    double solve(int x) {
+        vi cur;
+        fo(i, n) cur.push_back(i);
+        int rem = si(cur);
+        double ret = 1.0;
+
+        trace(x);
+        do {
+            double cp;
+            tie(cur, cp) = simulate(cur, x);
+            trace(cur, cp);
+            if(rem == si(cur)) return 0;
+            ret *= cp;
+            rem = si(cur);
+        } while(rem != 1);
+
+        return ret;
+    }
+
+	double probabilityToLose( int N, vector <int> decisions ) {
+		double ret = 0;
+        d = decisions;
+        n = N;
+        fo(i, n) {
+            double cp = solve(i);
+            trace(i, cp);
+            ret = max(ret, cp);
+        }
 		
 		return ret;
 	}
 };
 
 // BEGIN CUT HERE
+#include <algorithm>
+#include <cmath>
 #include <cstdio>
 #include <ctime>
 #include <iostream>
@@ -201,7 +267,34 @@ namespace moj_harness {
 		}
 	}
 	
-	int verify_case(int casenum, const int &expected, const int &received, std::clock_t elapsed) { 
+	static const double MAX_DOUBLE_ERROR = 1e-9;
+	static bool topcoder_fequ(double expected, double result) {
+		if (std::isnan(expected)) {
+			return std::isnan(result);
+		} else if (std::isinf(expected)) {
+			if (expected > 0) {
+				return result > 0 && std::isinf(result);
+			} else {
+				return result < 0 && std::isinf(result);
+			}
+		} else if (std::isnan(result) || std::isinf(result)) {
+			return false;
+		} else if (std::fabs(result - expected) < MAX_DOUBLE_ERROR) {
+			return true;
+		} else {
+			double mmin = std::min(expected * (1.0 - MAX_DOUBLE_ERROR), expected * (1.0 + MAX_DOUBLE_ERROR));
+			double mmax = std::max(expected * (1.0 - MAX_DOUBLE_ERROR), expected * (1.0 + MAX_DOUBLE_ERROR));
+			return result > mmin && result < mmax;
+		}
+	}
+	double moj_relative_error(double expected, double result) {
+		if (std::isnan(expected) || std::isinf(expected) || std::isnan(result) || std::isinf(result) || expected == 0) {
+			return 0;
+		}
+		return std::fabs(result-expected) / std::fabs(expected);
+	}
+	
+	int verify_case(int casenum, const double &expected, const double &received, std::clock_t elapsed) { 
 		std::cerr << "Example " << casenum << "... "; 
 		
 		string verdict;
@@ -213,8 +306,13 @@ namespace moj_harness {
 			info.push_back(buf);
 		}
 		
-		if (expected == received) {
+		if (topcoder_fequ(expected, received)) {
 			verdict = "PASSED";
+			double rerr = moj_relative_error(expected, received); 
+			if (rerr > 0) {
+				std::sprintf(buf, "relative error %.3e", rerr);
+				info.push_back(buf);
+			}
 		} else {
 			verdict = "FAILED";
 		}
@@ -241,70 +339,69 @@ namespace moj_harness {
 	int run_test_case(int casenum__) {
 		switch (casenum__) {
 		case 0: {
-			int X[]                   = {5, 2, 8, 12};
-			int expected__            = 3;
+			int N                     = 3;
+			int decisions[]           = {1, 1, 1};
+			double expected__         = 1.0;
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			double received__         = MafiaGame().probabilityToLose(N, vector <int>(decisions, decisions + (sizeof decisions / sizeof decisions[0])));
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}
 		case 1: {
-			int X[]                   = {1555};
-			int expected__            = 0;
+			int N                     = 5;
+			int decisions[]           = {1, 2, 3};
+			double expected__         = 0.0;
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			double received__         = MafiaGame().probabilityToLose(N, vector <int>(decisions, decisions + (sizeof decisions / sizeof decisions[0])));
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}
 		case 2: {
-			int X[]                   = {0, 10, 100, 1000, 10000};
-			int expected__            = 5;
+			int N                     = 20;
+			int decisions[]           = {1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7, 18, 19, 0};
+			double expected__         = 0.0;
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			double received__         = MafiaGame().probabilityToLose(N, vector <int>(decisions, decisions + (sizeof decisions / sizeof decisions[0])));
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}
 		case 3: {
-			int X[]                   = {1, 2, 2, 3, 3, 3, 4, 4, 4, 4};
-			int expected__            = 6;
+			int N                     = 23;
+			int decisions[]           = {17, 10, 3, 14, 22, 5, 11, 10, 22, 3, 14, 5, 11, 17};
+			double expected__         = 0.14285714285714285;
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
-			return verify_case(casenum__, expected__, received__, clock()-start__);
-		}
-		case 4: {
-			int X[]                   = {7890, 4861, 65773, 3769, 4638, 46000, 548254, 36185, 115};
-			int expected__            = 4;
-
-			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			double received__         = MafiaGame().probabilityToLose(N, vector <int>(decisions, decisions + (sizeof decisions / sizeof decisions[0])));
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}
 
 		// custom cases
 
-/*      case 5: {
-			int X[]                   = ;
-			int expected__            = ;
+      case 4: {
+			int N                     = 5;
+			int decisions[]           = {1, 1, 2, 2, 3};
+			double expected__         = .5;
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			double received__         = MafiaGame().probabilityToLose(N, vector <int>(decisions, decisions + (sizeof decisions / sizeof decisions[0])));
+			return verify_case(casenum__, expected__, received__, clock()-start__);
+		}
+/*      case 5: {
+			int N                     = ;
+			int decisions[]           = ;
+			double expected__         = ;
+
+			std::clock_t start__      = std::clock();
+			double received__         = MafiaGame().probabilityToLose(N, vector <int>(decisions, decisions + (sizeof decisions / sizeof decisions[0])));
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}*/
 /*      case 6: {
-			int X[]                   = ;
-			int expected__            = ;
+			int N                     = ;
+			int decisions[]           = ;
+			double expected__         = ;
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
-			return verify_case(casenum__, expected__, received__, clock()-start__);
-		}*/
-/*      case 7: {
-			int X[]                   = ;
-			int expected__            = ;
-
-			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			double received__         = MafiaGame().probabilityToLose(N, vector <int>(decisions, decisions + (sizeof decisions / sizeof decisions[0])));
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}*/
 		default:

@@ -145,19 +145,105 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx = -1;
+constexpr int mx_p = (1 << 10) + 10;
 
-class ILike5 {
+int vis[mx_p][mx_p];
+vector<tuple<int, int, int>> to_add;
+queue<tuple<int, int, int>> q;
+
+void add(ll d, int x, int y) {
+    if(vis[x][y]) return;
+    to_add.emplace_back(d, x, y);
+    vis[x][y] = 1;
+}
+
+
+
+class DistantPoints {
 public:
-	int transformTheSequence( vector <int> X ) {
-		int ret = 0;
-        int has5 = false;
-        for(int x: X) {
-            if(x % 2 == 0) ++ret;
-            if(x % 10 == 5) has5 = true;
+    void gen(int n) {
+        if(n == 1) {
+            to_add = {mt(1, 1, 1)};
+            return;
         }
 
-        if(!has5 && ret == 0) ++ret;
+        to_add.clear();;
+        while(!q.empty()) q.pop();
+        ini(vis, 0);
+        int sz = (1 << n);
+        to_add.reserve(sz * sz);
+
+        add(oo, 1, 1);
+        add(8 * sz * sz, sz + 1, sz + 1);
+        add(4 * sz * sz, 1, sz + 1);
+        add(4 * sz * sz, sz + 1, 1);
+
+        q.emplace(1, 1, (1 << n));
+
+        while(!q.empty()) {
+            int ox, oy, s;
+            //trace(q.front());
+            tie(ox, oy, s) = q.front(); q.pop();
+            if(s == 1) continue;
+
+            add(2 * s * s, ox + s/2, oy + s/2);
+            add(1 * s * s, ox + 0, oy + s/2);
+            add(1 * s * s, ox + s/2, oy + 0);
+            add(1 * s * s, ox + s/2, oy + s);
+            add(1 * s * s, ox + s, oy + s/2);
+
+            if(s > 2) {
+                q.emplace(ox, oy, s/2);
+                q.emplace(ox, oy+s/2, s/2);
+                q.emplace(ox+s/2, oy, s/2);
+                q.emplace(ox+s/2, oy+s/2, s/2);
+            }
+        }
+
+        //trace(to_add);
+        for(auto &entry: to_add) gt(entry, 0) *= -1;
+        sort(all(to_add));
+    }
+    vector<pi> solve(int n, int till) {
+        vector<pi> pts;
+        set<pi> done;
+        pts.emplace_back(1, 1);
+        done.emplace(1, 1);
+
+        while(si(pts) < till) {
+            int x = -1, y = -1;
+            ll dist = 0;
+
+            re(i, 1, (1 << n) + 2) re(j, 1, (1 << n) + 2) if(!done.count(mp(i, j))) {
+                ll cur = -1;
+                for(auto p: pts) {
+                    ll d = 1ll * (i - p.fi) * (i - p.fi) + 1ll * (j - p.se) * (j - p.se);
+                    if(cur == -1 || cur > d) cur = d;
+                }
+                if(cur > dist) {
+                    dist = cur;
+                    x = i; y = j;
+                }
+            }
+            
+            if(x == -1) break;
+            pts.emplace_back(x, y);
+            done.emplace(x, y);
+        }
+
+        return pts;
+    }
+	vector <int> getKth( int N, int K ) {
+		vector <int> ret;
+        gen(N);
+        //trace(N);
+        //trace(pts);
+        ret.push_back(gt(to_add[K-1], 1));
+        ret.push_back(gt(to_add[K-1], 2));
+
+        //auto brute = solve(N, oo);
+        //trace(brute);
+        //assert(pts == brute);
 		
 		return ret;
 	}
@@ -201,7 +287,9 @@ namespace moj_harness {
 		}
 	}
 	
-	int verify_case(int casenum, const int &expected, const int &received, std::clock_t elapsed) { 
+	template<typename T> std::ostream& operator<<(std::ostream &os, const vector<T> &v) { os << "{"; for (typename vector<T>::const_iterator vi=v.begin(); vi!=v.end(); ++vi) { if (vi != v.begin()) os << ","; os << " " << *vi; } os << " }"; return os; }
+
+	int verify_case(int casenum, const vector <int> &expected, const vector <int> &received, std::clock_t elapsed) { 
 		std::cerr << "Example " << casenum << "... "; 
 		
 		string verdict;
@@ -241,71 +329,79 @@ namespace moj_harness {
 	int run_test_case(int casenum__) {
 		switch (casenum__) {
 		case 0: {
-			int X[]                   = {5, 2, 8, 12};
-			int expected__            = 3;
+			int N                     = 4;
+			int K                     = 2;
+			int expected__[]          = {17, 17 };
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
-			return verify_case(casenum__, expected__, received__, clock()-start__);
+			vector <int> received__   = DistantPoints().getKth(N, K);
+			return verify_case(casenum__, vector <int>(expected__, expected__ + (sizeof expected__ / sizeof expected__[0])), received__, clock()-start__);
 		}
 		case 1: {
-			int X[]                   = {1555};
-			int expected__            = 0;
+			int N                     = 4;
+			int K                     = 3;
+			int expected__[]          = {1, 17 };
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
-			return verify_case(casenum__, expected__, received__, clock()-start__);
+			vector <int> received__   = DistantPoints().getKth(N, K);
+			return verify_case(casenum__, vector <int>(expected__, expected__ + (sizeof expected__ / sizeof expected__[0])), received__, clock()-start__);
 		}
 		case 2: {
-			int X[]                   = {0, 10, 100, 1000, 10000};
-			int expected__            = 5;
+			int N                     = 4;
+			int K                     = 5;
+			int expected__[]          = {9, 9 };
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
-			return verify_case(casenum__, expected__, received__, clock()-start__);
+			vector <int> received__   = DistantPoints().getKth(N, K);
+			return verify_case(casenum__, vector <int>(expected__, expected__ + (sizeof expected__ / sizeof expected__[0])), received__, clock()-start__);
 		}
 		case 3: {
-			int X[]                   = {1, 2, 2, 3, 3, 3, 4, 4, 4, 4};
-			int expected__            = 6;
+			int N                     = 3;
+			int K                     = 14;
+			int expected__[]          = {1, 3 };
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
-			return verify_case(casenum__, expected__, received__, clock()-start__);
+			vector <int> received__   = DistantPoints().getKth(N, K);
+			return verify_case(casenum__, vector <int>(expected__, expected__ + (sizeof expected__ / sizeof expected__[0])), received__, clock()-start__);
 		}
 		case 4: {
-			int X[]                   = {7890, 4861, 65773, 3769, 4638, 46000, 548254, 36185, 115};
-			int expected__            = 4;
+			int N                     = 5;
+			int K                     = 1089;
+			int expected__[]          = {33, 32 };
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
-			return verify_case(casenum__, expected__, received__, clock()-start__);
+			vector <int> received__   = DistantPoints().getKth(N, K);
+			return verify_case(casenum__, vector <int>(expected__, expected__ + (sizeof expected__ / sizeof expected__[0])), received__, clock()-start__);
 		}
 
 		// custom cases
 
-/*      case 5: {
-			int X[]                   = ;
-			int expected__            = ;
+      case 5: {
+			int N                     = 10;
+			int K                     = 1;
+			int expected__[]          = {1, 1};
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
-			return verify_case(casenum__, expected__, received__, clock()-start__);
-		}*/
+			vector <int> received__   = DistantPoints().getKth(N, K);
+			return verify_case(casenum__, vector <int>(expected__, expected__ + (sizeof expected__ / sizeof expected__[0])), received__, clock()-start__);
+		}
 /*      case 6: {
-			int X[]                   = ;
-			int expected__            = ;
+			int N                     = ;
+			int K                     = ;
+			int expected__[]          = ;
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
-			return verify_case(casenum__, expected__, received__, clock()-start__);
+			vector <int> received__   = DistantPoints().getKth(N, K);
+			return verify_case(casenum__, vector <int>(expected__, expected__ + (sizeof expected__ / sizeof expected__[0])), received__, clock()-start__);
 		}*/
 /*      case 7: {
-			int X[]                   = ;
-			int expected__            = ;
+			int N                     = ;
+			int K                     = ;
+			int expected__[]          = ;
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
-			return verify_case(casenum__, expected__, received__, clock()-start__);
+			vector <int> received__   = DistantPoints().getKth(N, K);
+			return verify_case(casenum__, vector <int>(expected__, expected__ + (sizeof expected__ / sizeof expected__[0])), received__, clock()-start__);
 		}*/
 		default:
 			return -1;

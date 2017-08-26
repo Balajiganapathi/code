@@ -76,8 +76,10 @@ template<typename H, typename ...T> void _dt(string u, H&& v, T&&... r) {
 
 template<typename T> 
 ostream &operator <<(ostream &o, vector<T> v) { // print a vector
+    o << "[";
     fo(i, si(v) - 1) o << v[i] << ", ";
     if(si(v)) o << v.back();
+    o << "]";
     return o;
 }
 
@@ -163,14 +165,62 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx = -1;
+constexpr int mx_n = 41, mx_mask = (1 << 21);
+ll adj[mx_n];
+int n, k;
+int sz[mx_mask], mxsz[mx_mask];
 
 int main() {
-    int n = 50;
-    vi t;
-    fo(i, n) t.push_back(rand() % 1000 + 1);
+    cin >> n >> k;
+    fo(i, n) {
+        int x;
+        adj[i] = 0;
+        fo(j, n) {
+            cin >> x;
+            adj[i] |= (1ll * x << j);
+        }
+    }
+
+    int n1 = (n+1)/2;
+    int n2 = n - n1;
+    trace(n1, n2);
+
+    for(ll m = 1; m < (1 << n2); ++m) {
+        ll mask = (m << n1);
+        ll a = (1ll << n) - 1;
+        re(i, n1, n) if(is1(mask, i)) a &= (adj[i] | (1ll << i));
+        a = (a >> n1);
+        a &= m;
+        if(a != m) continue;
+        sz[m] = __builtin_popcount(a);
+        trace(m, mask, a, sz[m]);
+    }
+
+    fo(mask, (1 << n2)) mxsz[mask] = sz[mask];
+    fo(i, n2) fo(mask, (1 << n2)) 
+        if(is1(mask, i)) mxsz[mask] = max(mxsz[mask], mxsz[mask^(1 << i)]);
+
+    int c = mxsz[(1 << n2)-1];
+    trace(c);
+    for(ll mask = 1; mask < (1 << n1); ++mask) {
+        ll a = (1ll << n) - 1;
+        fo(i, n1) if(is1(mask, i)) a &= (adj[i] | (1ll << i));
+        int m = (a >> n1);
+        trace(mask, a, m);
+        a &= mask;
+        if(a != mask) continue;
+        int cur = __builtin_popcount(a) + mxsz[m];
+        trace(a, cur);
+        c = max(c, cur);
+    }
+    trace(c);
+
+    long double ans = 0;
+    if(c) ans = 1.0L * k * k / (c * 2) * (c-1);
+
+    cout.precision(10);
+    cout << fixed << ans << endl;
     
-    cout << t << endl;
     
 	return 0;
 }

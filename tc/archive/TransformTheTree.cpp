@@ -150,34 +150,61 @@ constexpr int mx_n = 55;
 class TransformTheTree {
 public:
     vi adj[mx_n];
-    int mv, mh;
+    int n;
+    int hx, h;
+    int par[mx_n];
+    int vis[mx_n];
 
-    void dfs(int x, int p, int h) {
-        trace(x, p, h);
-        if(h > mh) {
-            mh = h;
-            mv = x;
+    void dfs(int x, int p, int d) {
+        if(d > h) {
+            h = d;
+            hx = x;
         }
-        for(int y: adj[x]) if(y != p) dfs(y, x, h + 1);
+        par[x] = p;
+        for(int y: adj[x]) if(y != p && !vis[y]) dfs(y, x, d + 1);
+    }
+
+    int getH(int r) {
+        if(vis[r]) return 0;
+        hx = r, h = 0;
+        dfs(r, -1, 0);
+        //dfs(hx, -1, 0);
+        int ret = h;
+
+        vi nxt;
+        for(int x = hx; x != -1; x = par[x]) {
+            int p = par[x];
+            vis[x] = 1;
+            if(p != -1) {
+                vis[p] = 1;
+                for(int c: adj[p]) if(c != x && !vis[c]) {
+                    nxt.push_back(c);
+                }
+            }
+        }
+        trace(r, ret);
+        for(int x: nxt) ret += getH(x);
+
+        return ret;
+    }
+
+    int solve(int r) {
+        ini(vis, 0);
+        ini(par, -1);
+        return getH(r);
     }
 
 	int countCuts( vector <int> parents ) {
-		int ret = 0;
-        fo(i, si(parents)) {
-            int x = i+1, y = parents[i];
-            adj[x].push_back(y);
-            adj[y].push_back(x);
+        n = si(parents) + 1;
+        fo(i, n-1) {
+            adj[parents[i]].push_back(i + 1);
         }
 
-        mv = 0, mh = 0;
-        dfs(mv, -1, 0);
-        trace(mv, mh);
-        dfs(mv, -1, 0);
+        int rem = 0;
+        fo(i, n) rem = max(rem, solve(i));
+        int ret = n - 1 - rem;
 
-        trace(mv, si(parents), mh);
-        ret = si(parents) - mh;
-		
-		return ret;
+        return ret;
 	}
 };
 

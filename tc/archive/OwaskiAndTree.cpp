@@ -145,19 +145,19 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx = -1;
+constexpr int mx_n = 1003;
 
-class ILike5 {
+class OwaskiAndTree {
 public:
-	int transformTheSequence( vector <int> X ) {
-		int ret = 0;
-        int has5 = false;
-        for(int x: X) {
-            if(x % 2 == 0) ++ret;
-            if(x % 10 == 5) has5 = true;
-        }
+    int n;
+    vi ch[mx_n];
+    int pl[mx_n];
 
-        if(!has5 && ret == 0) ++ret;
+	int maximalScore( vector <int> parent, vector <int> pleasure ) {
+		int ret;
+        n = si(pleasure);
+        fo(i, n) pl[i] = pleasure[i];
+        fo(i, n - 1) ch[parent[i]].push_back(i+1);
 		
 		return ret;
 	}
@@ -241,70 +241,78 @@ namespace moj_harness {
 	int run_test_case(int casenum__) {
 		switch (casenum__) {
 		case 0: {
-			int X[]                   = {5, 2, 8, 12};
-			int expected__            = 3;
-
-			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
-			return verify_case(casenum__, expected__, received__, clock()-start__);
-		}
-		case 1: {
-			int X[]                   = {1555};
-			int expected__            = 0;
-
-			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
-			return verify_case(casenum__, expected__, received__, clock()-start__);
-		}
-		case 2: {
-			int X[]                   = {0, 10, 100, 1000, 10000};
-			int expected__            = 5;
-
-			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
-			return verify_case(casenum__, expected__, received__, clock()-start__);
-		}
-		case 3: {
-			int X[]                   = {1, 2, 2, 3, 3, 3, 4, 4, 4, 4};
-			int expected__            = 6;
-
-			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
-			return verify_case(casenum__, expected__, received__, clock()-start__);
-		}
-		case 4: {
-			int X[]                   = {7890, 4861, 65773, 3769, 4638, 46000, 548254, 36185, 115};
+			int parent[]              = {0, 1, 2, 3, 4, 5, 6, 7, 8};
+			int pleasure[]            = {1, 1, -1, -1, -1, -1, 1, 1, 1, 1};
 			int expected__            = 4;
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			int received__            = OwaskiAndTree().maximalScore(vector <int>(parent, parent + (sizeof parent / sizeof parent[0])), vector <int>(pleasure, pleasure + (sizeof pleasure / sizeof pleasure[0])));
+			return verify_case(casenum__, expected__, received__, clock()-start__);
+		}
+		case 1: {
+			int parent[]              = {0, 0, 1, 2};
+			int pleasure[]            = {2, 3, 4, -1, -1};
+			int expected__            = 9;
+
+			std::clock_t start__      = std::clock();
+			int received__            = OwaskiAndTree().maximalScore(vector <int>(parent, parent + (sizeof parent / sizeof parent[0])), vector <int>(pleasure, pleasure + (sizeof pleasure / sizeof pleasure[0])));
+			return verify_case(casenum__, expected__, received__, clock()-start__);
+		}
+		case 2: {
+			int parent[]              = {0, 0, 1, 1, 2, 2, 5, 5};
+			int pleasure[]            = {1, 2, -3, -7, 3, 2, 7, -1, 3};
+			int expected__            = 17;
+
+			std::clock_t start__      = std::clock();
+			int received__            = OwaskiAndTree().maximalScore(vector <int>(parent, parent + (sizeof parent / sizeof parent[0])), vector <int>(pleasure, pleasure + (sizeof pleasure / sizeof pleasure[0])));
+			return verify_case(casenum__, expected__, received__, clock()-start__);
+		}
+		case 3: {
+			int parent[]              = {0, 1, 1, 1, 0, 3, 1, 3, 4, 4, 3, 6, 8, 0, 12, 12, 11, 7, 7};
+			int pleasure[]            = {-154011, 249645, 387572, 292156, -798388, 560085, -261135, -812756, 191481, -165204, 81513, -448791, 608073, 354614, -455750, 325999, 227225, -696501, 904692, -297238};
+			int expected__            = 3672275;
+
+			std::clock_t start__      = std::clock();
+			int received__            = OwaskiAndTree().maximalScore(vector <int>(parent, parent + (sizeof parent / sizeof parent[0])), vector <int>(pleasure, pleasure + (sizeof pleasure / sizeof pleasure[0])));
+			return verify_case(casenum__, expected__, received__, clock()-start__);
+		}
+		case 4: {
+			int parent[]              = {};
+			int pleasure[]            = {-1};
+			int expected__            = 0;
+
+			std::clock_t start__      = std::clock();
+			int received__            = OwaskiAndTree().maximalScore(vector <int>(parent, parent + (sizeof parent / sizeof parent[0])), vector <int>(pleasure, pleasure + (sizeof pleasure / sizeof pleasure[0])));
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}
 
 		// custom cases
 
 /*      case 5: {
-			int X[]                   = ;
+			int parent[]              = ;
+			int pleasure[]            = ;
 			int expected__            = ;
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			int received__            = OwaskiAndTree().maximalScore(vector <int>(parent, parent + (sizeof parent / sizeof parent[0])), vector <int>(pleasure, pleasure + (sizeof pleasure / sizeof pleasure[0])));
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}*/
 /*      case 6: {
-			int X[]                   = ;
+			int parent[]              = ;
+			int pleasure[]            = ;
 			int expected__            = ;
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			int received__            = OwaskiAndTree().maximalScore(vector <int>(parent, parent + (sizeof parent / sizeof parent[0])), vector <int>(pleasure, pleasure + (sizeof pleasure / sizeof pleasure[0])));
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}*/
 /*      case 7: {
-			int X[]                   = ;
+			int parent[]              = ;
+			int pleasure[]            = ;
 			int expected__            = ;
 
 			std::clock_t start__      = std::clock();
-			int received__            = ILike5().transformTheSequence(vector <int>(X, X + (sizeof X / sizeof X[0])));
+			int received__            = OwaskiAndTree().maximalScore(vector <int>(parent, parent + (sizeof parent / sizeof parent[0])), vector <int>(pleasure, pleasure + (sizeof pleasure / sizeof pleasure[0])));
 			return verify_case(casenum__, expected__, received__, clock()-start__);
 		}*/
 		default:

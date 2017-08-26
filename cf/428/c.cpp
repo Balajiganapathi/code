@@ -76,8 +76,10 @@ template<typename H, typename ...T> void _dt(string u, H&& v, T&&... r) {
 
 template<typename T> 
 ostream &operator <<(ostream &o, vector<T> v) { // print a vector
+    o << "[";
     fo(i, si(v) - 1) o << v[i] << ", ";
     if(si(v)) o << v.back();
+    o << "]";
     return o;
 }
 
@@ -163,14 +165,35 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx = -1;
+constexpr int mx_n = 100005;
+vi adj[mx_n];
+long double ans;
+
+void dfs(int x, int par, int d, long double p) {
+    trace(x, par, si(adj[x]), d, p);
+    int nc = si(adj[x]);
+    if(par != -1) --nc;
+    if(nc == 0) {
+        ans += p * d;
+        return;
+    }
+    for(int y: adj[x]) if(y != par) dfs(y, x, d + 1, p/nc);
+}
 
 int main() {
-    int n = 50;
-    vi t;
-    fo(i, n) t.push_back(rand() % 1000 + 1);
+    int n, x, y;
+    cin >> n;
+    fo(i, n - 1) {
+        cin >> x >> y;
+        adj[x].push_back(y);
+        adj[y].push_back(x);
+    }
+    ans = 0;
+    dfs(1, -1, 0, 1);
+
+    cout.precision(10);
+    cout << fixed << ans << endl;
     
-    cout << t << endl;
     
 	return 0;
 }

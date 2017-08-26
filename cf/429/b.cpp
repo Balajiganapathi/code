@@ -76,8 +76,10 @@ template<typename H, typename ...T> void _dt(string u, H&& v, T&&... r) {
 
 template<typename T> 
 ostream &operator <<(ostream &o, vector<T> v) { // print a vector
+    o << "[";
     fo(i, si(v) - 1) o << v[i] << ", ";
     if(si(v)) o << v.back();
+    o << "]";
     return o;
 }
 
@@ -163,14 +165,59 @@ constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx = -1;
+constexpr int mx_n = 300005;
+vector<pi> adj[mx_n];
+int d[mx_n];
+int n, m;
+pi edges[mx_n];
+int fe[mx_n], vis[mx_n];
+
+int solve(int x) {
+    vis[x] = 1;
+    int f = 0;
+    for(auto y: adj[x]) if(!vis[y.fi]) {
+        int cy = solve(y.fi);
+        f ^= cy;
+        if(cy == 1) {
+            fe[y.se] = 1;
+        }
+    }
+
+    if(d[x] == -1) f = 0;
+    else f ^= d[x];
+    return f;
+}
 
 int main() {
-    int n = 50;
-    vi t;
-    fo(i, n) t.push_back(rand() % 1000 + 1);
-    
-    cout << t << endl;
+    int n, m;
+    cin >> n >> m;
+    fo(i, n) cin >> d[i];
+    fo(i, m) {
+        cin >> edges[i].fi >> edges[i].se;
+        --edges[i].fi; --edges[i].se;
+        adj[edges[i].fi].emplace_back(edges[i].se, i);
+        adj[edges[i].se].emplace_back(edges[i].fi, i);
+    }
+
+    int c = 0;
+    fo(i, n) if(d[i] != -1) {
+        d[i] ^= (si(adj[i]) % 2);
+        if(d[i] == 1) ++c;
+    }
+    fo(i, n) trace(i, d[i]);
+
+    int root = (find(d, d + n, -1) - d) % n;
+    int ans = 0;
+    if(solve(root)) ans = -1;
+    else fo(i, m) if(!fe[i]) ++ans;
+
+    cout << ans << endl;
+    if(ans != -1) {
+        fo(i, m) if(!fe[i]) {
+            cout << i+1 << '\n';
+        }
+    }
+
     
 	return 0;
 }
