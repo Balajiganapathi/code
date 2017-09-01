@@ -94,7 +94,7 @@ ostream &operator <<(ostream &o, map<T1, T2> m) { // print a map
 }
 
 template<typename T> 
-ostream &operator <<(ostream &o, multiset<T> s) { // print a set
+ostream &operator <<(ostream &o, set<T> s) { // print a set
     o << "{";
     bool first = true;
     for(auto &entry: s) {
@@ -160,135 +160,87 @@ T1 modpow(T1 _a, T2 p, T3 mod) {
 constexpr int dx[] = {-1, 0, 1, 0, 1, 1, -1, -1};
 constexpr int dy[] = {0, -1, 0, 1, 1, -1, 1, -1};
 constexpr auto PI  = 3.14159265358979323846L;
-constexpr auto oo  = numeric_limits<ll>::max() / 2 - 2;
+constexpr auto oo  = numeric_limits<int>::max() / 2 - 2;
 constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx_n = 3003;
+constexpr int mx_n = 200005;
+string s, t;
+int n, m, k;
+int ti[mx_n], te[mx_n];
+bool matches[mx_n];
 
-// N -> tot()
-template<typename T>
-class DynamicMedian {
-public:
-    multiset<T> small, large;
-    ll small_sum, large_sum;
-    int tot() { // O(1)
-        return si(small) + si(large);
+void setBit(unsigned int a[mx_n], int idx, int v) {
+    a[idx/32] |= (v << (31 - idx % 32));
+}
+
+void shift(unsigned int a[mx_n], int n) {
+    unsigned int cb = 0;
+    for(int i = n - 1; i >= 0; --i) {
+        int tb = (a[i] >> 31);
+        a[i] = ((a[i] << 1) | cb);
     }
+}
 
-    ll sum() {
-        return small_sum + large_sum;
+bool eq(unsigned int a[mx_n], unsigned int b[mx_n], int n) {
+    trace(n);
+    fo(i, (n+31) / 32) {
+        //trace(a[i], b[i]);
+        if((a[i] & b[i]) != a[i]) return false;
     }
+    return true;
+}
 
-    DynamicMedian() {
-        init();
+void copyIt(unsigned int a[mx_n], unsigned int b[mx_n], int n) {
+    fo(i, (n+31) / 32) a[i] = b[i];
+    if(n % 32 != 0) {
+        b[n/32] = ((a[n/32] >> (31 - n%32)) << (31 - n%32));
     }
+}
 
-    void init() { // O(N)
-        small.clear();
-        large.clear();
-        small_sum = large_sum = 0;
-    }
-
-    T median() { // O(1)
-        assert(tot() > 0);
-        return *large.begin();
-    }
-
-    T maxElement()  { // O(1)
-        assert(tot() > 0);
-        return *large.rbegin();
-    }
-
-    T minElement() { // O(1)
-        assert(tot() > 0);
-        if(!small.empty()) return *small.begin();
-        else return *large.begin();
-    }
-
-    void add(T x) { // O(lg N)
-        if(tot() == 0 || x < median()) {
-            small_sum += x;
-            small.insert(x);
-        } else {
-            large_sum += x;
-            large.insert(x);
-        }
-        reorder();
-    }
-
-    void remove(const T& x) { // O(lg N)
-        if(x < median()) {
-            assert(small.find(x) != small.end());
-            small.erase(small.find(x));
-            small_sum -= x;
-        } else {
-            assert(large.find(x) != large.end());
-            large.erase(large.find(x));
-            large_sum -= x;
-        }
-        reorder();
-    }
-
-    void reorder() { // O(lg N)
-        while(si(large) < si(small)) {
-            T x = *small.rbegin();
-            small_sum -= x; large_sum += x;
-            large.insert(x);
-            small.erase(small.find(x));
-        }
-
-        while(si(large) > si(small) + 1) {
-            T x = *large.begin();
-            small_sum += x; large_sum -= x;
-            small.insert(x);
-            large.erase(large.begin());
-        }
-    }
-};
-
-int n;
-ll a[mx_n], eq[mx_n][mx_n], dp[mx_n], big[mx_n][mx_n], sm[mx_n][mx_n];
-ll bdp[mx_n];
-
+unsigned bs[mx_n], bt[mx_n], cs[mx_n];
 int main() {
-    cin >> n;
-    rep(i, 1, n) cin >> a[i];
+    cin >> n >> m >> k >> s >> t;
+    char chars[] = "AGCT";
 
-    rep(i, 1, n) {
-        DynamicMedian<int> dm;
-        ll sum = 0;
-        rep(j, i, n) {
-            int x = a[j] - (j - i);
-            dm.add(x);
-            sum += x;
-            int m = dm.median();
-            eq[i][j] = 1ll * si(dm.small) * m - dm.small_sum + dm.large_sum - 1ll * si(dm.large) * m;
-            sm[i][j] = dm.median();
-            big[i][j] = sm[i][j] + (j-i);
-            trace(i, j, m, eq[i][j], sm[i][j], big[i][j]);
+    trace(n, m, k, s, t);
+    fo(i, n - m + 1) matches[i] = true;
+    fo(ci, 4) {
+        ini(bs, 0); ini(bt, 0); ini(cs, 0);
+        ini(ti, 0); ini(te, 0);
+        char c = chars[ci];
+        fo(i, m) if(t[i] == c) {
+            setBit(bt, i, 1);
+        }
+        //fo(i, (m+31) / 32) trace(i, bt[i]);
+        fo(i, n) if(s[i] == c) {
+            ++ti[max(0, i - k)];
+            ++te[min(n, i + k + 1)];
+        }
+        int cur = 0;
+        fo(i, n) {
+            cur += ti[i];
+            if(cur > 0) setBit(bs, i, 1);
+            cur -= te[i];
+        }
+        //fo(i, (n+31) / 32) trace(i, bs[i]);
+
+        copyIt(cs, bs, m);
+        //fo(i, (m+31) / 32) trace(i, cs[i]);
+
+        fo(i, n - m + 1) {
+            //trace(ci, i, matches[i]);
+            if(matches[i] && !eq(bt, cs, m)) matches[i] = false;
+            trace(ci, i, matches[i]);
+            shift(cs, m);
+            setBit(cs, i + m, bs[i]);
         }
     }
 
-    dp[0] = 0;
-    eq[0][0] = 0;
-    bdp[0] = -oo;
-    rep(i, 1, n) {
-        dp[i] = oo;
-        for(int j = i - 1; j >= 0; --j) if(bdp[j] < sm[j+1][i]) {
-            ll cur = dp[j] + eq[j+1][i];
-            if(cur < dp[i]) {
-                dp[i] = cur;
-                bdp[i] = sm[j+1][i] + (i - j - 1);
-            }
-        }
-        trace(i, dp[i], bdp[i]);
-    }
-
-    cout << dp[n] << endl;
-
-    
+    int ans = 0;
+    fo(i, n) if(matches[i]) ++ans;
+    cout << ans << endl;
     
 	return 0;
 }

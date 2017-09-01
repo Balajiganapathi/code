@@ -94,7 +94,7 @@ ostream &operator <<(ostream &o, map<T1, T2> m) { // print a map
 }
 
 template<typename T> 
-ostream &operator <<(ostream &o, multiset<T> s) { // print a set
+ostream &operator <<(ostream &o, set<T> s) { // print a set
     o << "{";
     bool first = true;
     for(auto &entry: s) {
@@ -160,135 +160,57 @@ T1 modpow(T1 _a, T2 p, T3 mod) {
 constexpr int dx[] = {-1, 0, 1, 0, 1, 1, -1, -1};
 constexpr int dy[] = {0, -1, 0, 1, 1, -1, 1, -1};
 constexpr auto PI  = 3.14159265358979323846L;
-constexpr auto oo  = numeric_limits<ll>::max() / 2 - 2;
+constexpr auto oo  = numeric_limits<int>::max() / 2 - 2;
 constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx_n = 3003;
+constexpr int mx_n = 15;
+constexpr int mx_deg = (1 << mx_n) + 10;
 
-// N -> tot()
-template<typename T>
-class DynamicMedian {
-public:
-    multiset<T> small, large;
-    ll small_sum, large_sum;
-    int tot() { // O(1)
-        return si(small) + si(large);
-    }
+int ans_deg, ans[mx_deg];
+int dp[mx_deg][mx_n], fact[mx_deg], ifact[mx_deg];
+int n, a[mx_n];
 
-    ll sum() {
-        return small_sum + large_sum;
-    }
+void pre() {
+    fact[0] = 1;
+    re(i, 1, mx_deg) fact[i] = 1ll * i * fact[i-1] % mod;
+    fo(i, mx_deg) ifact[i] = modpow(fact[i], mod - 2, mod);
+}
 
-    DynamicMedian() {
-        init();
-    }
-
-    void init() { // O(N)
-        small.clear();
-        large.clear();
-        small_sum = large_sum = 0;
-    }
-
-    T median() { // O(1)
-        assert(tot() > 0);
-        return *large.begin();
-    }
-
-    T maxElement()  { // O(1)
-        assert(tot() > 0);
-        return *large.rbegin();
-    }
-
-    T minElement() { // O(1)
-        assert(tot() > 0);
-        if(!small.empty()) return *small.begin();
-        else return *large.begin();
-    }
-
-    void add(T x) { // O(lg N)
-        if(tot() == 0 || x < median()) {
-            small_sum += x;
-            small.insert(x);
-        } else {
-            large_sum += x;
-            large.insert(x);
-        }
-        reorder();
-    }
-
-    void remove(const T& x) { // O(lg N)
-        if(x < median()) {
-            assert(small.find(x) != small.end());
-            small.erase(small.find(x));
-            small_sum -= x;
-        } else {
-            assert(large.find(x) != large.end());
-            large.erase(large.find(x));
-            large_sum -= x;
-        }
-        reorder();
-    }
-
-    void reorder() { // O(lg N)
-        while(si(large) < si(small)) {
-            T x = *small.rbegin();
-            small_sum -= x; large_sum += x;
-            large.insert(x);
-            small.erase(small.find(x));
-        }
-
-        while(si(large) > si(small) + 1) {
-            T x = *large.begin();
-            small_sum += x; large_sum -= x;
-            small.insert(x);
-            large.erase(large.begin());
+void solve() {
+    ans_deg = (1 << n);
+    dp[0][n] = 1;
+    for(int i = n - 1; i >= 0; --i) {
+        for(int d = 0; d <= ans_deg; d += 2) {
+            int cur = 1;
+            dp[d][i] = 0;
+            for(int cd = 0; cd <= d; cd += 2) {
+                dp[d][i] = (dp[d][i] + 1ll * dp[d-cd][i+1] * ifact[cd] % mod * cur) % mod;
+                cur = 1ll * cur * a[i] % mod;
+            }
+            trace(i, d, dp[d][i]);
         }
     }
-};
 
-int n;
-ll a[mx_n], eq[mx_n][mx_n], dp[mx_n], big[mx_n][mx_n], sm[mx_n][mx_n];
-ll bdp[mx_n];
+    for(int i = 0; i <= ans_deg; i += 2) {
+        trace(i, fact[ans_deg], fact[ans_deg-i], dp[0][i]);
+        ans[i] = 1ll * fact[ans_deg] * ifact[ans_deg-i] % mod * dp[0][i] % mod;
+    }
+}
 
 int main() {
-    cin >> n;
-    rep(i, 1, n) cin >> a[i];
-
-    rep(i, 1, n) {
-        DynamicMedian<int> dm;
-        ll sum = 0;
-        rep(j, i, n) {
-            int x = a[j] - (j - i);
-            dm.add(x);
-            sum += x;
-            int m = dm.median();
-            eq[i][j] = 1ll * si(dm.small) * m - dm.small_sum + dm.large_sum - 1ll * si(dm.large) * m;
-            sm[i][j] = dm.median();
-            big[i][j] = sm[i][j] + (j-i);
-            trace(i, j, m, eq[i][j], sm[i][j], big[i][j]);
-        }
+    pre();
+    int t;
+    cin >> t;
+    while(t--) {
+        cin >> n;
+        fo(i, n) cin >> a[i];
+        solve();
+        cout << ans_deg << endl;
+        rep(i, 0, ans_deg) cout << ans[i] << " ";
+        cout << endl;
     }
-
-    dp[0] = 0;
-    eq[0][0] = 0;
-    bdp[0] = -oo;
-    rep(i, 1, n) {
-        dp[i] = oo;
-        for(int j = i - 1; j >= 0; --j) if(bdp[j] < sm[j+1][i]) {
-            ll cur = dp[j] + eq[j+1][i];
-            if(cur < dp[i]) {
-                dp[i] = cur;
-                bdp[i] = sm[j+1][i] + (i - j - 1);
-            }
-        }
-        trace(i, dp[i], bdp[i]);
-    }
-
-    cout << dp[n] << endl;
-
-    
     
 	return 0;
 }
