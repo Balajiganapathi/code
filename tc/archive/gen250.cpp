@@ -76,8 +76,10 @@ template<typename H, typename ...T> void _dt(string u, H&& v, T&&... r) {
 
 template<typename T> 
 ostream &operator <<(ostream &o, vector<T> v) { // print a vector
+    o << "[";
     fo(i, si(v) - 1) o << v[i] << ", ";
     if(si(v)) o << v.back();
+    o << "]";
     return o;
 }
 
@@ -166,11 +168,8 @@ constexpr auto mod = 1000000007;
 constexpr int mx = -1;
 
 int main() {
-    int n = 50;
-    vi t;
-    fo(i, n) t.push_back(rand() % 1000 + 1);
     
-    cout << t << endl;
+    
     
 	return 0;
 }

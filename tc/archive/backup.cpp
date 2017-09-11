@@ -18,8 +18,8 @@ using namespace std;
 
 /* aliases */
 using vi  = vector<int>;
+using pi  = pair<int, int>;
 using ll  = long long int;
-using pi  = pair<ll, ll>;
 
 /* shortcut macros */
 #define mp              make_pair
@@ -140,128 +140,135 @@ ostream& operator<<(ostream& os, const pair<T1, T2>& p) { // print a pair
 constexpr int dx[] = {-1, 0, 1, 0, 1, 1, -1, -1};
 constexpr int dy[] = {0, -1, 0, 1, 1, -1, 1, -1};
 constexpr auto PI  = 3.14159265358979323846L;
-constexpr auto oo  = 1000000000000L;
+constexpr auto oo  = numeric_limits<int>::max() / 2 - 2;
 constexpr auto eps = 1e-6;
 constexpr auto mod = 1000000007;
 
 /* code */
-constexpr int mx_n = 12;
+constexpr int mx = -1;
 
-ll dist[(1 << mx_n) + 10][mx_n];
-
-class State {
+class EllysRollerCoasters {
 public:
-    int mask, cur;
-    ll d;
+    int n, m, si, sj;
+    vector<string> cr, cf;
 
-    State(): mask(0), cur(-1), d(oo) {};
-    State(int m, int c, ll d): mask(m), cur(c), d(d) {}
+    bool ok(int i, int j) {
+        int di = 0, dj = 0;
+        if(cr[i][j] == '-') dj = 1;
+        else if(cr[i][j] == '|') di = 1;
+        else if(cf[i][j] == 'U') di = 1;
+        else if(cf[i][j] == 'D') di = -1;
+        else if(cf[i][j] == 'L') dj = 1;
+        else dj = -1;
+        trace(i, j);
 
-    bool operator <(const State &s) const {
-        return d < s.d;
-    }
-};
+        int ci = i, cj = j;
+        trace(ci, cj, di, dj);
+
+        bool is_left(char r, char f) {
+            if(f == '.' || r == '.') return false;
+            return r == '-' || f == 'L' || (r == '/' && f == 'U') || (r == '\\' && f == 'D');
+        }
+
+        bool is_right(char r, char f) {
+            if(f == '.' || r == '.') return false;
+            return r == '-' || f == 'R' || (r == '\\' && f == 'U') || (r == '/' && f == 'D');
+        }
+
+        bool is_top(char r, char f) {
+            if(f == '.' || r == '.') return false;
+            return r == '|' || f == 'U' || (r == '/' && f == 'L') || (r == '\\' && f == 'R');
+        }
+
+        bool is_bottom(char r, char f) {
+            if(f == '.' || r == '.') return false;
+            return r == '|' || f == 'D' || (r == '\\' && f == 'L') || (r == '/' && f == 'R');
+        }
 
 
-
-class AliceInWanderland {
-public:
-    vi rx, ry;
-    vector<string> mv;
-    vector<vector<pi>> acc;
-    int n;
-
-    void pre() {
-        for(string m: mv) {
-            ll dx = 0, dy = 0;
-            vector<pi> v;
-            v.emplace_back(0, 0);
-            for(char c: m) {
-                if(c == 'R') ++dx;
-                if(c == 'L') --dx;
-                if(c == 'U') ++dy;
-                if(c == 'D') --dy;
-                v.emplace_back(dx, dy);
+        fo(iter, n * m + 2) {
+            if(ci < 0 || ci >= n || cj < 0 || cj >= m) return false;
+            trace(ci, cj, cr[ci][cj], cf[ci][cj]);
+            if(cr[ci][cj] == '|') {
+                if(di == 0) return false;
+                ci += di; cj += dj;
+            } else if(cr[ci][cj] == '-') {
+                if(dj == 0) return false;
+                ci += di; cj += dj;
+            } else if(cf[ci][cj] == 'U') {
+                if(di == 0 || di == -1) return false;
+                if(cr[ci][cj] == '/') di = 0, dj = -1;
+                else di = 0, dj = 1;
+                ci += di; cj += dj;
+            } else if(cf[ci][cj] == 'D') {
+                if(di == 0 || di == 1) return false;
+                if(cr[ci][cj] == '/') di = 0, dj = 1;
+                else di = 0, dj = -1;
+                ci += di; cj += dj;
+            } else if(cf[ci][cj] == 'L') {
+                if(dj == -1 || dj == 0) return false;
+                if(cr[ci][cj] == '/') di = -1, dj = 0;
+                else di = 1, dj = 0;
+                ci += di; cj += dj;
+            } else if(cf[ci][cj] == 'R') {
+                if(dj == 1 || dj == 0) return false;
+                if(cr[ci][cj] == '/') di = 1, dj = 0;
+                else di = -1, dj = 0;
+                ci += di; cj += dj;
             }
-            acc.push_back(v);
-        }
-    }
-
-    pi getAt(int i, ll d) {
-        if(i == n) return {0, 0};
-        pi ans(rx[i], ry[i]);
-
-        ll times = d / si(mv[i]);
-        ans.fi += acc[i].back().fi * times;
-        ans.se += acc[i].back().se * times;
-
-        ans.fi += acc[i][d%si(mv[i])].fi;
-        ans.se += acc[i][d%si(mv[i])].se;
-
-        return ans;
-    }
-
-    ll getDist(pi cur, pi nxt) {
-        ll df = abs(cur.fi - nxt.fi);
-        ll ds = abs(cur.se - nxt.se);
-
-        return max(df, ds);
-    }
-
-    ll getDist(int ci, int ni, ll d) {
-        pi cur = getAt(ci, d);
-        ll lo = d, hi = oo;
-        while(lo < hi) {
-            ll m = (lo + hi) / 2;
-            pi nxt = getAt(ni, m);
-            if(getDist(cur, nxt) <= m - d) hi = m;
-            else lo = m + 1;
+            trace(ci, cj, di, dj);
+            if(si == ci && sj == cj) return true;
         }
 
-
-        ll nd = lo;
-        if(lo < oo) assert(getDist(cur, getAt(ni, lo)) <= lo - d);
-        //trace(ci, ni, d, nd);
-        return nd;
+        return false;
     }
+	vector <string> getPlan( vector <string> field ) {
+		vector <string> ret;
+        ret = field;
+        n = si(ret); m = si(ret[0]);
 
-	long long getMinimum( vector <int> rabbitX, vector <int> rabbitY, vector <string> _moves ) {
-		long long ret = -1;
-        rx = rabbitX; ry = rabbitY; mv = _moves;
-        n = si(rx);
-        pre();
+        bool notok = false;
+        fo(i, n) fo(j, m) {
+            if(ret[i][j] == '.') continue;
+            char top = '.', ftop = '.';
+            if(i > 0) top = ret[i-1][j], ftop = field[i-1][j];
+            char left = '.', fleft = '.';
+            if(j > 0) left = ret[i][j-1], fleft = field[i][j-1];
 
-        fo(i, (1 << n)) fo(j, n+1) dist[i][j] = oo;
+            char& cur = ret[i][j];
 
-        set<State> pq;
-        dist[0][n] = 0;
-        pq.insert(State(0, n, 0));
-
-        while(!pq.empty()) {
-            auto state = *pq.begin();
-            pq.erase(pq.begin());
-            int mask = state.mask, cur = state.cur;
-            ll d = state.d;
-            assert(d == dist[mask][cur]);
-            if(d >= oo) continue;
-
-            fo(nxt, n) if(!is1(mask, nxt)) {
-                ll nd = getDist(cur, nxt, d);
-                assert(nd >= d);
-                if(nd >= oo  || nd == -1) continue;
-                State nstate((mask|(1 << nxt)), nxt, nd);
-                if(nd < dist[nstate.mask][nstate.cur]) {
-                    State pstate(nstate.mask, nstate.cur, dist[nstate.mask][nstate.cur]);
-                    pq.erase(pstate);
-                    dist[nstate.mask][nstate.cur] = nd;
-                    pq.insert(nstate);
-                }
+            if(cur == 'S') {
+                if(is_bottom(top, ftop) || !is_right(left, fleft)) cur = '|';
+                else cur = '-';
+            } else if(cur == 'U') {
+                if(is_right(left, fleft)) cur = '/';
+                else cur = '\\';
+            } else if(cur == 'D') {
+                if(is_right(left, fleft)) cur = '\\';
+                else cur = '/';
+            } else if(cur == 'L') {
+                if(is_bottom(top, ftop)) cur = '/';
+                else cur = '\\';
+            } else if(cur == 'R') {
+                if(is_bottom(top, ftop)) cur = '\\';
+                else cur = '/';
             }
         }
 
-        ret = oo;
-        fo(i, n) ret = min(ret, dist[(1 << n) - 1][i]);
-        if(ret >= oo) ret = -1;
+        trace(ret, field);
+        cr = ret; cf = field;
+        fo(i, n) fo(j, m) if(ret[i][j] != '.') {
+            si = i; sj = j;
+            bool o = ok(si, sj);
+            trace(si, sj, o);
+            if(!o) {
+                notok = true;
+                break;
+            }
+        }
+
+        trace(notok);
+        if(notok) return vector<string>();
 		
 		return ret;
 	}
@@ -305,7 +312,10 @@ namespace moj_harness {
 		}
 	}
 	
-	int verify_case(int casenum, const long long &expected, const long long &received, std::clock_t elapsed) { 
+	template<typename T> std::ostream& operator<<(std::ostream &os, const vector<T> &v) { os << "{"; for (typename vector<T>::const_iterator vi=v.begin(); vi!=v.end(); ++vi) { if (vi != v.begin()) os << ","; os << " " << *vi; } os << " }"; return os; }
+	template<> std::ostream& operator<<(std::ostream &os, const vector<string> &v) { os << "{"; for (vector<string>::const_iterator vi=v.begin(); vi!=v.end(); ++vi) { if (vi != v.begin()) os << ","; os << " \"" << *vi << "\""; } os << " }"; return os; }
+
+	int verify_case(int casenum, const vector <string> &expected, const vector <string> &received, std::clock_t elapsed) { 
 		std::cerr << "Example " << casenum << "... "; 
 		
 		string verdict;
@@ -345,108 +355,114 @@ namespace moj_harness {
 	int run_test_case(int casenum__) {
 		switch (casenum__) {
 		case 0: {
-			int rabbitX[]             = { 4 };
-			int rabbitY[]             = { 2 };
-			string moves[]            = { "ULDR" };
-			long long expected__      = 3;
+			string field[]            = {"RSSLRD",
+ "SDDSSS",
+ "SULUUS",
+ "ULRLDL",
+ "RLSSRL",
+ "SDUSDL",
+ "SRSLRD",
+ "RSSSSL"};
+			string expected__[]       = {"/--\\/\\", "|/\\|||", "|\\/\\/|", "\\\\/\\//", "//||\\\\", "|//|//", "|\\-/\\\\", "\\----/" };
 
 			std::clock_t start__      = std::clock();
-			long long received__      = AliceInWanderland().getMinimum(vector <int>(rabbitX, rabbitX + (sizeof rabbitX / sizeof rabbitX[0])), vector <int>(rabbitY, rabbitY + (sizeof rabbitY / sizeof rabbitY[0])), vector <string>(moves, moves + (sizeof moves / sizeof moves[0])));
-			return verify_case(casenum__, expected__, received__, clock()-start__);
+			vector <string> received__ = EllysRollerCoasters().getPlan(vector <string>(field, field + (sizeof field / sizeof field[0])));
+			return verify_case(casenum__, vector <string>(expected__, expected__ + (sizeof expected__ / sizeof expected__[0])), received__, clock()-start__);
 		}
 		case 1: {
-			int rabbitX[]             = { 10, -20 };
-			int rabbitY[]             = { 0, 0 };
-			string moves[]            = { "RL", "LULD" };
-			long long expected__      = 80;
+			string field[]            = {"RDL",
+ "RLL"};
+			string expected__[]       = { };
 
 			std::clock_t start__      = std::clock();
-			long long received__      = AliceInWanderland().getMinimum(vector <int>(rabbitX, rabbitX + (sizeof rabbitX / sizeof rabbitX[0])), vector <int>(rabbitY, rabbitY + (sizeof rabbitY / sizeof rabbitY[0])), vector <string>(moves, moves + (sizeof moves / sizeof moves[0])));
-			return verify_case(casenum__, expected__, received__, clock()-start__);
+			vector <string> received__ = EllysRollerCoasters().getPlan(vector <string>(field, field + (sizeof field / sizeof field[0])));
+			return verify_case(casenum__, vector <string>(expected__, expected__ + (sizeof expected__ / sizeof expected__[0])), received__, clock()-start__);
 		}
 		case 2: {
-			int rabbitX[]             = { 30, -40 };
-			int rabbitY[]             = { 0, 0 };
-			string moves[]            = { "RL", "DLUL" };
-			long long expected__      = 188;
+			string field[]            = {"DSSSSLDSSSDRSSSDDSSDDSSDRDRSSSD",
+ "USLRSUSDSSUSDSLSUSDSSDLSSSRSSDS",
+ "..SS..SS...SS.SSRSUSSSSSSS...SS",
+ "..SS..SS...SS.SSSDSUSSSSSS...SS",
+ "..SS..SS...SS.SSSRSDSULSSS...SS",
+ "..SS..SS...SS.SSUSSUUSSUUL...UL",
+ "..SS..SRSSDSRSLSDSSSSSSSSSSSSSL",
+ "..RU..RSSSURSSSURSSSSSSSSSSSSSU"};
+			string expected__[]       = {"/----\\/---\\/---\\/--\\/--\\/\\/---\\", "\\-\\/-/|/--/|/-\\|\\-\\||/\\|||\\--\\|", "..||..||...||.||/-/|||||||...||", "..||..||...||.|||/-/||||||...||", "..||..||...||.|||\\-\\|\\/|||...||", "..||..||...||.||\\--/\\--/\\/...\\/", "..||..|\\--\\|\\-/|/-------------\\", "..\\/..\\---/\\---/\\-------------/" };
 
 			std::clock_t start__      = std::clock();
-			long long received__      = AliceInWanderland().getMinimum(vector <int>(rabbitX, rabbitX + (sizeof rabbitX / sizeof rabbitX[0])), vector <int>(rabbitY, rabbitY + (sizeof rabbitY / sizeof rabbitY[0])), vector <string>(moves, moves + (sizeof moves / sizeof moves[0])));
-			return verify_case(casenum__, expected__, received__, clock()-start__);
+			vector <string> received__ = EllysRollerCoasters().getPlan(vector <string>(field, field + (sizeof field / sizeof field[0])));
+			return verify_case(casenum__, vector <string>(expected__, expected__ + (sizeof expected__ / sizeof expected__[0])), received__, clock()-start__);
 		}
 		case 3: {
-			int rabbitX[]             = { 0 };
-			int rabbitY[]             = { 1 };
-			string moves[]            = { "UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU" };
-			long long expected__      = -1;
+			string field[]            = {"DD.RSSSL.....DSSLRL.DSSLRL..RLDSD.DSSSSSSD",
+ "SUSU...UDDSSLRSSLSS.UL.RUUSSURU.UDS.DSD.DU",
+ "SRSL.RSSLUL.RDRD.RU..USD.RSSSLRSLSUSLRU.S.",
+ "SS.RSU.DDRL..SSSDLDSSSDRDRL.RUS.RU.RDULRL.",
+ "SRSDRSSUSS.DSURURLRD..UDULRSU.S.RSSLSRLRD.",
+ "SRLSUD..UL.RLDSDDL.RD..SRLRL..S.S.DSUS..RD",
+ "SSSS.S.RSSLDURLSUUDLUL.UU.RUDSL.SDU..S.RLS",
+ "RUSS.S.S.DLSDDRL..RU.UD..RSSU.DLULRD.ULULS",
+ "DSLS.RDRSLRLUURLRL.RDRLRDSDD..RURSURL.S..S",
+ "S.RLRLUD.RURL.RURU.SUUDLSSUU.DD.S.DSL.USSL",
+ "RSU.SS.S.S.RU.DSD..RL.RDSUSSSLRSU.S.DLDL..",
+ "DSSSLRSL.S..DSU.RDDLRDDLS....RD...USLUURSD",
+ "RLDSSSLRSUDDS.DSDSSSRLRDUSSLDLUSSSSL.DL..S",
+ ".SSDDDUS..SSS.RDSULSRSLS.DDSRSDDLRLRDSUSSL",
+ ".RURLUDSRLRLRSDUURLRSLSS.RLRL.SRLRU.UL.DSL",
+ "RSSL.RUSSSRD..RSDRU.DLSS..RDULS.DSSDDL.USU",
+ "SDLRSL.UUSSSRD.DUDDDU.RU.RUUDULRUDDRLS.RSL",
+ "ULSDSSLRSURLRU.SRUUURSSSSL..S..S.SSRSU.ULS",
+ ".RURDRUUL..RSDDLS..RUDSSSSL.RD.S.RUUSDRDSS",
+ ".RSSUS..UL.S.RU.RL.UDRSSSSLDLUSUDSSSSLRUUU",
+ "RL..RLRSLS.RSD.RSURDRSSSDDSUUSSSLRSSDDL.RD",
+ "SRSLSRLRLSDL.S.RL.RLRLDSUUD..RL..RSSLSS.UU",
+ "RSLULUSLRLRL.SDLSRSSUSUSSSU.DUS.DSD.RURL..",
+ ".RLDSDRLRSLRDSUUSUL..RSSSSSSL.UDUDRLRSDUSL",
+ ".RSU.SULRSUSSS.DL.S.DSSSD.RL..RL.SDUDDULDL",
+ "RSSLRURDRD.RUSRUDLRSL.RDULUURSU.DUS.UL.SS.",
+ "USSUSDUS.S.RDSRDSUD.RDUL.SRLS...SRLDD..SUL",
+ ".RSSURLS.RLSSRSUUSL.SS...SULRL..RUDLSDLS.S",
+ ".SDDDSUS.DLUU..DD..RURSSSUDSSURSSLRSUSULRU",
+ ".SSSRSDRDS.RSD.UURLSRD.DSLRLRLS.RU.DSU.RL.",
+ "RUSRSSLDURLULUL..SSSSUSL.S.SUUUSLRDUSL.SDD",
+ "RSL..RLRD.UDS.S.RLRLUD.DDS.S.RSSSLUD.USURL",
+ "DSSSDUL.S..SRDSDU....SDLRL.SDL..DSDUSSSSSL",
+ "UDDSU.RDRSDSRUSRSD.DLSS.DL.ULRSLS.RLRSD.DL",
+ ".UU.RLULDLRURSUDLS.RLUL.SS...SDURL.RLDU.S.",
+ "RDDDSSDDSUSLDSLSSS...RSSLUSDDUS..S.DDRD.RL",
+ "RUUURLULUSSLRSLUUUSSSL.....UL.USSL.UL.USSU"};
+			string expected__[]       = {"/\\./---\\...../--\\/\\./--\\/\\../\\/-\\./------\\", "|\\-/...\\\\/--\\\\--/||.\\\\.\\/\\--/\\/.\\\\|./-\\.//", "|/-\\./--/\\\\.\\\\/\\.\\/..\\-\\./---\\/-\\|\\-///.|.", "||.\\-/./\\//..|||/\\/---\\\\\\\\\\.//|.\\/./\\\\\\//.", "|\\-\\/--/||./-/\\/\\/\\\\..\\\\\\\\\\-/.|./--/|//\\\\.", "|/\\|\\\\..\\/.\\\\/-\\/\\.\\\\..|///\\..|.|./-/|..\\\\", "||||.|./--\\//\\\\|\\//\\\\\\.\\/.\\//-/.|//..|./\\|", "\\/||.|.|.//|/\\\\/..\\/.\\\\../--/./\\\\//\\.\\\\\\/|", "/-/|.\\\\\\-///\\//\\/\\./\\///\\|/\\..\\//-/\\\\.|..|", "|.///\\\\\\.///\\.\\/\\/.|\\///||\\/./\\.|./-/.\\--/", "\\-/.||.|.|.\\/./-\\..\\\\.\\\\|\\---/\\-/.|./\\/\\..", "/---/\\-/.|../-/.\\\\/\\\\\\//|..../\\...\\-/\\/\\-\\", "\\\\/---\\/-//\\|./-\\|||//\\\\\\--\\//\\----\\./\\..|", ".||/\\//|..|||.\\\\|\\/|\\-\\|./\\|\\-\\/\\/\\\\\\|\\--/", ".\\/\\/\\\\|/\\\\/\\-\\\\//\\\\-\\||.\\/\\\\.|\\/\\/.\\/./-\\", "/--\\.//|||/\\..\\-\\\\/.//||../\\\\\\|./--\\/\\.\\-/", "|/\\\\-/.\\/|||/\\.///\\//.\\/.//\\\\\\////\\\\/|./-\\", "\\/|/--\\/-/\\/\\/.|//\\//----/..|..|.||/-/.\\\\|", ".//\\\\//\\\\../-\\//|..///----\\.\\\\.|.\\/\\-\\/\\||", ".\\--/|..\\\\.|.\\/.\\\\.\\\\\\----//\\\\-//----/\\/\\/", "/\\..///-\\|.\\-\\./-//\\\\---\\/-/\\---//--\\/\\./\\", "|\\-\\|////|/\\.|.\\\\.\\//\\/-/\\\\../\\..\\--/||.\\/", "\\-\\\\/\\-///\\/.|/\\|/--/|\\---/.//|./-\\.//\\\\..", ".///-\\/\\\\-\\/\\|\\/|\\\\..\\------/.\\\\\\\\\\\\\\-\\\\-\\", ".\\-/.|\\//-/|||.//.|./---\\./\\..//.|///\\\\\\//", "/--\\///\\\\\\.\\/|///\\\\-/./\\\\\\\\//-/.//|.\\/.||.", "\\--/|//|.|./\\|\\\\|\\\\./\\\\/.|/\\|...|///\\..|\\\\", "./--/\\\\|.\\\\||\\-/\\-/.||...|\\/\\\\..\\///|/\\|.|", ".|/\\/-/|.//\\/../\\..//\\---//--//--\\\\-/|\\///", ".|||\\-\\\\\\|./-\\.\\//\\|/\\./-\\\\\\/\\|.//./-/.//.", "//|\\--///\\\\\\\\\\\\..||||\\-/.|.|\\/\\-//\\\\-\\.|/\\", "\\-/../\\\\\\.\\\\|.|.//\\/\\\\./\\|.|./---/\\\\.\\-/\\/", "/---\\\\/.|..|\\\\|//....|//\\/.|//../-\\\\-----\\", "\\\\/-/./\\\\-\\|//|\\-\\./\\||./\\.\\//-\\|.\\\\/-\\.//", ".\\/./\\\\//\\\\/\\-//\\|.\\/\\/.||...|//\\\\.\\///.|.", "/\\/\\||/\\|\\-\\/-\\|||.../--/\\-\\//|..|./\\\\\\.\\\\", "\\/\\/\\/\\/\\--/\\-/\\/\\---/.....\\/.\\--/.\\/.\\--/" };
 
 			std::clock_t start__      = std::clock();
-			long long received__      = AliceInWanderland().getMinimum(vector <int>(rabbitX, rabbitX + (sizeof rabbitX / sizeof rabbitX[0])), vector <int>(rabbitY, rabbitY + (sizeof rabbitY / sizeof rabbitY[0])), vector <string>(moves, moves + (sizeof moves / sizeof moves[0])));
-			return verify_case(casenum__, expected__, received__, clock()-start__);
-		}
-		case 4: {
-			int rabbitX[]             = { 1000000000, 1000000000, -1000000000, -1000000000, 1000000000, 1000000000, -1000000000, -1000000000, 0, 0, 0};
-			int rabbitY[]             = { 0, 0, 0, 0, 0, 0, 0, 0, 1000000000, 1000000000, -1000000000};
-			string moves[]            = { "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRU", 
-  "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRD", 
-  "LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLU", 
-  "LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLD", 
-  "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRUU", 
-  "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRDD", 
-  "LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLUU", 
-  "LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLDD", 
-  "UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUR", 
-  "UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUL", 
-  "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDR" }
-;
-			long long expected__      = -1;
-
-			std::clock_t start__      = std::clock();
-			long long received__      = AliceInWanderland().getMinimum(vector <int>(rabbitX, rabbitX + (sizeof rabbitX / sizeof rabbitX[0])), vector <int>(rabbitY, rabbitY + (sizeof rabbitY / sizeof rabbitY[0])), vector <string>(moves, moves + (sizeof moves / sizeof moves[0])));
-			return verify_case(casenum__, expected__, received__, clock()-start__);
-		}
-		case 5: {
-			int rabbitX[]             = { 1, 1 };
-			int rabbitY[]             = { 0, 0 };
-			string moves[]            = { "L", "U" };
-			long long expected__      = -1;
-
-			std::clock_t start__      = std::clock();
-			long long received__      = AliceInWanderland().getMinimum(vector <int>(rabbitX, rabbitX + (sizeof rabbitX / sizeof rabbitX[0])), vector <int>(rabbitY, rabbitY + (sizeof rabbitY / sizeof rabbitY[0])), vector <string>(moves, moves + (sizeof moves / sizeof moves[0])));
-			return verify_case(casenum__, expected__, received__, clock()-start__);
+			vector <string> received__ = EllysRollerCoasters().getPlan(vector <string>(field, field + (sizeof field / sizeof field[0])));
+			return verify_case(casenum__, vector <string>(expected__, expected__ + (sizeof expected__ / sizeof expected__[0])), received__, clock()-start__);
 		}
 
 		// custom cases
 
-      case 6: {
-			int rabbitX[]             = {5, 1, 5, 0, 2, 2, -4, -8, 1, -3};
-			int rabbitY[]             = {-3, 3, 2, 8, -7, -1, -2, 4, 4, -3};
-			string moves[]            = {"RDDDDR", "RRRLLRLLRLL", "DDDRRLDDDDUUR", "RRRRRDLURRRRL", "LUUUUD", "RLRLRUUURDRUUR", "LULLU", "UD", "DDULL", "RUUUDLLULU"};
-			long long expected__      = 166;
+      case 4: {
+			string field[]            = {"RSD", "S.S", "USL"};
+			string expected__[]       = {"/-\\", "|.|", "\\-/"};
 
 			std::clock_t start__      = std::clock();
-			long long received__      = AliceInWanderland().getMinimum(vector <int>(rabbitX, rabbitX + (sizeof rabbitX / sizeof rabbitX[0])), vector <int>(rabbitY, rabbitY + (sizeof rabbitY / sizeof rabbitY[0])), vector <string>(moves, moves + (sizeof moves / sizeof moves[0])));
-			return verify_case(casenum__, expected__, received__, clock()-start__);
+			vector <string> received__ = EllysRollerCoasters().getPlan(vector <string>(field, field + (sizeof field / sizeof field[0])));
+			return verify_case(casenum__, vector <string>(expected__, expected__ + (sizeof expected__ / sizeof expected__[0])), received__, clock()-start__);
 		}
-/*      case 7: {
-			int rabbitX[]             = ;
-			int rabbitY[]             = ;
-			string moves[]            = ;
-			long long expected__      = ;
+/*      case 5: {
+			string field[]            = ;
+			string expected__[]       = ;
 
 			std::clock_t start__      = std::clock();
-			long long received__      = AliceInWanderland().getMinimum(vector <int>(rabbitX, rabbitX + (sizeof rabbitX / sizeof rabbitX[0])), vector <int>(rabbitY, rabbitY + (sizeof rabbitY / sizeof rabbitY[0])), vector <string>(moves, moves + (sizeof moves / sizeof moves[0])));
-			return verify_case(casenum__, expected__, received__, clock()-start__);
+			vector <string> received__ = EllysRollerCoasters().getPlan(vector <string>(field, field + (sizeof field / sizeof field[0])));
+			return verify_case(casenum__, vector <string>(expected__, expected__ + (sizeof expected__ / sizeof expected__[0])), received__, clock()-start__);
 		}*/
-/*      case 8: {
-			int rabbitX[]             = ;
-			int rabbitY[]             = ;
-			string moves[]            = ;
-			long long expected__      = ;
+/*      case 6: {
+			string field[]            = ;
+			string expected__[]       = ;
 
 			std::clock_t start__      = std::clock();
-			long long received__      = AliceInWanderland().getMinimum(vector <int>(rabbitX, rabbitX + (sizeof rabbitX / sizeof rabbitX[0])), vector <int>(rabbitY, rabbitY + (sizeof rabbitY / sizeof rabbitY[0])), vector <string>(moves, moves + (sizeof moves / sizeof moves[0])));
-			return verify_case(casenum__, expected__, received__, clock()-start__);
+			vector <string> received__ = EllysRollerCoasters().getPlan(vector <string>(field, field + (sizeof field / sizeof field[0])));
+			return verify_case(casenum__, vector <string>(expected__, expected__ + (sizeof expected__ / sizeof expected__[0])), received__, clock()-start__);
 		}*/
 		default:
 			return -1;
