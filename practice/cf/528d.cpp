@@ -166,6 +166,7 @@ constexpr auto mod = 1000000007;
 
 /* code */
 constexpr int mx_n = 200005;
+<<<<<<< HEAD
 string s, t;
 int n, m, k;
 int ti[mx_n], te[mx_n];
@@ -241,6 +242,76 @@ int main() {
     int ans = 0;
     fo(i, n) if(matches[i]) ++ans;
     cout << ans << endl;
+=======
+
+class Bits;
+
+class Bit {
+    friend class Bits;
+private:
+    Bits* par;
+    size_t idx;
+    Bit();
+    Bit(Bits& _par, size_t i);
+public:
+    operator bool() const; 
+    Bit& operator= (bool x);
+};
+
+class Bits {
+public:
+    int n;
+    int setbits = 0;
+    using BitInternal = unsigned int;
+    size_t BITS_PER_ENTRY = sizeof(BitInternal) * 4;
+
+    vector<BitInternal> bits;
+    Bits(int _n) {
+        n = _n;
+        bits = vector<BitInternal>((n + BITS_PER_ENTRY - 1) / BITS_PER_ENTRY);
+    }
+
+    void clear() {
+        for(size_t i = 0; i < bits.size(); ++i) bits[i] = 0;
+    }
+
+    void fill(int b) {
+        assert(b == 0 || b == 1);
+        for(size_t i = 0; i < bits.size(); ++i) bits[i] = -1;
+        bits.back() <<= (BITS_PER_ENTRY - n % BITS_PER_ENTRY);
+
+    }
+
+    size_t count() {
+        size_t ret = 0;
+        for(size_t i = 0; i < bits.size(); ++i) ret += __builtin_popcount(bits[i]);
+    }
+
+    int operator[](size_t i) const {
+        assert(i >= 0 && i < n);
+        return (bits[i / BITS_PER_ENTRY] >> (i % BITS_PER_ENTRY) & 1);
+    }
+
+    Bit& operator[](size_t i) {
+        assert(i >= 0 && i < n);
+        return Bit(this, i);
+    }
+
+
+private:
+    int set(int i, int v) {
+        assert(i >= 0 && i < n);
+    }
+};
+
+Bit::Bit(Bits* _par, size_t i) {
+    par = _par;
+    idx = i;
+}
+
+int main() {
+    
+>>>>>>> 0bd1362238be25ae3a2bbe3d9ff4c9536985bfaf
     
 	return 0;
 }
